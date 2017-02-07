@@ -2,7 +2,7 @@
 
 A Geant4 simulation of the TREX setup at REX-ISOLDE (CERN) (https://doi.org/10.1140/epja/i2012-12085-6).
 
-In addition to ROOT and Geant4 (version 4.9), this simulation requires the Miniball simulation package.
+In addition to ROOT and Geant4 (version 4.9), this simulation requires the Miniball simulation package (https://github.com/VinzenzBildstein/Miniball).
 
 -----------------------------------------
 Running
