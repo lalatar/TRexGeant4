@@ -17,4 +17,4 @@ TRexGeant4 has the following input flags:
 																
 More to follow...
 
-** Authors ** V. Bildstein, S. Klupp
+**Authors** V. Bildstein, S. Klupp
