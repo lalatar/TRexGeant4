@@ -37,7 +37,7 @@ class TRexColour
 
   private:
     TRexColour(void);
-    static TRexColour* colour;
+    static TRexColour* fColour;
 };
 
 #endif /* TREXCOLOUR_HH_ */

@@ -12,12 +12,12 @@
 TRexCDErestSingle::TRexCDErestSingle() {
 }
 
-TRexCDErestSingle::TRexCDErestSingle(std::string name, std::string direction, int id){
+TRexCDErestSingle::TRexCDErestSingle(std::string name, std::string direction, int id) {
 	fName = name;
 	fId = id;
 	fDirection = direction;
 
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fInnerRadiusDetector = TRexSettings::Get()->GetFCDErestSingleInnerRadius();
 		fOuterRadiusDetector = TRexSettings::Get()->GetFCDErestSingleOuterRadius();
 		fThicknessDetector = TRexSettings::Get()->GetFCDErestSingleThickness()[fId];
@@ -28,8 +28,7 @@ TRexCDErestSingle::TRexCDErestSingle(std::string name, std::string direction, in
 		fPos = G4ThreeVector(TRexSettings::Get()->GetFCDErestSinglePosX()[fId],
 				TRexSettings::Get()->GetFCDErestSinglePosY()[fId],
 				TRexSettings::Get()->GetFCDErestSinglePosZ()[fId] - fThicknessDetector / 2.);
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fInnerRadiusDetector = TRexSettings::Get()->GetBCDErestSingleInnerRadius();
 		fOuterRadiusDetector = TRexSettings::Get()->GetBCDErestSingleOuterRadius();
 		fThicknessDetector = TRexSettings::Get()->GetBCDErestSingleThickness()[fId];
@@ -40,8 +39,7 @@ TRexCDErestSingle::TRexCDErestSingle(std::string name, std::string direction, in
 		fPos = G4ThreeVector(TRexSettings::Get()->GetBCDErestSinglePosX()[fId],
 				TRexSettings::Get()->GetBCDErestSinglePosY()[fId],
 				TRexSettings::Get()->GetBCDErestSinglePosZ()[fId] - fThicknessDetector / 2.);
-	}
-	else{
+	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}
 }
@@ -55,12 +53,12 @@ void TRexCDErestSingle::Construct(G4LogicalVolume* experimentalHall_log, G4SDMan
 	ConstructSilicon(experimentalHall_log, SDMan);
 
 	// PCB
-	if(TRexSettings::Get()->ConstructPCB()){
+	if(TRexSettings::Get()->ConstructPCB()) {
 	  ConstructPCB(experimentalHall_log);
 	}
 
 	// include dead layers ?
-	if(fDeadLayer > 0.1*um){
+	if(fDeadLayer > 0.1*um) {
 		ConstructDeadLayer(experimentalHall_log);
 	}
 }
@@ -86,7 +84,7 @@ void TRexCDErestSingle::ConstructSilicon(G4LogicalVolume* experimentalHall_log, 
 	SDMan->AddNewDetector(fCDErestSingleSensitiveDetector);
 	fLogicalVolume->SetSensitiveDetector(fCDErestSingleSensitiveDetector);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		fLogicalVolume->SetVisAttributes(TRexColour::Get()->red);
 	}
 }
@@ -119,7 +117,7 @@ void TRexCDErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) {
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(0, fPos, PCBCD_log, "PCBForwardCD1", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		PCBCD_log->SetVisAttributes(TRexColour::Get()->darkgreen);
 	}
 }
@@ -138,7 +136,7 @@ void TRexCDErestSingle::ConstructDeadLayer(G4LogicalVolume* experimentalHall_log
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(0, fPos, deadLayer_log, "deadLayer", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		deadLayer_log->SetVisAttributes(TRexColour::Get()->red);
 	}
 }

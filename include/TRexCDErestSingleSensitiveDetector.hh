@@ -20,38 +20,38 @@
 
 #include "TTree.h"
 
-class TRexCDErestSingleSensitiveDetector  : public G4VSensitiveDetector{
-public:
-	//TRexCDErestSensitiveDetector();
-	TRexCDErestSingleSensitiveDetector(G4String name, G4String direction, int id);
-	virtual ~TRexCDErestSingleSensitiveDetector();
+class TRexCDErestSingleSensitiveDetector  : public G4VSensitiveDetector {
+	public:
+		//TRexCDErestSensitiveDetector();
+		TRexCDErestSingleSensitiveDetector(G4String name, G4String direction, int id);
+		virtual ~TRexCDErestSingleSensitiveDetector();
 
-	// initialize hit collection
-	void Initialize(G4HCofThisEvent*);
+		// initialize hit collection
+		void Initialize(G4HCofThisEvent*);
 
-	G4bool ProcessHits(G4Step *, G4TouchableHistory*);
+		G4bool ProcessHits(G4Step *, G4TouchableHistory*);
 
-	G4bool ProcessHits_constStep(const G4Step * aStep, G4TouchableHistory*);
+		G4bool ProcessHits_constStep(const G4Step * aStep, G4TouchableHistory*);
 
-	// to write the data into a root file
-	void EndOfEvent(G4HCofThisEvent*);
+		// to write the data into a root file
+		void EndOfEvent(G4HCofThisEvent*);
 
-	ParticleMC* GetParticleMC() {return fCDErestSingle; };
+		ParticleMC* GetParticleMC() { return fCDErestSingle; }
 
-private:
-	G4double GetTotalEnergyDeposition();
-	int IsStopped(int hitIndex, double &resKinEnergy);
+	private:
+		G4double GetTotalEnergyDeposition();
+		int IsStopped(int hitIndex, double &resKinEnergy);
 
-	G4String fName;
-	G4String fDirection;
-	int fID;
+		G4String fName;
+		G4String fDirection;
+		int fID;
 
-	G4double fEnergyResolution;
+		G4double fEnergyResolution;
 
-	TRexHitsCollection* fHitCollection;
-	G4int fCollectionID;
+		TRexHitsCollection* fHitCollection;
+		G4int fCollectionID;
 
-	ParticleMC* fCDErestSingle;
+		ParticleMC* fCDErestSingle;
 };
 
 #endif /* TREXCDERESTSINGLESENSITIVEDETECTOR_HH_ */

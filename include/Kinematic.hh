@@ -24,8 +24,7 @@
 #define PI                       (TMath::Pi())
 #endif
 
-class Kinematic
-{
+class Kinematic {
 public:
   Kinematic();
   Kinematic(Element* pro, Material* tar);
@@ -100,11 +99,4 @@ double expdev();
 double gen_theta();
 
 #endif
-
-
-
-
-
-
-
 

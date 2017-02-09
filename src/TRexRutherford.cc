@@ -28,7 +28,7 @@ TRexRutherford::~TRexRutherford() {
 }
 
 
-void TRexRutherford::GeneratePrimaries(G4Event *anEvent){
+void TRexRutherford::GeneratePrimaries(G4Event *anEvent) {
 	// shoot the emission point
 	ShootReactionPosition();
 
@@ -46,11 +46,11 @@ void TRexRutherford::GeneratePrimaries(G4Event *anEvent){
 }
 
 
-void TRexRutherford::CalculateScatteringProbability(){
+void TRexRutherford::CalculateScatteringProbability() {
 	// Rutherford factor
 	G4double RF = fProjectileZ * fTargetZ * eplus * eplus / (16. * M_PI * epsilon0);
 	RF *= RF;
-	//G4cout << "RF = " << RF/(MeV * MeV *millibarn) << G4endl;
+	//G4cout<<"RF = "<<RF/(MeV * MeV *millibarn)<<G4endl;
 
 	// total energy in the CM frame
 	//G4double E_CM = projectileCM.e() - projectileRestMass +
@@ -58,22 +58,22 @@ void TRexRutherford::CalculateScatteringProbability(){
 	G4double E_CM = fReactionEnergy * fTargetRestMass / (fProjectileRestMass + fTargetRestMass);
 
 	G4double sigmaTot = -4. * M_PI * RF / (E_CM * E_CM) * (1. - 1./ (sin(fThetaCM_min *0.5) * sin(fThetaCM_min * 0.5)));
-	//G4cout << "sigmaTot = " << sigmaTot/millibarn << G4endl;
+	//G4cout<<"sigmaTot = "<<sigmaTot/millibarn<<G4endl;
 
 	G4double arealDensity = TRexSettings::Get()->GetTargetThickness() * Avogadro / (fTargetA* g/mole);
-	//G4cout << "areal density = " << arealDensity*cm2 << G4endl;
+	//G4cout<<"areal density = "<<arealDensity*cm2<<G4endl;
 
 	fScatteringProbability = arealDensity * sigmaTot;
-	//G4cout << "scatteringProbability = " << fScatteringProb << G4endl;
+	//G4cout<<"scatteringProbability = "<<fScatteringProb<<G4endl;
 }
 
 
-void TRexRutherford::DoKinematicCalculation(){
+void TRexRutherford::DoKinematicCalculation() {
 	// kinematics (RelativistischeKinematik.pdf)
 	fEcm = sqrt(pow(fReactionEnergy + fProjectileRestMass + fTargetRestMass,2) -
 			pow(fReactionEnergy,2) - 2. * fReactionEnergy * fProjectileRestMass);
 
-	//std::cout << "fReactionEnergy = " << fReactionEnergy / MeV << " , fBeamEnergy = " << fBeamEnergy / MeV << " , fEcm = " << fEcm / MeV << std::endl;
+	//std::cout<<"fReactionEnergy = "<<fReactionEnergy / MeV<<" , fBeamEnergy = "<<fBeamEnergy / MeV<<" , fEcm = "<<fEcm / MeV<<std::endl;
 
 	fTcm = fEcm - fProjectileRestMass - fTargetRestMass;
 
@@ -91,7 +91,7 @@ void TRexRutherford::DoKinematicCalculation(){
 }
 
 
-void TRexRutherford::ShootEjectileAndRecoilDirections(){
+void TRexRutherford::ShootEjectileAndRecoilDirections() {
 	// particle momentum direction
 	fEjectilePhi = CLHEP::RandFlat::shoot(-M_PI, M_PI) * rad;
 	fRecoilPhi = -fEjectilePhi;
@@ -134,8 +134,8 @@ void TRexRutherford::ShootEjectileAndRecoilDirections(){
 	G4ThreeVector ejectileMomentumVectorLab;
 	ejectileMomentumVectorLab.setRThetaPhi(p3, theta3, fEjectilePhi);
 
-	//std::cout << "theta3 = " << theta3 * 180. /  TMath::Pi() << std::endl;
-	//std::cout << "theta4 = " << theta4 * 180. /  TMath::Pi() << std::endl;
+	//std::cout<<"theta3 = "<<theta3 * 180. /  TMath::Pi()<<std::endl;
+	//std::cout<<"theta4 = "<<theta4 * 180. /  TMath::Pi()<<std::endl;
 
 	fEjectileLab.setE(fProjectileRestMass + T3);
 	fEjectileLab.setVect(ejectileMomentumVectorLab);

@@ -20,13 +20,13 @@
 #include "G4PVPlacement.hh"
 
 class TRexVacuumChamberGas {
-public:
-	TRexVacuumChamberGas();
-	virtual ~TRexVacuumChamberGas();
+	public:
+		TRexVacuumChamberGas();
+		virtual ~TRexVacuumChamberGas();
 
-	virtual G4LogicalVolume* ConstructChamberGas(G4LogicalVolume*) { return NULL; }
+		virtual G4LogicalVolume* ConstructChamberGas(G4LogicalVolume*) { return NULL; }
 
-protected:
+	protected:
 };
 
 #endif /* TREXVACUUMCHAMBERGAS_HH_ */

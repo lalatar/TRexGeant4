@@ -22,34 +22,34 @@
 #include <vector>
 #include <string>
 
-class TRexBarrelDeltaESingle : public TRexBaseDetector{
-public:
-	TRexBarrelDeltaESingle();
-	TRexBarrelDeltaESingle(std::string name, std::string direction, int id);
-	virtual ~TRexBarrelDeltaESingle();
+class TRexBarrelDeltaESingle : public TRexBaseDetector {
+	public:
+		TRexBarrelDeltaESingle();
+		TRexBarrelDeltaESingle(std::string name, std::string direction, int id);
+		virtual ~TRexBarrelDeltaESingle();
 
-	void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	ParticleMC* GetParticleMC() {return fBarrelDeltaESingleSensitiveDetector->GetParticleMC(); };
-	std::vector<ParticleMC>* GetParticleMCvector();
+		void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		ParticleMC* GetParticleMC() {return fBarrelDeltaESingleSensitiveDetector->GetParticleMC(); };
+		std::vector<ParticleMC>* GetParticleMCvector();
 
-private:
-	void ConstructSilicon(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	void ConstructPCB(G4LogicalVolume* experimentalHall_log);
-	void ConstructDeadLayer(G4LogicalVolume* experimentalHall_log);
-	void ConstructFoil(G4LogicalVolume* experimentalHall_log);
+	private:
+		void ConstructSilicon(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		void ConstructPCB(G4LogicalVolume* experimentalHall_log);
+		void ConstructDeadLayer(G4LogicalVolume* experimentalHall_log);
+		void ConstructFoil(G4LogicalVolume* experimentalHall_log);
 
-	TRexBarrelDeltaESingleSensitiveDetector* fBarrelDeltaESingleSensitiveDetector;
+		TRexBarrelDeltaESingleSensitiveDetector* fBarrelDeltaESingleSensitiveDetector;
 
-	G4double fDetectorLengthX;
-	G4double fDetectorLengthY;
-	G4double fThicknessDetector;
-	G4double fStartAngleDetector;
-	G4double fDeadLayer;
-	G4double fFoilThickness;
+		G4double fDetectorLengthX;
+		G4double fDetectorLengthY;
+		G4double fThicknessDetector;
+		G4double fStartAngleDetector;
+		G4double fDeadLayer;
+		G4double fFoilThickness;
 
-	G4ThreeVector fPos;
-	G4RotationMatrix* fRotMatrix;
-	G4RotationMatrix* fRotMatrixPcb;
+		G4ThreeVector fPos;
+		G4RotationMatrix* fRotMatrix;
+		G4RotationMatrix* fRotMatrixPcb;
 };
 
 #endif /* TREXBARRELDELTAESINGLE_HH_ */

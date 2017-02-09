@@ -10,12 +10,12 @@
 TRexBarrelErest::TRexBarrelErest() {
 }
 
-TRexBarrelErest::TRexBarrelErest(std::string name, std::string direction, int nbOfSingles){
+TRexBarrelErest::TRexBarrelErest(std::string name, std::string direction, int nbOfSingles) {
 	fName = name;
 	fDirection = direction;
 	fNbOfSingles = nbOfSingles;
 
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		fBarrelErestSingles.push_back(new TRexBarrelErestSingle(fName + Form("Single%d", i), direction, i));
 	}
 }
@@ -26,7 +26,7 @@ TRexBarrelErest::~TRexBarrelErest() {
 
 void TRexBarrelErest::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan) {
 	// loop over all BarrelErest single detectors
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		fBarrelErestSingles[i]->Construct(experimentalHall_log, SDMan);
 	}
 }
@@ -34,9 +34,9 @@ void TRexBarrelErest::Construct(G4LogicalVolume* experimentalHall_log, G4SDManag
 std::vector<ParticleMC>* TRexBarrelErest::GetParticleMCvector() {
 	std::vector<ParticleMC>* particleMCvector = new std::vector<ParticleMC>;
 
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		// include only detectors with a hit
-		if(fBarrelErestSingles[i]->GetParticleMC()->GetEdet() > 0.001 * eV){
+		if(fBarrelErestSingles[i]->GetParticleMC()->GetEdet() > 0.001 * eV) {
 			particleMCvector->push_back(*fBarrelErestSingles[i]->GetParticleMC());
 		}
 	}

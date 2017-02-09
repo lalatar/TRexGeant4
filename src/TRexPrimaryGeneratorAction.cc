@@ -17,31 +17,28 @@ TRexPrimaryGeneratorAction::~TRexPrimaryGeneratorAction() {
 	// TODO Auto-generated destructor stub
 }
 
-void TRexPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent){
+void TRexPrimaryGeneratorAction::GeneratePrimaries(G4Event *anEvent) {
 	fCurrentGenerator->GeneratePrimaries(anEvent);
 }
 
-void TRexPrimaryGeneratorAction::SetGenerator(){
+void TRexPrimaryGeneratorAction::SetGenerator() {
 	std::string generatorName = TRexSettings::Get()->GetPrimaryGenerator();
-	if(generatorName == "TestSource"){
-		std::cout << "\nUsing test source ....\n" << std::endl;
+	if(generatorName == "TestSource") {
+		std::cout<<std::endl<<"Using test source ....\n"<<std::endl;
 		fCurrentGenerator = new TRexTestSource;
-	}
-	else if(generatorName == "Rutherford"){
-		std::cout << "\nUsing Rutherford scattering ....\n" << std::endl;
+	} else if(generatorName == "Rutherford") {
+		std::cout<<std::endl<<"Using Rutherford scattering ....\n"<<std::endl;
 		fCurrentGenerator = new TRexRutherford;
-	}
-	else if(generatorName == "AngularDistribution"){
-		std::cout << "\nUsing given angular distribution ....\n" << std::endl;
+	} else if(generatorName == "AngularDistribution") {
+		std::cout<<std::endl<<"Using given angular distribution ....\n"<<std::endl;
 		fCurrentGenerator = new TRexAngularDistribution;
-	}
-	else if(generatorName == "AlphaSource"){
-		std::cout << "\nUsing alpha source ....\n" << std::endl;
+	} else if(generatorName == "AlphaSource") {
+		std::cout<<std::endl<<"Using alpha source ....\n"<<std::endl;
 		fCurrentGenerator = new TRexAlphaSource;
 	}
 }
 
-void TRexPrimaryGeneratorAction::SetTree(TTree* tree){
+void TRexPrimaryGeneratorAction::SetTree(TTree* tree) {
 	fCurrentGenerator->SetTree(tree);
 	fCurrentGenerator->CreateTreeBranches();
 }

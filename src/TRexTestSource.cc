@@ -11,7 +11,7 @@
 #include "G4ParticleGun.hh"
 
 TRexTestSource::TRexTestSource() {
-	particleGun = new G4ParticleGun(1);
+	fParticleGun = new G4ParticleGun(1);
 }
 
 TRexTestSource::~TRexTestSource() {
@@ -23,16 +23,16 @@ TRexTestSource::~TRexTestSource() {
  * Simulates a test source
  *
  ************************************************************/
-void TRexTestSource::GeneratePrimaries(G4Event *anEvent){
+void TRexTestSource::GeneratePrimaries(G4Event *anEvent) {
 
 	fReactionEnergy = TRexSettings::Get()->GetTestSourceEnergy();
 
 	// shoot the alpha emission point
 	ShootReactionPosition();
 
-	particleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
-	particleGun->SetParticlePosition(G4ThreeVector(fReactionX, fReactionY, fReactionZ));
-	particleGun->SetParticleEnergy(fReactionEnergy);
+	fParticleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
+	fParticleGun->SetParticlePosition(G4ThreeVector(fReactionX, fReactionY, fReactionZ));
+	fParticleGun->SetParticleEnergy(fReactionEnergy);
 
 	// isotropic distribution
 	CreateIsotropicDistribution();
@@ -44,20 +44,20 @@ void TRexTestSource::GeneratePrimaries(G4Event *anEvent){
 	direction.setPhi(fPhi);
 	//direction.setTheta(45* degree);
 	//direction.setPhi(2.0* degree);
-	particleGun->SetParticleMomentumDirection(direction);
+	fParticleGun->SetParticleMomentumDirection(direction);
 
-	particleGun->GeneratePrimaryVertex(anEvent);
+	fParticleGun->GeneratePrimaryVertex(anEvent);
 
 	FillTree();
 }
 
-void TRexTestSource::ShootReactionPosition(){
+void TRexTestSource::ShootReactionPosition() {
 	fReactionX = 0.0 * mm;
 	fReactionY = 0.0 * mm;
 	fReactionZ = 0.0 * mm;
 }
 
-void TRexTestSource::CreateIsotropicDistribution(){
+void TRexTestSource::CreateIsotropicDistribution() {
 	fThetaCM = CLHEP::RandFlat::shoot(-1., 1.);
 
 	fThetaCM = acos(fThetaCM)*radian;
@@ -68,8 +68,8 @@ void TRexTestSource::CreateIsotropicDistribution(){
 }
 
 void TRexTestSource::CreateTreeBranches() {
-	if(!fTree){
-		std::cout << "\n\n\nTRexTestSource: Tree doesn't exist!\n\n" << std::endl;
+	if(!fTree) {
+		std::cout<<std::endl<<std::endl<<"TRexTestSource: Tree doesn't exist!"<<std::endl<<std::endl;
 	}
 	fTree->Branch("reactionEnergy", &fReactionEnergy, "reactionEnergy/D");
 	fTree->Branch("reactionX", &fReactionX, "reactionX/D");
@@ -78,6 +78,4 @@ void TRexTestSource::CreateTreeBranches() {
 	fTree->Branch("thetaCM", &fThetaCM, "thetaCM/D");
 	fTree->Branch("phi", &fPhi, "phi/D");
 }
-
-
 

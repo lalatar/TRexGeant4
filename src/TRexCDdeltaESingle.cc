@@ -17,7 +17,7 @@ TRexCDdeltaESingle::TRexCDdeltaESingle(std::string name, std::string direction, 
 	fId = id;
 	fDirection = direction;
 
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fInnerRadiusDetector = TRexSettings::Get()->GetFCDdeltaESingleInnerRadius();
 		fOuterRadiusDetector = TRexSettings::Get()->GetFCDdeltaESingleOuterRadius();
 		fThicknessDetector = TRexSettings::Get()->GetFCDdeltaESingleThickness()[fId];
@@ -27,12 +27,11 @@ TRexCDdeltaESingle::TRexCDdeltaESingle(std::string name, std::string direction, 
 		fDeadLayer = TRexSettings::Get()->GetFCDdeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetFCDdeltaESinglePosX()[fId],
-					TRexSettings::Get()->GetFCDdeltaESinglePosY()[fId],
-					TRexSettings::Get()->GetFCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+				TRexSettings::Get()->GetFCDdeltaESinglePosY()[fId],
+				TRexSettings::Get()->GetFCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
 
 		fFoilThickness = TRexSettings::Get()->GetFCDdeltaESingleFoilThickness();
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fInnerRadiusDetector = TRexSettings::Get()->GetBCDdeltaESingleInnerRadius();
 		fOuterRadiusDetector = TRexSettings::Get()->GetBCDdeltaESingleOuterRadius();
 		fThicknessDetector = TRexSettings::Get()->GetBCDdeltaESingleThickness()[fId];
@@ -42,12 +41,11 @@ TRexCDdeltaESingle::TRexCDdeltaESingle(std::string name, std::string direction, 
 		fDeadLayer = TRexSettings::Get()->GetBCDdeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetBCDdeltaESinglePosX()[fId],
-					TRexSettings::Get()->GetBCDdeltaESinglePosY()[fId],
-					TRexSettings::Get()->GetBCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+				TRexSettings::Get()->GetBCDdeltaESinglePosY()[fId],
+				TRexSettings::Get()->GetBCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
 
 		fFoilThickness = TRexSettings::Get()->GetBCDdeltaESingleFoilThickness();
-	}
-	else{
+	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}
 }
@@ -61,17 +59,17 @@ void TRexCDdeltaESingle::Construct(G4LogicalVolume* experimentalHall_log, G4SDMa
 	ConstructSilicon(experimentalHall_log, SDMan);
 
 	// PCB
-	if(TRexSettings::Get()->ConstructPCB()){
-	  ConstructPCB(experimentalHall_log);
+	if(TRexSettings::Get()->ConstructPCB()) {
+		ConstructPCB(experimentalHall_log);
 	}
 
 	// include dead layers ?
-	if(fDeadLayer > 0.1*um){
+	if(fDeadLayer > 0.1*um) {
 		ConstructDeadLayer(experimentalHall_log);
 	}
 
 	// protection foils ?
-	if(fFoilThickness > 0.1*um){
+	if(fFoilThickness > 0.1*um) {
 		ConstructFoil(experimentalHall_log);
 	}
 }
@@ -97,7 +95,7 @@ void TRexCDdeltaESingle::ConstructSilicon(G4LogicalVolume* experimentalHall_log,
 	SDMan->AddNewDetector(fCDdeltaESingleSensitiveDetector);
 	fLogicalVolume->SetSensitiveDetector(fCDdeltaESingleSensitiveDetector);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		fLogicalVolume->SetVisAttributes(TRexColour::Get()->yellow);
 	}
 }
@@ -130,7 +128,7 @@ void TRexCDdeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) {
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(0, fPos, PCBCD_log, "PCBForwardCD1", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		PCBCD_log->SetVisAttributes(TRexColour::Get()->darkgreen);
 	}
 }
@@ -149,7 +147,7 @@ void TRexCDdeltaESingle::ConstructDeadLayer(G4LogicalVolume* experimentalHall_lo
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(0, fPos, deadLayer_log, "deadLayerCDdeltaE", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		deadLayer_log->SetVisAttributes(TRexColour::Get()->yellow);
 	}
 }
@@ -169,17 +167,16 @@ void TRexCDdeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log) {
 
 	// position of the foil
 	G4ThreeVector position = fPos;
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		position.setZ(fPos.z() - foilDistance - fFoilThickness / 2.);
-	}
-	else{
+	} else {
 		position.setZ(fPos.z() + foilDistance + fFoilThickness / 2.);
 	}
 
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(0, position, foil_log, "foil", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		foil_log->SetVisAttributes(TRexColour::Get()->silver);
 	}
 }

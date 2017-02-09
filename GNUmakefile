@@ -44,7 +44,8 @@ include $(G4INSTALL)/config/binmake.gmk
 
 #------------- ROOT -------------#
 
-DEPENDENCIES = include/Barrel.hh \
+DEPENDENCIES = include/TRexSettings.hh \
+	include/Barrel.hh \
 	include/Annular.hh \
 	include/Germanium.hh \
 	include/ParticleMC.hh \

@@ -21,39 +21,39 @@
 
 class G4Event;
 
-class TRexEventAction : public MiniBallEventAction{
-public:
-  TRexEventAction(TRexDetectorConstruction* detectorConst, MiniBallHistoManager* miniballHistoManager);
-  virtual ~TRexEventAction();
+class TRexEventAction : public MiniBallEventAction {
+	public:
+		TRexEventAction(TRexDetectorConstruction* detectorConst, MiniBallHistoManager* miniballHistoManager);
+		virtual ~TRexEventAction();
 
-  void BeginOfEventAction(const G4Event*);
-  void EndOfEventAction(const G4Event*);
+		void BeginOfEventAction(const G4Event*);
+		void EndOfEventAction(const G4Event*);
 
-  void SetTree(TTree *tree);
-  void CreateBranches();
+		void SetTree(TTree *tree);
+		void CreateBranches();
 
-private:
-  void MiniballEndOfEventAction(const G4Event*);
+	private:
+		void MiniballEndOfEventAction(const G4Event*);
 
-  void CollectDataFromDetectors();
-  //! clears all data coming from the detectors
-  void clearDetectorData();
-  void CollectMiniballData();
+		void CollectDataFromDetectors();
+		//! clears all data coming from the detectors
+		void ClearDetectorData();
+		void CollectMiniballData();
 
-  TRexDetectorConstruction* fDetectorConst;
-  MiniBallHistoManager* fMbHistoMan;
+		TRexDetectorConstruction* fDetectorConst;
+		MiniBallHistoManager* fMbHistoMan;
 
-  TTree* fTree;
+		TTree* fTree;
 
-  //std::vector<ParticleMC*> fDataOfDetectors;
-  std::vector<std::vector<ParticleMC>* > fDataOfDetectors;
-  std::vector<Germanium>* fMiniball;
+		//std::vector<ParticleMC*> fDataOfDetectors;
+		std::vector<std::vector<ParticleMC>* > fDataOfDetectors;
+		std::vector<Germanium>* fMiniball;
 
-  bool fIsHit;
-  bool fMiniballHit;
-  // fill always the detector tree regardless if a detector was hit or not
-  // (useful to correlate the generator and the detector tree)
-  bool fWriteAllEvents;
+		bool fIsHit;
+		bool fMiniballHit;
+		// fill always the detector tree regardless if a detector was hit or not
+		// (useful to correlate the generator and the detector tree)
+		bool fWriteAllEvents;
 };
 
 #endif /* TREXEVENTACTION_HH_ */

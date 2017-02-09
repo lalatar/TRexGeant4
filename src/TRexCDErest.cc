@@ -11,12 +11,12 @@
 TRexCDErest::TRexCDErest() {
 }
 
-TRexCDErest::TRexCDErest(std::string name, std::string direction, int nbOfSingles){
+TRexCDErest::TRexCDErest(std::string name, std::string direction, int nbOfSingles) {
 	fName = name;
 	fDirection = direction;
 	fNbOfSingles = nbOfSingles;
 
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		fCDErestSingles.push_back(new TRexCDErestSingle(fName + Form("Single%d", i), direction, i));
 	}
 }
@@ -27,7 +27,7 @@ TRexCDErest::~TRexCDErest() {
 
 void TRexCDErest::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan) {
 	// loop over all CDErest single detectors
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		fCDErestSingles[i]->Construct(experimentalHall_log, SDMan);
 	}
 }
@@ -35,9 +35,9 @@ void TRexCDErest::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *
 std::vector<ParticleMC>* TRexCDErest::GetParticleMCvector() {
 	std::vector<ParticleMC>* particleMCvector = new std::vector<ParticleMC>;
 
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		// include only detectors with a hit
-		if(fCDErestSingles[i]->GetParticleMC()->GetEdet() > 0.001){
+		if(fCDErestSingles[i]->GetParticleMC()->GetEdet() > 0.001) {
 			particleMCvector->push_back(*fCDErestSingles[i]->GetParticleMC());
 		}
 	}

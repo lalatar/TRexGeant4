@@ -25,7 +25,7 @@ TRexHit::TRexHit() {
 
 }
 
-TRexHit::TRexHit(const G4Step* aStep, G4TouchableHistory*){
+TRexHit::TRexHit(const G4Step* aStep, G4TouchableHistory*) {
 	SetParticle(aStep->GetTrack()->GetDefinition()->GetParticleName());
 	SetParticleZ(aStep->GetTrack()->GetDefinition()->GetAtomicNumber());
 	SetParticleA(aStep->GetTrack()->GetDefinition()->GetAtomicMass());
@@ -53,28 +53,26 @@ TRexHit::~TRexHit() {
 }
 
 // print
-void TRexHit::Print()
-{
-  G4cout << "particle = " << fParticle << " : " << fPos[0]/mm
-	 << " mm , " << fPos[1]/mm << " mm , " << fPos[2]/mm
-	 << " mm , process = " << fProcess << " , time = " << fTime
-	 << "  , trackLength = " << fTrackLength
-	 << "  , energy deposition = " << fEnergy
-	 <<  G4endl;
+void TRexHit::Print() {
+	G4cout << "particle = " << fParticle << " : " << fPos[0]/mm
+		<< " mm , " << fPos[1]/mm << " mm , " << fPos[2]/mm
+		<< " mm , process = " << fProcess << " , time = " << fTime
+		<< "  , trackLength = " << fTrackLength
+		<< "  , energy deposition = " << fEnergy
+		<<  G4endl;
 }
 
 // draw
 void TRexHit::Draw()
 {
-  G4VVisManager *visMan = G4VVisManager::GetConcreteInstance();
-  if(visMan)
-    {
-      G4Circle circle(fPos);
-      circle.SetScreenSize(5);
-      circle.SetFillStyle(G4Circle::filled);
-      G4Color color(1.0, 0.0, 0.5);
-      G4VisAttributes attribs(color);
-      circle.SetVisAttributes(attribs);
-      visMan->Draw(circle);
-    }
+	G4VVisManager *visMan = G4VVisManager::GetConcreteInstance();
+	if(visMan) {
+		G4Circle circle(fPos);
+		circle.SetScreenSize(5);
+		circle.SetFillStyle(G4Circle::filled);
+		G4Color color(1.0, 0.0, 0.5);
+		G4VisAttributes attribs(color);
+		circle.SetVisAttributes(attribs);
+		visMan->Draw(circle);
+	}
 }

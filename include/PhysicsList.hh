@@ -38,42 +38,41 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VUserPhysicsList
-{
-  public:
-    PhysicsList();
-   ~PhysicsList();
+class PhysicsList: public G4VUserPhysicsList {
+	public:
+		PhysicsList();
+		~PhysicsList();
 
-  protected:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
- 
-    void SetCuts();
+	protected:
+		// Construct particle and physics
+		void ConstructParticle();
+		void ConstructProcess();
 
-   
-  protected:
-    // these methods Construct particles 
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
+		void SetCuts();
 
-  protected:
-  // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
 
-    void ConstructOptical();
-  //void ConstructLight();
+	protected:
+		// these methods Construct particles 
+		void ConstructBosons();
+		void ConstructLeptons();
+		void ConstructMesons();
+		void ConstructBaryons();
 
-    void AddStepMax();
+	protected:
+		// these methods Construct physics processes and register them
+		void ConstructGeneral();
+		void ConstructEM();
 
-  //InputHandler* input;
+		void ConstructOptical();
+		//void ConstructLight();
+
+		void AddStepMax();
+
+		//InputHandler* input;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
- 
+

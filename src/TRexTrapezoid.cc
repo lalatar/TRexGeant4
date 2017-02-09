@@ -11,7 +11,7 @@
 TRexTrapezoid::TRexTrapezoid() {
 }
 
-TRexTrapezoid::TRexTrapezoid(std::string name, std::string direction, int nbOfTelescopes){
+TRexTrapezoid::TRexTrapezoid(std::string name, std::string direction, int nbOfTelescopes) {
 	fName = name;
 	fDirection = direction;
 	fNbOfTelescopes = nbOfTelescopes;
@@ -30,5 +30,5 @@ void TRexTrapezoid::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager
 }
 
 std::vector<ParticleMC>* TRexTrapezoid::GetParticleMCvector() {
-	return (combineDeltaEErestData(fTrapezoidDeltaE, fTrapezoidErest));
+	return CombineDeltaEErestData(fTrapezoidDeltaE, fTrapezoidErest);
 }

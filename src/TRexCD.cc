@@ -11,7 +11,7 @@
 TRexCD::TRexCD() {
 }
 
-TRexCD::TRexCD(std::string name, std::string direction, int nbOfTelescopes){
+TRexCD::TRexCD(std::string name, std::string direction, int nbOfTelescopes) {
 	fName = name;
 	fDirection = direction;
 	fNbOfTelescopes = nbOfTelescopes;
@@ -30,5 +30,5 @@ void TRexCD::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan
 }
 
 std::vector<ParticleMC>* TRexCD::GetParticleMCvector() {
-	return (combineDeltaEErestData(fCDdeltaE, fCDErest));
+	return CombineDeltaEErestData(fCDdeltaE, fCDErest);
 }

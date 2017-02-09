@@ -4,61 +4,32 @@
 #include "Isotopes.hh"
 #include <fstream>
 
+double Isotopes::fAmu = 931.494043;//error is 0.000080
+bool Isotopes::fDebug = false;
+
 //#define debug
 //#define debug_all
 //#define debug_transfer
 
-Isotopes::Isotopes() {
-	amu = 931.494043;//error is 0.000080
+Isotopes::Isotopes(const char* massFileName, bool debug) {
+	fDebug = debug;
 
 	char temp[256],*cptr;
-	int i = 0,n,z;
-	double emass,dmass;
-	std::ifstream mass_file;
-	mass_file.open("./mass.dat",std::ios::in);
+	int i = 0;
+	int n;
+	int z;
+	double emass;
+	double dmass;
+	std::ifstream massFile;
+	massFile.open(massFileName,std::ios::in);
 
-	while(!mass_file.bad() && !mass_file.eof() && i < 5012) {
-		mass_file>>z;
-		mass_file>>n;
-		mass_file>>emass;
-		mass_file>>dmass;
-		mass_file.width(6);
-		mass_file>>temp;
-		cptr = temp;
-		while( *cptr == ' ') {
-			cptr++;
-		}
-		while(isdigit(*cptr)) {
-			cptr++;
-		}
-		IsotopeTable[i] = new Element(z,n,((double)(n+z)*amu)+emass/1000.,emass/1000.,dmass/1000.,cptr,i);
-		i++;
-		mass_file.ignore(256,'\n');
-#ifdef debug_all
-		std::cout<<i<<". read: "<<z<<" "<<n<<" "<<emass<<" "<<dmass<<" "<<temp<<"/"<<cptr<<std::endl;
-#endif
-	}
-	max_elements=i;
-
-	mass_file.close();
-}
-
-Isotopes::Isotopes(const char* MassFile) {
-	amu = 931.494043;//error is 0.000080
-
-	char temp[256],*cptr;
-	int i = 0,n,z;
-	double emass,dmass;
-	std::ifstream mass_file;
-	mass_file.open(MassFile,std::ios::in);
-
-	while(!mass_file.bad() && !mass_file.eof() && i < 5012) {
-		mass_file>>z;
-		mass_file>>n;
-		mass_file>>emass;
-		mass_file>>dmass;
-		mass_file.width(6);
-		mass_file>>temp;
+	while(!massFile.bad() && !massFile.eof()) {
+		massFile>>z;
+		massFile>>n;
+		massFile>>emass;
+		massFile>>dmass;
+		massFile.width(6);
+		massFile>>temp;
 		cptr = temp;
 		while( *cptr == ' ')	{
 			cptr++;
@@ -66,71 +37,67 @@ Isotopes::Isotopes(const char* MassFile) {
 		while(isdigit(*cptr)) {
 			cptr++;
 		}
-		IsotopeTable[i] = new Element(z,n,((double)(n+z)*amu)+emass/1000.,emass/1000.,dmass/1000.,cptr,i);
-		i++;
-		mass_file.ignore(256,'\n');
-#ifdef debug_all
-		std::cout<<"read: "<<z<<" "<<n<<" "<<emass<<" "<<dmass<<" "<<temp<<"/"<<cptr<<std::endl;
-#endif
+		fIsotopeTable.push_back(new Element(z,n,((double)(n+z)*fAmu)+emass/1000.,emass/1000.,dmass/1000.,cptr,i));
+		++i;
+		massFile.ignore(256,'\n');
+		if(fDebug) {
+			std::cout<<"read: "<<z<<" "<<n<<" "<<emass<<" "<<dmass<<" "<<temp<<"/"<<cptr<<std::endl;
+		}
 	}
-	max_elements=i;
 
-	mass_file.close();
+	massFile.close();
 }
 
 Isotopes::~Isotopes() {
-	for(int i=0;i<max_elements;i++) {
-		if(IsotopeTable[i] != NULL) {
-			delete IsotopeTable[i];
+	for(size_t i = 0; i < fIsotopeTable.size(); ++i) {
+		delete fIsotopeTable[i];
+	}
+}
+
+size_t Isotopes::GetIndex(int z, int n) {
+	size_t i = 0;
+	for(i = 0; i < fIsotopeTable.size(); ++i) {
+		if(fIsotopeTable[i]->Z() == z && fIsotopeTable[i]->N() == n) break;
+		if(fDebug) {
+			std::cout<<i<<". "<<fIsotopeTable[i]->Z()<<" "<<fIsotopeTable[i]->N()<<"("<<z<<", "<<n<<")"<<std::endl;
 		}
 	}
+
+	return i;
 }
 
 double Isotopes::Mass(int z, int n) {
-#ifdef debug
-	std::cout<<"start Mass("<<z<<","<<n<<")"<<std::endl;
-#endif
-
-	int i = 0;
-
-	while(IsotopeTable[i]->Z() != z || IsotopeTable[i]->N() != n) {
-#ifdef debug
-		std::cout<<i<<". "<<IsotopeTable[i]->Z()<<" "<<IsotopeTable[i]->N()<<"("<<z<<", "<<n<<")"<<std::endl;
-#endif
-		i++;
-		if(i == max_elements) {
-			return -1;
-		}
+	if(fDebug) {
+		std::cout<<"start Mass("<<z<<","<<n<<")"<<std::endl;
 	}
 
-	return IsotopeTable[i]->Mass();
+	size_t i = GetIndex(z, n);
+	if(i == NumberOfIsotopes()) {
+		return -1.;
+	}
+
+	return fIsotopeTable[i]->Mass();
 }
 
 double Isotopes::MassExcess(int z, int n) {
-#ifdef debug
-	std::cout<<"start MassExcess("<<z<<","<<n<<")"<<std::endl;
-#endif
-
-	int i = 0;
-
-	while(IsotopeTable[i]->Z() != z || IsotopeTable[i]->N() != n) {
-#ifdef debug
-		std::cout<<i<<". "<<IsotopeTable[i]->Z()<<" "<<IsotopeTable[i]->N()<<"("<<z<<", "<<n<<")"<<std::endl;
-#endif
-		i++;
-		if(i == max_elements) {
-			return -1;
-		}
+	if(fDebug) {
+		std::cout<<"start MassExcess("<<z<<","<<n<<")"<<std::endl;
 	}
 
-	return IsotopeTable[i]->MassExcess();
+	size_t i = GetIndex(z, n);
+	if(i == NumberOfIsotopes()) {
+		return -1.;
+	}
+
+	return fIsotopeTable[i]->MassExcess();
 }
 
 Element* Isotopes::Search(char* c) {
-#ifdef debug
-	std::cout<<"start SearchTable("<<c<<")"<<std::endl;
-#endif
-	int i,n;
+	if(fDebug) {
+		std::cout<<"start SearchTable("<<c<<")"<<std::endl;
+	}
+	int i;
+	int n;
 	char* cptr;
 	char* tmp;
 	double a;
@@ -168,142 +135,126 @@ Element* Isotopes::Search(char* c) {
 	a = atof(tmp);
 
 	i = 0;
-	while(i<max_elements) {
-		if(strcmp(IsotopeTable[i]->Name(),cptr)==0) {
-#ifdef debug
-			std::cout<<"Search::A(): "<<IsotopeTable[i]->A()<<std::endl;
-#endif
-			while(IsotopeTable[i]->A() != a && i<max_elements)	{
-#ifdef debug
-				std::cout<<a<<" != "<<IsotopeTable[i]->A()<<" ("<<i<<")"<<std::endl;
-#endif
-				i++;
+	for(i = 0; i < (int) NumberOfIsotopes(); ++i) {
+		if(strcmp(fIsotopeTable[i]->Name(),cptr)==0) {
+			if(fDebug) {
+				std::cout<<"Search::A(): "<<fIsotopeTable[i]->A()<<std::endl;
+			}
+			while(fIsotopeTable[i]->A() != a && i < (int) NumberOfIsotopes())	{
+				if(fDebug) {
+					std::cout<<a<<" != "<<fIsotopeTable[i]->A()<<" ("<<i<<")"<<std::endl;
+				}
+				++i;
 			}
 			break;
 		}
-		i++;
 	}
 
 	delete[] cptr;
 	delete[] tmp;
 
-	if(i < max_elements) {
-		return IsotopeTable[i];
+	if(i < (int) NumberOfIsotopes()) {
+		return fIsotopeTable[i];
 	} else {
 		return NULL;
 	}
 }
 
 Element* Isotopes::Search(int z, int n) {
-#ifdef debug
-	std::cout<<"start SearchTable("<<z<<", "<<n<<")"<<std::endl;
-#endif
-	int i;
-
-	i = 0;
-	while(i<max_elements) {
-		if(IsotopeTable[i]->Z() == z) {
-#ifdef debug
-			std::cout<<"Search::N(): "<<IsotopeTable[i]->N()<<std::endl;
-#endif
-			while(IsotopeTable[i]->N() != n) {
-				i++;
-			}
-			break;
-		}
-		i++;
+	if(fDebug) {
+		std::cout<<"start SearchTable("<<z<<", "<<n<<")"<<std::endl;
 	}
-
-	if(i < max_elements) {
-		return IsotopeTable[i];
-	} else {
+	size_t i = GetIndex(z, n);
+	if(i == NumberOfIsotopes()) {
 		return NULL;
 	}
+
+	return fIsotopeTable[i];
 }
 
 void Isotopes::ProjectileOneNeutronGain(Element*& ejectile, Element*& recoil) {
-#ifdef debug_transfer
-	std::cout<<"called Isotopes::ProjectileOneNeutronGain("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
-#endif
-	ejectile = this->Reaction(ejectile,0,1);
-	recoil   = this->Reaction(recoil,0,-1);
-#ifdef debug_transfer
-	std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
-#endif
+	if(fDebug) {
+		std::cout<<"called Isotopes::ProjectileOneNeutronGain("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
+	}
+	ejectile = Reaction(ejectile,0,1);
+	recoil   = Reaction(recoil,0,-1);
+	if(fDebug) {
+		std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
+	}
 }
 
 void Isotopes::ProjectileOneNeutronLoss(Element*& ejectile, Element*& recoil) {
-#ifdef debug_transfer
-	std::cout<<"called Isotopes::ProjectileOneNeutronLoss("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
-#endif
-	ejectile = this->Reaction(ejectile,0,-1);
-	recoil   = this->Reaction(recoil,0,1);
-#ifdef debug_transfer
-	std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
-#endif
+	if(fDebug) {
+		std::cout<<"called Isotopes::ProjectileOneNeutronLoss("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
+	}
+	ejectile = Reaction(ejectile,0,-1);
+	recoil   = Reaction(recoil,0,1);
+	if(fDebug) {
+		std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
+	}
 }
 
 void Isotopes::ProjectileTwoNeutronGain(Element*& ejectile, Element*& recoil) {
-#ifdef debug_transfer
-	std::cout<<"called Isotopes::ProjectileTwoNeutronGain("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
-#endif
-	ejectile = this->Reaction(ejectile,0,2);
-	recoil   = this->Reaction(recoil,0,-2);
-#ifdef debug_transfer
-	std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
-#endif
+	if(fDebug) {
+		std::cout<<"called Isotopes::ProjectileTwoNeutronGain("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
+	}
+	ejectile = Reaction(ejectile,0,2);
+	recoil   = Reaction(recoil,0,-2);
+	if(fDebug) {
+		std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
+	}
 }
 
 void Isotopes::ProjectileTwoNeutronLoss(Element*& ejectile, Element*& recoil) {
-#ifdef debug_transfer
-	std::cout<<"called Isotopes::ProjectileTwoNeutronLoss("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
-#endif
-	ejectile = this->Reaction(ejectile,0,-2);
-	recoil   = this->Reaction(recoil,0,2);
-#ifdef debug_transfer
-	std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
-#endif
+	if(fDebug) {
+		std::cout<<"called Isotopes::ProjectileTwoNeutronLoss("<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<")"<<std::endl;
+	}
+	ejectile = Reaction(ejectile,0,-2);
+	recoil   = Reaction(recoil,0,2);
+	if(fDebug) {
+		std::cout<<"returned: "<<ejectile->A()<<ejectile->Name()<<", "<<recoil->A()<<recoil->Name()<<std::endl;
+	}
 }
 
-Element* Isotopes::Reaction(Element* el, int proton_change, int neutron_change) {
-#ifdef debug_transfer
-	std::cout<<"called Isotopes::Reaction("<<el->A()<<el->Name()<<", "<<proton_change<<", "<<neutron_change<<")"<<std::endl;
-#endif
-	int new_proton_number, new_neutron_number, index;
+Element* Isotopes::Reaction(Element* el, int protonChange, int neutronChange) {
+	if(fDebug) {
+		std::cout<<"called Isotopes::Reaction("<<el->A()<<el->Name()<<", "<<protonChange<<", "<<neutronChange<<")"<<std::endl;
+	}
+	int newProtonNumber, newNeutronNumber, index;
 
-	if(proton_change == 0 && neutron_change == 0) {
+	if(protonChange == 0 && neutronChange == 0) {
 		return el;
 	}
 
-	new_proton_number = el->Z() + proton_change;
-	new_neutron_number = el->N() + neutron_change;
+	newProtonNumber = el->Z() + protonChange;
+	newNeutronNumber = el->N() + neutronChange;
 	index = el->Index();
 
-#ifdef debug_transfer
-	std::cout<<"new_proton_number: "<<new_proton_number<<", new_neutron_number: "<<new_neutron_number<<", index: "<<index<<std::endl;
-#endif
+	if(fDebug) {
+		std::cout<<"newProtonNumber: "<<newProtonNumber<<", newNeutronNumber: "<<newNeutronNumber<<", index: "<<index<<std::endl;
+	}
 
-	if(proton_change >= 0 && neutron_change >= 0) {
-		while(IsotopeTable[index]->Z() != new_proton_number || IsotopeTable[index]->N() != new_neutron_number) {
+	if(protonChange >= 0 && neutronChange >= 0) {
+		while(fIsotopeTable[index]->Z() != newProtonNumber || fIsotopeTable[index]->N() != newNeutronNumber) {
 			index++;
-#ifdef debug_transfer
-			std::cout<<"increment index: "<<index<<std::endl;
-#endif
+			if(fDebug) {
+				std::cout<<"increment index: "<<index<<std::endl;
+			}
 		}
 	} else {
-		while(IsotopeTable[index]->Z() != new_proton_number || IsotopeTable[index]->N() != new_neutron_number) {
+		while(fIsotopeTable[index]->Z() != newProtonNumber || fIsotopeTable[index]->N() != newNeutronNumber) {
 			index--;
-#ifdef debug_transfer
-			std::cout<<"decrement index: "<<index<<std::endl;
-#endif
+			if(fDebug) {
+				std::cout<<"decrement index: "<<index<<std::endl;
+			}
 		}
 	}
 
-#ifdef debug_transfer
-	std::cout<<"final index: "<<index<<" = "<<IsotopeTable[index]->A()<<IsotopeTable[index]->Name()<<std::endl;
-#endif
+	if(fDebug) {
+		std::cout<<"final index: "<<index<<" = "<<fIsotopeTable[index]->A()<<fIsotopeTable[index]->Name()<<std::endl;
+	}
 
-	return IsotopeTable[index];
+	return fIsotopeTable[index];
 }
 
 int CalculateQ(Element** particle,double* q,double* dq) {

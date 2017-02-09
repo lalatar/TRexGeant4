@@ -16,18 +16,18 @@
 #include <vector>
 #include <string>
 
-class TRexTrapezoidErest : public TRexBaseDetector{
-public:
-	TRexTrapezoidErest();
-	TRexTrapezoidErest(std::string name, std::string direction, int nbOfSingles);
-	virtual ~TRexTrapezoidErest();
+class TRexTrapezoidErest : public TRexBaseDetector {
+	public:
+		TRexTrapezoidErest();
+		TRexTrapezoidErest(std::string name, std::string direction, int nbOfSingles);
+		virtual ~TRexTrapezoidErest();
 
-	void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	std::vector<ParticleMC>* GetParticleMCvector();
+		void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		std::vector<ParticleMC>* GetParticleMCvector();
 
-private:
-	int fNbOfSingles;
-	std::vector<TRexTrapezoidErestSingle*> fTrapezoidErestSingles;
+	private:
+		int fNbOfSingles;
+		std::vector<TRexTrapezoidErestSingle*> fTrapezoidErestSingles;
 };
 
 #endif /* TREXTRAPEZOIDEREST_HH_ */

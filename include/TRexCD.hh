@@ -17,21 +17,21 @@
 #include <vector>
 #include <string>
 
-class TRexCD : public TRexBaseDetector{
-public:
-	TRexCD();
-	TRexCD(std::string name, std::string direction, int nbOfTelescopes);
-	virtual ~TRexCD();
+class TRexCD : public TRexBaseDetector {
+	public:
+		TRexCD();
+		TRexCD(std::string name, std::string direction, int nbOfTelescopes);
+		virtual ~TRexCD();
 
-	void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	std::vector<ParticleMC>* GetParticleMCvector();
+		void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		std::vector<ParticleMC>* GetParticleMCvector();
 
-private:
-	std::string fDirection;
-	int fNbOfTelescopes;
+	private:
+		std::string fDirection;
+		int fNbOfTelescopes;
 
-	TRexCDdeltaE* fCDdeltaE;
-	TRexCDErest* fCDErest;
+		TRexCDdeltaE* fCDdeltaE;
+		TRexCDErest* fCDErest;
 };
 
 #endif /* TREXCD_HH_ */

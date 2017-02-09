@@ -29,7 +29,7 @@ TRexAngularDistribution::~TRexAngularDistribution() {
 }
 
 
-void TRexAngularDistribution::GeneratePrimaries(G4Event *anEvent){
+void TRexAngularDistribution::GeneratePrimaries(G4Event *anEvent) {
 	// clear old event
 	fGammaTheta->resize(0);
 	fGammaPhi->resize(0);
@@ -53,7 +53,7 @@ void TRexAngularDistribution::GeneratePrimaries(G4Event *anEvent){
 	// shoot energy and direction
 	ShootEjectileAndRecoilDirections();
 
-	if(TRexSettings::Get()->SimulateGammas() && fReaction < fNbOfLevels){
+	if(TRexSettings::Get()->SimulateGammas() && fReaction < fNbOfLevels) {
 		// shoot energy and direction of the gamma
 		ShootGamma();
 	}
@@ -62,25 +62,24 @@ void TRexAngularDistribution::GeneratePrimaries(G4Event *anEvent){
 	SetEjectileGun(anEvent);
 	SetRecoilGun(anEvent);
 
-	if(TRexSettings::Get()->SimulateGammas() && fReaction < fNbOfLevels){
+	if(TRexSettings::Get()->SimulateGammas() && fReaction < fNbOfLevels) {
 		SetGammaGun(anEvent);
 	}
 
 	FillTree();
 }
 
-void TRexAngularDistribution::SetEjectileAndRecoil(){
+void TRexAngularDistribution::SetEjectileAndRecoil() {
 	// Transfer or Coulex reaction
-	if(fReaction < fNbOfLevels){
+	if(fReaction < fNbOfLevels) {
 		fTargetZ = TRexSettings::Get()->GetTargetZ();
 		fTargetA = TRexSettings::Get()->GetTargetA();
 		fEjectileZ = TRexSettings::Get()->GetEjectileZ();
 		fEjectileA = TRexSettings::Get()->GetEjectileA();
 		fRecoilZ = TRexSettings::Get()->GetRecoilZ();
 		fRecoilA = TRexSettings::Get()->GetRecoilA();
-	}
-	else{ // elastic Rutherford scattering
-		int index = fReaction - fNbOfLevels;
+	} else { // elastic Rutherford scattering
+		size_t index = fReaction - fNbOfLevels;
 
 		fTargetZ = fTargetMaterial->GetElement(index)->Z();
 		fTargetA = fTargetMaterial->GetElement(index)->A();
@@ -95,12 +94,11 @@ void TRexAngularDistribution::SetEjectileAndRecoil(){
 	fRecoil = *(fIsotopeTable->Search(fRecoilZ, fRecoilA - fRecoilZ));
 }
 
-void TRexAngularDistribution::ShootThetaCm(int levelNb){
+void TRexAngularDistribution::ShootThetaCm(int levelNb) {
 	// get a random number (thetaCM) distributed according the histogram bin contents, i.e. the cross section sigma * sin(thetaCM)
-	if(fReaction < fNbOfLevels){
+	if(fReaction < fNbOfLevels) {
 		fThetaCM = fHistos[levelNb].GetRandom() * rad;
-	}
-	else{
+	} else {
 		// normalization constant
 		double norm = 1./  (1./(sin(fThetaCM_min/rad * 0.5) * sin(fThetaCM_min/rad * 0.5)) -1);
 		G4double rand = CLHEP::RandFlat::shoot(0., 1.);
@@ -111,30 +109,28 @@ void TRexAngularDistribution::ShootThetaCm(int levelNb){
 }
 
 
-void TRexAngularDistribution::ShootReactionTypeAndExcitationEnergy(){
+void TRexAngularDistribution::ShootReactionTypeAndExcitationEnergy() {
 	// decide whether to simulate transfer reaction / Coulex reaction or elastic Rutherford scattering
 	double tmp = CLHEP::RandFlat::shoot(0.,1.);
 
-	if(tmp < TRexSettings::Get()->GetTransferOrCoulexProbability()){ //transfer reaction or Coulex
+	if(tmp < TRexSettings::Get()->GetTransferOrCoulexProbability()) { //transfer reaction or Coulex
 		// shoot transfer / Coulex reaction channel
 		tmp = CLHEP::RandFlat::shoot(0., fScatteringProbabilitySingle[fNbOfLevels - 1]);
 
-		for(fReaction = 0; tmp > fScatteringProbabilitySingle[fReaction]; fReaction++){
+		for(fReaction = 0; tmp > fScatteringProbabilitySingle[fReaction]; fReaction++) {
 			//nothing else, after this loop reaction is the reaction channel to be used (from 0 to NumberOfLevel-1 or NumberOfLevel+NumberOfElements-1)
 		}
 
 		fExcitationEnergy = fLevelEnergy[fReaction];
-	}
-	else{ // elastic Rutherford scattering => reaction based on cross sections for elastic scattering on the different elements in the target
-		if(fTargetMaterial->NumberOfElements() == 1){ //easy, only one element in target => chose element 0
+	} else { // elastic Rutherford scattering => reaction based on cross sections for elastic scattering on the different elements in the target
+		if(fTargetMaterial->NumberOfElements() == 1) { //easy, only one element in target => chose element 0
 			fReaction = fNbOfLevels;
-		}
-		else{
+		} else {
 			// shoot elastic Rutherford channel
 			double tmp = CLHEP::RandFlat::shoot(fScatteringProbabilitySingle[fNbOfLevels - 1],
 					fScatteringProbabilitySingle[fNbOfLevels + fTargetMaterial->NumberOfElements() - 1]);
 
-			for(fReaction = fNbOfLevels; tmp > fScatteringProbabilitySingle[fReaction]; fReaction++){
+			for(fReaction = fNbOfLevels; tmp > fScatteringProbabilitySingle[fReaction]; fReaction++) {
 				//nothing else, after this loop reaction is the reaction channel to be used (from 0 to NumberOfLevel-1 or NumberOfLevel+NumberOfElements-1)
 			}
 		}
@@ -143,7 +139,7 @@ void TRexAngularDistribution::ShootReactionTypeAndExcitationEnergy(){
 	}
 }
 
-void TRexAngularDistribution::ShootEjectileAndRecoilDirections(){
+void TRexAngularDistribution::ShootEjectileAndRecoilDirections() {
 	//fThetaCM = 70. * degree;
 
 	// particle momentum direction
@@ -189,17 +185,16 @@ void TRexAngularDistribution::ShootEjectileAndRecoilDirections(){
 
 
 	// set ejectile Lorentz vector after target if gammas are simulated (needed for the calculation of the Doppler shift)
-	if(TRexSettings::Get()->SimulateGammas()){
+	if(TRexSettings::Get()->SimulateGammas()) {
 		// travel length of the ejectile through the target
 		G4double travelLength;
 
-		if(fEjectileTheta / degree < 90*degree){
+		if(fEjectileTheta / degree < 90*degree) {
 			travelLength = 1. / fabs(cos(fEjectileTheta)) *
-					(TRexSettings::Get()->GetTargetThickness() - (fReactionZ * TRexSettings::Get()->GetTargetMaterialDensity() + TRexSettings::Get()->GetTargetThickness() / 2.));
-		}
-		else{
+				(TRexSettings::Get()->GetTargetThickness() - (fReactionZ * TRexSettings::Get()->GetTargetMaterialDensity() + TRexSettings::Get()->GetTargetThickness() / 2.));
+		} else {
 			travelLength = 1. / fabs(cos(fEjectileTheta)) *
-					(fReactionZ * TRexSettings::Get()->GetTargetMaterialDensity() + TRexSettings::Get()->GetTargetThickness() / 2.);
+				(fReactionZ * TRexSettings::Get()->GetTargetMaterialDensity() + TRexSettings::Get()->GetTargetThickness() / 2.);
 		}
 
 		// energy loss of the ejectile in the target
@@ -215,17 +210,17 @@ void TRexAngularDistribution::ShootEjectileAndRecoilDirections(){
 }
 
 
-void TRexAngularDistribution::ShootGamma(){
+void TRexAngularDistribution::ShootGamma() {
 	// clear old event
 	fGammaLab->clear();
 
 	G4LorentzVector boostedGamma;
 
-	if(fNbOfDecays[fReaction] > 0){
+	if(fNbOfDecays[fReaction] > 0) {
 
 		GenerateDecay(fReaction);
 
-		for(int i = 0; i < GetNbOfGammas(); i++){
+		for(int i = 0; i < GetNbOfGammas(); i++) {
 			// gamma in the CM frame
 			boostedGamma.set(GetGammaEnergy(i), GetGammaDirection(i));
 
@@ -244,14 +239,13 @@ void TRexAngularDistribution::ShootGamma(){
 	}
 }
 
-void TRexAngularDistribution::FillAngularDistributionGraphs(){
+void TRexAngularDistribution::FillAngularDistributionGraphs() {
 	std::ifstream file(TRexSettings::Get()->GetAngularDistributionFile().c_str());
 
-	if(file.bad()){
+	if(file.bad()) {
 		std::cerr << "Unable to open " << TRexSettings::Get()->GetAngularDistributionFile() << "!\nexiting ... \n";
 		exit(2);
-	}
-	else{
+	} else {
 		std::cout << "\nReading angular distribution file " << TRexSettings::Get()->GetAngularDistributionFile() << " ... \n"<< std::endl;
 	}
 
@@ -259,7 +253,7 @@ void TRexAngularDistribution::FillAngularDistributionGraphs(){
 	// number of theta angles = number of lines
 	int nbOfThetaAngles;
 
-	for(int i = 0; i < fNbOfLevels; i++){
+	for(size_t i = 0; i < fNbOfLevels; i++) {
 		file >> nbOfThetaAngles;
 	}
 	//std::cout << "nfOfThetaAngles = " << nbOfThetaAngles << std::endl;
@@ -270,9 +264,9 @@ void TRexAngularDistribution::FillAngularDistributionGraphs(){
 	std::vector<TVectorF> sigmaSin = std::vector<TVectorF>(fNbOfLevels, TVectorF(nbOfThetaAngles));
 
 	// loop over all lines
-	for(int th = 0; th < nbOfThetaAngles; th++){
+	for(int th = 0; th < nbOfThetaAngles; th++) {
 		// loop over all states
-		for(int i = 0; i < fNbOfLevels; i++){
+		for(size_t i = 0; i < fNbOfLevels; i++) {
 			file >> theta[i][th] >> sigma[i][th];
 			//std::cout << theta[i][th] << " " << sigma[i][th] << std::endl;
 			thetaSin[i][th] = theta[i][th] / 180 * TMath::Pi();
@@ -282,25 +276,25 @@ void TRexAngularDistribution::FillAngularDistributionGraphs(){
 	}
 
 	// loop over all states
-	for(int i = 0; i < fNbOfLevels; i++){
+	for(size_t i = 0; i < fNbOfLevels; i++) {
 		//fGraphs.push_back(TGraph(theta[i], sigma[i]));
 		fGraphsSin.push_back(TGraph(thetaSin[i], sigmaSin[i]));
 	}
 
 	file.close();
 
-//		TFile testFile("angDist.root", "recreate");
-//		testFile.cd();
-//
-//		for(int i = 0; i < fNbOfLevels; i++){
-//			//fGraphs[i].SetName(Form("Graph_%i", i));
-//			//fGraphs[i].Write();
-//		}
+	//		TFile testFile("angDist.root", "recreate");
+	//		testFile.cd();
+	//
+	//		for(int i = 0; i < fNbOfLevels; i++) {
+	//			//fGraphs[i].SetName(Form("Graph_%i", i));
+	//			//fGraphs[i].Write();
+	//		}
 }
 
-void TRexAngularDistribution::FillAngularDistributionHistos(){
+void TRexAngularDistribution::FillAngularDistributionHistos() {
 	// loop over all levels
-	for(int i = 0; i < fNbOfLevels; i++){
+	for(size_t i = 0; i < fNbOfLevels; i++) {
 		// binning of the histogram
 		int nbOfBins = fGraphsSin[i].GetN() * 100;
 
@@ -313,55 +307,54 @@ void TRexAngularDistribution::FillAngularDistributionHistos(){
 		double binWidth = (thetaMax - thetaMin) / nbOfBins;
 
 		// create angular distribution histogram
-		fHistos.push_back(TH1F(Form("AngularDistributionHisto_%d", i), Form("AngularDistributionHisto_%d", i),
-				nbOfBins + 1, thetaMin - binWidth/2., thetaMax + binWidth/2.));
+		fHistos.push_back(TH1F(Form("AngularDistributionHisto_%d", (int) i), Form("AngularDistributionHisto_%d", (int) i),
+					nbOfBins + 1, thetaMin - binWidth/2., thetaMax + binWidth/2.));
 
 		double sigma;
 
 		// loop over all theta angles and fill the histogram
-		for(double theta = thetaMin; theta < thetaMax + binWidth; theta += binWidth){
+		for(double theta = thetaMin; theta < thetaMax + binWidth; theta += binWidth) {
 			sigma = fGraphsSin[i].Eval(theta);
 
-			if(theta >  fThetaCM_min / rad){
+			if(theta >  fThetaCM_min / rad) {
 				// fill histogram
 				fHistos[i].Fill(theta, sigma);
 			}
 		}
 	}
 
-//		TFile testFile("angDistHisto.root", "recreate");
-//		testFile.cd();
-//
-//		for(int i = 0; i < fNbOfLevels; i++){
-//			fHistos[i].Write();
-//		}
+	//		TFile testFile("angDistHisto.root", "recreate");
+	//		testFile.cd();
+	//
+	//		for(size_t i = 0; i < fNbOfLevels; i++) {
+	//			fHistos[i].Write();
+	//		}
 }
 
-void TRexAngularDistribution::CalculateArealDensity(){
-	if(fTargetMaterial->NumberOfElements() == 1){
-	  fArealDensity.push_back(TRexSettings::Get()->GetTargetThickness() * Avogadro / (fTargetMaterial->GetElement(0)->A() * g/mole));
-	}
-	else{
-	  double atomicRatio[2] = {1.0, TRexSettings::Get()->GetTargetAtomicRatio()};
-	  
-	  for(int i = 0; i < fTargetMaterial->NumberOfElements();i++){
-	    fArealDensity.push_back(atomicRatio[i] * TRexSettings::Get()->GetTargetThickness() * Avogadro /
-				    (fTargetMaterial->GetElement(0)->A() * g/mole + TRexSettings::Get()->GetTargetAtomicRatio() * fTargetMaterial->GetElement(1)->A() * g/mole));
-	  }
+void TRexAngularDistribution::CalculateArealDensity() {
+	if(fTargetMaterial->NumberOfElements() == 1) {
+		fArealDensity.push_back(TRexSettings::Get()->GetTargetThickness() * Avogadro / (fTargetMaterial->GetElement(0)->A() * g/mole));
+	} else {
+		double atomicRatio[2] = {1.0, TRexSettings::Get()->GetTargetAtomicRatio()};
+
+		for(size_t i = 0; i < fTargetMaterial->NumberOfElements(); ++i) {
+			fArealDensity.push_back(atomicRatio[i] * TRexSettings::Get()->GetTargetThickness() * Avogadro /
+					(fTargetMaterial->GetElement(0)->A() * g/mole + TRexSettings::Get()->GetTargetAtomicRatio() * fTargetMaterial->GetElement(1)->A() * g/mole));
+		}
 	}
 
-	for(int i = 0; i < fTargetMaterial->NumberOfElements();i++){
-	  std::cout << "Areal density[" << i << "] = " << fArealDensity[i] *cm2 << " / cm2" << std::endl;
+	for(size_t i = 0; i < fTargetMaterial->NumberOfElements(); ++i) {
+		std::cout << "Areal density[" << i << "] = " << fArealDensity[i] *cm2 << " / cm2" << std::endl;
 	}
 }
 
-void TRexAngularDistribution::CalculateCrossSectionIntegral(){
+void TRexAngularDistribution::CalculateCrossSectionIntegral() {
 	int firstPoint = 0;
 
-	for(unsigned int i = 0; i < fGraphsSin.size(); i++){
+	for(unsigned int i = 0; i < fGraphsSin.size(); i++) {
 		firstPoint = 0;
 
-		while(fGraphsSin[i].GetX()[firstPoint] < fThetaCM_min / rad - 0.00001){
+		while(fGraphsSin[i].GetX()[firstPoint] < fThetaCM_min / rad - 0.00001) {
 			firstPoint ++;
 		}
 
@@ -372,7 +365,7 @@ void TRexAngularDistribution::CalculateCrossSectionIntegral(){
 	}
 
 	// elastic scattering (using Rutherford scattering)
-	for(int i = 0; i < fTargetMaterial->NumberOfElements(); i++){
+	for(size_t i = 0; i < fTargetMaterial->NumberOfElements(); ++i) {
 		// Rutherford factor
 		G4double RF = fProjectileZ * fTargetMaterial->Z(i) * eplus * eplus / (16. * M_PI * epsilon0);
 		RF *= RF;
@@ -392,164 +385,162 @@ void TRexAngularDistribution::CalculateCrossSectionIntegral(){
 	}
 }
 
-void TRexAngularDistribution::CalculateScatteringProbability(){
-  fScatteringProbabilitySingle.push_back(fCrossSectionIntegral[0] * fArealDensity[fTargetMaterial->NumberOfElements()-1]);
+void TRexAngularDistribution::CalculateScatteringProbability() {
+	fScatteringProbabilitySingle.push_back(fCrossSectionIntegral[0] * fArealDensity[fTargetMaterial->NumberOfElements()-1]);
 
-  //	bool Transfer = true;
-  //	int index;
-  //
-  //	if(Transfer){
-  //		for(index = 1; index < fNbOfLevels + targetMaterial.NumberOfElements();index++){
-  //			// transfer cross sections
-  //			if(index < fNbOfLevels){
-  //				ScatteringProbability[index] = ScatteringProbability[index-1] +  fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[index];
-  //
-  //				std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[targetMaterial.NumberOfElements()-1] * cm2  << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
-  //			}
-  //			else{ // elastic cross sections
-  //				ScatteringProbability[index] = ScatteringProbability[index-1] +  fArealDensity[index - fNbOfLevels] * fCrossSectionIntegral[index];
-  //
-  //				std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[index - fNbOfLevels] * cm2 << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
-  //			}
-  //			std::cout << "ScatteringProbability(transfer)[" << index << "] = " << ScatteringProbability[index] << std::endl;
-  //		}
-  //	}
-  //	else{ // Coulex
-  //
-  //		ScatteringProbability[fNbOfLevels] = fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[0];
-  //
-  //		for(index = 1; index < fNbOfLevels; index++){
-  //			ScatteringProbability[index] = ScatteringProbability[index-1] + fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[index];
-  //			ScatteringProbability[fNbOfLevels] += fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[index];
-  //
-  //			std::cout << "ScatteringProbability(Coulex)[" << index << "] = " << ScatteringProbability[index] << std::endl;
-  //		}
-  //		std::cout << "ScatteringProbability(Coulex)[" << fNbOfLevels << "] = " << ScatteringProbability[fNbOfLevels] << std::endl;
-  //	}
+	//	bool Transfer = true;
+	//	int index;
+	//
+	//	if(Transfer) {
+	//		for(index = 1; index < fNbOfLevels + targetMaterial.NumberOfElements();index++) {
+	//			// transfer cross sections
+	//			if(index < fNbOfLevels) {
+	//				ScatteringProbability[index] = ScatteringProbability[index-1] +  fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[index];
+	//
+	//				std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[targetMaterial.NumberOfElements()-1] * cm2  << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
+	//			}
+	//			else{ // elastic cross sections
+	//				ScatteringProbability[index] = ScatteringProbability[index-1] +  fArealDensity[index - fNbOfLevels] * fCrossSectionIntegral[index];
+	//
+	//				std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[index - fNbOfLevels] * cm2 << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
+	//			}
+	//			std::cout << "ScatteringProbability(transfer)[" << index << "] = " << ScatteringProbability[index] << std::endl;
+	//		}
+	//	}
+	//	else{ // Coulex
+	//
+	//		ScatteringProbability[fNbOfLevels] = fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[0];
+	//
+	//		for(index = 1; index < fNbOfLevels; index++) {
+	//			ScatteringProbability[index] = ScatteringProbability[index-1] + fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[index];
+	//			ScatteringProbability[fNbOfLevels] += fArealDensity[targetMaterial.NumberOfElements()-1] * fCrossSectionIntegral[index];
+	//
+	//			std::cout << "ScatteringProbability(Coulex)[" << index << "] = " << ScatteringProbability[index] << std::endl;
+	//		}
+	//		std::cout << "ScatteringProbability(Coulex)[" << fNbOfLevels << "] = " << ScatteringProbability[fNbOfLevels] << std::endl;
+	//	}
 
 
-  for(int index = 1; index < fNbOfLevels + fTargetMaterial->NumberOfElements(); index++){
-    // transfer or Coulex cross sections
-    if(index < fNbOfLevels){
-      fScatteringProbabilitySingle.push_back(fScatteringProbabilitySingle[index-1] +
-					     fArealDensity[fTargetMaterial->NumberOfElements()-1] * fCrossSectionIntegral[index]);
+	for(size_t index = 1; index < fNbOfLevels + fTargetMaterial->NumberOfElements(); ++index) {
+		// transfer or Coulex cross sections
+		if(index < fNbOfLevels) {
+			fScatteringProbabilitySingle.push_back(fScatteringProbabilitySingle[index-1] +
+					fArealDensity[fTargetMaterial->NumberOfElements()-1] * fCrossSectionIntegral[index]);
 
-      std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[fTargetMaterial->NumberOfElements()-1] * cm2
-	   << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
-    }
-    else{ // elastic Rutherford cross sections
-      fScatteringProbabilitySingle.push_back(fScatteringProbabilitySingle[index-1] +  fArealDensity[index - fNbOfLevels] * fCrossSectionIntegral[index]);
+			std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[fTargetMaterial->NumberOfElements()-1] * cm2
+				<< " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
+		} else { // elastic Rutherford cross sections
+			fScatteringProbabilitySingle.push_back(fScatteringProbabilitySingle[index-1] +  fArealDensity[index - fNbOfLevels] * fCrossSectionIntegral[index]);
 
-      std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[index - fNbOfLevels] * cm2 << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
-    }
-    std::cout << "ScatteringProbability(transfer)[" << index << "] = " << fScatteringProbabilitySingle[index] << std::endl;
-  }
+			std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[index - fNbOfLevels] * cm2 << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
+		}
+		std::cout << "ScatteringProbability(transfer)[" << index << "] = " << fScatteringProbabilitySingle[index] << std::endl;
+	}
 
-  // set total scattering probability
-  fScatteringProbability = fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability() +
-    fScatteringProbabilitySingle[fNbOfLevels + fTargetMaterial->NumberOfElements() - 1] * (1 - TRexSettings::Get()->GetTransferOrCoulexProbability());
+	// set total scattering probability
+	fScatteringProbability = fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability() +
+		fScatteringProbabilitySingle[fNbOfLevels + fTargetMaterial->NumberOfElements() - 1] * (1 - TRexSettings::Get()->GetTransferOrCoulexProbability());
 
-  if(fThetaCM < 0.00001 * degree){
-    fScatteringProbability = fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability();
-  }
-  //std::cout << "ScatteringProbabilityTree = " << fScatteringProbability << " = ? "<< fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability() << std::endl;
+	if(fThetaCM < 0.00001 * degree) {
+		fScatteringProbability = fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability();
+	}
+	//std::cout << "ScatteringProbabilityTree = " << fScatteringProbability << " = ? "<< fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability() << std::endl;
 }
 
 
-void TRexAngularDistribution::ReadLevelFile(){
+void TRexAngularDistribution::ReadLevelFile() {
 	std::ifstream file(TRexSettings::Get()->GetLevelFile().c_str());
 
-  if(file.bad()){
-    std::cerr << "Unable to open " << TRexSettings::Get()->GetLevelFile() << "!\nexiting ... \n";
-    exit(2);
-  }
-  else{
-    std::cout << "\nReading level file " << TRexSettings::Get()->GetLevelFile() << " ... \n"<< std::endl;
-  }
+	if(file.bad()) {
+		std::cerr << "Unable to open " << TRexSettings::Get()->GetLevelFile() << "!\nexiting ... \n";
+		exit(2);
+	} else {
+		std::cout << "\nReading level file " << TRexSettings::Get()->GetLevelFile() << " ... \n"<< std::endl;
+	}
 
-  // ignore the first 3 lines as they are only comments
-  file.ignore(1000, '\n');
-  file.ignore(1000, '\n');
-  file.ignore(1000, '\n');
+	// ignore the first 3 lines as they are only comments
+	file.ignore(1000, '\n');
+	file.ignore(1000, '\n');
+	file.ignore(1000, '\n');
 
-  // read the total number of levels
-  file >> fNbOfLevels;
+	// read the total number of levels
+	file >> fNbOfLevels;
 
-  std::cout << "NbOfLevels = " << fNbOfLevels << std::endl;
+	std::cout << "NbOfLevels = " << fNbOfLevels << std::endl;
 
-  // resize the vectors
-  fLevelID.resize(fNbOfLevels);
-  fLevelEnergy.resize(fNbOfLevels);
-  fFeedingProbability.resize(fNbOfLevels);
-  fLevelSpin.resize(fNbOfLevels);
-  fLevelParity.resize(fNbOfLevels);
-  fNbOfDecays.resize(fNbOfLevels);
-  fDecayLevel.resize(fNbOfLevels);
-  fDecayProbability.resize(fNbOfLevels);
-  fDecayType.resize(fNbOfLevels);
-  fDecayDelta.resize(fNbOfLevels);
+	// resize the vectors
+	fLevelID.resize(fNbOfLevels);
+	fLevelEnergy.resize(fNbOfLevels);
+	fFeedingProbability.resize(fNbOfLevels);
+	fLevelSpin.resize(fNbOfLevels);
+	fLevelParity.resize(fNbOfLevels);
+	fNbOfDecays.resize(fNbOfLevels);
+	fDecayLevel.resize(fNbOfLevels);
+	fDecayProbability.resize(fNbOfLevels);
+	fDecayType.resize(fNbOfLevels);
+	fDecayDelta.resize(fNbOfLevels);
 
-  // ignore the next comment line
-  //file.ignore(1000, '\n');
+	// ignore the next comment line
+	//file.ignore(1000, '\n');
 
-  double totalFeedingProbability = 0.;
+	double totalFeedingProbability = 0.;
 
-  for(int i = 0; i < fNbOfLevels; i++){
-    fLevelID[i] = i;
+	for(size_t i = 0; i < fNbOfLevels; i++) {
+		fLevelID[i] = i;
 
-    file >> fLevelEnergy[i] >> fFeedingProbability[i] >> fLevelSpin[i] >> fLevelParity[i] >> fNbOfDecays[i];
+		file >> fLevelEnergy[i] >> fFeedingProbability[i] >> fLevelSpin[i] >> fLevelParity[i] >> fNbOfDecays[i];
 
-    fLevelEnergy[i] *= keV;
-    totalFeedingProbability += fFeedingProbability[i];
+		fLevelEnergy[i] *= keV;
+		totalFeedingProbability += fFeedingProbability[i];
 
-    std::cout << "E[" << i << "] = " << fLevelEnergy[i] / keV << " , feeding Prob = " << fFeedingProbability[i] << " , spin = " << fLevelSpin[i]
-	 << " , parity = " << fLevelParity[i] << " , nbOfDecays = " << fNbOfDecays[i] << std::endl;
+		std::cout << "E[" << i << "] = " << fLevelEnergy[i] / keV << " , feeding Prob = " << fFeedingProbability[i] << " , spin = " << fLevelSpin[i]
+			<< " , parity = " << fLevelParity[i] << " , nbOfDecays = " << fNbOfDecays[i] << std::endl;
 
-    for(int ii = 0; ii < fNbOfDecays[i]; ii++){
-      fDecayLevel[i].resize(fNbOfDecays[i]);
-      fDecayProbability[i].resize(fNbOfDecays[i]);
-      fDecayType[i].resize(fNbOfDecays[i]);
-      fDecayDelta[i].resize(fNbOfDecays[i]);
+		for(int ii = 0; ii < fNbOfDecays[i]; ii++) {
+			fDecayLevel[i].resize(fNbOfDecays[i]);
+			fDecayProbability[i].resize(fNbOfDecays[i]);
+			fDecayType[i].resize(fNbOfDecays[i]);
+			fDecayDelta[i].resize(fNbOfDecays[i]);
 
-      file >> fDecayLevel[i][ii] >> fDecayProbability[i][ii] >> fDecayType[i][ii] >> fDecayDelta[i][ii];
-      std::cout << "\t" << ii << ": i decays in = " << fDecayLevel[i][ii] << " with prob = " << fDecayProbability[i][ii] << " , type = " << fDecayType[i][ii]
-	   << " , delta = " << fDecayDelta[i][ii] << std::endl;
-    }
-  }
+			file >> fDecayLevel[i][ii] >> fDecayProbability[i][ii] >> fDecayType[i][ii] >> fDecayDelta[i][ii];
+			std::cout << "\t" << ii << ": i decays in = " << fDecayLevel[i][ii] << " with prob = " << fDecayProbability[i][ii] << " , type = " << fDecayType[i][ii]
+				<< " , delta = " << fDecayDelta[i][ii] << std::endl;
+		}
+	}
 
-  // normalize feeding probability
-  for(int i = 0; i < fNbOfLevels; i++){
-    fFeedingProbability[i] /= totalFeedingProbability;
+	// normalize feeding probability
+	for(size_t i = 0; i < fNbOfLevels; i++) {
+		fFeedingProbability[i] /= totalFeedingProbability;
 
-    if(i > 0){
-      fFeedingProbability[i] += fFeedingProbability[i - 1];
-    }
-  }
+		if(i > 0) {
+			fFeedingProbability[i] += fFeedingProbability[i - 1];
+		}
+	}
 
-  file.close();
+	file.close();
 }
 
 
-void TRexAngularDistribution::FillMiniballLevels(){
-  fLevelsMB.resize(fNbOfLevels);
+void TRexAngularDistribution::FillMiniballLevels() {
+	fLevelsMB.resize(fNbOfLevels);
 
-  for(int i = 0; i < fNbOfLevels; i++){
-    fLevelsMB[i] = MiniBallSourceLevel(fLevelEnergy[i], fLevelSpin[i], fLevelParity[i]);
+	for(size_t i = 0; i < fNbOfLevels; i++) {
+		fLevelsMB[i] = MiniBallSourceLevel(fLevelEnergy[i], fLevelSpin[i], fLevelParity[i]);
 
-    level_structure.push_back(&fLevelsMB[i]);
+		level_structure.push_back(&fLevelsMB[i]);
 
-    fFeedingMB.decay.push_back(i);
+		fFeedingMB.decay.push_back(i);
 
-    fFeedingMB.prob.push_back(fFeedingProbability[i]);
+		fFeedingMB.prob.push_back(fFeedingProbability[i]);
 
-    for(int ii = 0; ii < fNbOfDecays[i]; ii++){
-      std::cout << "i = " << i << " , ii = " << ii << std::endl;
-      std::cout << "fDecayLevel[i][ii] = " << fDecayLevel[i][ii] << std::endl;
-      std::cout << "fLevelID = " << fLevelID[fDecayLevel[i][ii]] << std::endl;
-      std::cout << "prob = " << fDecayProbability[i][ii] << std::endl;
-      std::cout << "type = " << fDecayType[i][ii] << std::endl;
-      std::cout << "delta = " << fDecayDelta[i][ii] << std::endl;
-      fLevelsMB[i].AddDecay(fLevelID[fDecayLevel[i][ii]], fDecayProbability[i][ii], fDecayType[i][ii], fDecayDelta[i][ii]);
-    }
-  }
+		for(int ii = 0; ii < fNbOfDecays[i]; ii++) {
+			std::cout << "i = " << i << " , ii = " << ii << std::endl;
+			std::cout << "fDecayLevel[i][ii] = " << fDecayLevel[i][ii] << std::endl;
+			std::cout << "fLevelID = " << fLevelID[fDecayLevel[i][ii]] << std::endl;
+			std::cout << "prob = " << fDecayProbability[i][ii] << std::endl;
+			std::cout << "type = " << fDecayType[i][ii] << std::endl;
+			std::cout << "delta = " << fDecayDelta[i][ii] << std::endl;
+			fLevelsMB[i].AddDecay(fLevelID[fDecayLevel[i][ii]], fDecayProbability[i][ii], fDecayType[i][ii], fDecayDelta[i][ii]);
+		}
+	}
 }

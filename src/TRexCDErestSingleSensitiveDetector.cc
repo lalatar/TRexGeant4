@@ -9,7 +9,7 @@
 
 #include "TRexSettings.hh"
 
-//TRexCDErestSingleSensitiveDetector::TRexCDErestSingleSensitiveDetector(){
+//TRexCDErestSingleSensitiveDetector::TRexCDErestSingleSensitiveDetector() {
 //}
 
 TRexCDErestSingleSensitiveDetector::TRexCDErestSingleSensitiveDetector(G4String name, G4String direction, int id) :
@@ -25,13 +25,11 @@ TRexCDErestSingleSensitiveDetector::TRexCDErestSingleSensitiveDetector(G4String 
 
 	fCDErestSingle = new ParticleMC();
 
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fEnergyResolution = TRexSettings::Get()->GetFCDErestSingleEnergyResolution();
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fEnergyResolution = TRexSettings::Get()->GetBCDErestSingleEnergyResolution();
-	}
-	else{
+	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}
 }
@@ -41,43 +39,43 @@ TRexCDErestSingleSensitiveDetector::~TRexCDErestSingleSensitiveDetector() {
 }
 
 // initialize event
-void TRexCDErestSingleSensitiveDetector::Initialize(G4HCofThisEvent *HCE){
-  //G4cout << "Initialize sensitive detector" << G4endl;
+void TRexCDErestSingleSensitiveDetector::Initialize(G4HCofThisEvent *HCE) {
+	//G4cout << "Initialize sensitive detector" << G4endl;
 
-  fHitCollection = new TRexHitsCollection(SensitiveDetectorName, collectionName[0]);
+	fHitCollection = new TRexHitsCollection(SensitiveDetectorName, collectionName[0]);
 
-  if(fCollectionID < 0){
-	  fCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
-  }
+	if(fCollectionID < 0) {
+		fCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
+	}
 
-  HCE->AddHitsCollection(fCollectionID, fHitCollection);
+	HCE->AddHitsCollection(fCollectionID, fHitCollection);
 }
 
 
 // process hits
 G4bool TRexCDErestSingleSensitiveDetector::ProcessHits(G4Step *aStep,
-				      G4TouchableHistory *ROHist){
-  return ProcessHits_constStep(aStep, ROHist);
+		G4TouchableHistory *ROHist) {
+	return ProcessHits_constStep(aStep, ROHist);
 }
 
 
 G4bool TRexCDErestSingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
-						G4TouchableHistory* ROHist){
-  // only primary particle hits are considered (no secondaries)
-  if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV){
-	  return false;
-  }
+		G4TouchableHistory* ROHist) {
+	// only primary particle hits are considered (no secondaries)
+	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV) {
+		return false;
+	}
 
-  TRexHit *hit = new TRexHit(aStep, ROHist);
+	TRexHit* hit = new TRexHit(aStep, ROHist);
 
-  fHitCollection->insert(hit);
+	fHitCollection->insert(hit);
 
-  return true;
+	return true;
 }
 
 
 // write into root file
-void TRexCDErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*){
+void TRexCDErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 	// clear old event
 	fCDErestSingle->ClearParticleMC();
 
@@ -86,17 +84,16 @@ void TRexCDErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*){
 	//G4cout << "NbOfHits = " << fHitCollection->entries() << G4endl;
 	//G4cout << "Deposited energy = " << totalEnergy << G4endl;
 
-	if(GetTotalEnergyDeposition() > 0){
+	if(GetTotalEnergyDeposition() > 0) {
 		fCDErestSingle->ID(fID);
 
-		if(TRexSettings::Get()->IncludeEnergyResolution()){
+		if(TRexSettings::Get()->IncludeEnergyResolution()) {
 			fCDErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
-		}
-		else{
+		} else {
 			fCDErestSingle->SetEdet(totalEnergy / keV);
 		}
 
-		if(fHitCollection->entries() > 0){
+		if(fHitCollection->entries() > 0) {
 			fCDErestSingle->SetTime((*fHitCollection)[0]->GetTime() / ns);
 			fCDErestSingle->SetZ((*fHitCollection)[0]->GetParticleZ());
 			fCDErestSingle->SetA((*fHitCollection)[0]->GetParticleA());
@@ -105,26 +102,25 @@ void TRexCDErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*){
 			double resKinEnergy;
 			fCDErestSingle->SetStopped(IsStopped(fHitCollection->entries() - 1, resKinEnergy));
 			fCDErestSingle->SetResKinEnergy(resKinEnergy);
-		}
-		else{
+		} else {
 			fCDErestSingle->SetStopped(-10);
 		}
 	}
 }
 
 
-G4double TRexCDErestSingleSensitiveDetector::GetTotalEnergyDeposition(){
+G4double TRexCDErestSingleSensitiveDetector::GetTotalEnergyDeposition() {
 	G4double totalEnergy = 0.;
 
 	// loop over all hits
-	for(G4int i = 0; i < fHitCollection->entries(); i++){
+	for(G4int i = 0; i < fHitCollection->entries(); i++) {
 		totalEnergy += (*fHitCollection)[i]->GetEnergyDeposition();
 	}
 
 	return totalEnergy;
 }
 
-int TRexCDErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEnergy){
+int TRexCDErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEnergy) {
 	// set default value resKinEnergy (residual energy of punch through particles)
 	resKinEnergy = -100.;
 
@@ -134,27 +130,25 @@ int TRexCDErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEn
 
 	// check if the hitIndex is the last particle hit
 	bool isLastHit;
-	if(hitIndex == fHitCollection->entries() - 1){
+	if(hitIndex == fHitCollection->entries() - 1) {
 		isLastHit = true;
-	}
-	else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ){ // check if it is the same particle
+	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ) { // check if it is the same particle
 		isLastHit = false;
-	}
-	else{
+	} else {
 		isLastHit = true;
 	}
 
-	if(isLastHit == false)
+	if(isLastHit == false) {
 		return -2;
+	}
 
 	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / keV;
 
 	// check if particle is stopped
-	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV){
+	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV) {
 		// stopped
 		return 1;
-	}
-	else{
+	} else {
 		// not stopped
 		return 0;
 	}

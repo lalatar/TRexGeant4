@@ -17,21 +17,21 @@
 #include <vector>
 #include <string>
 
-class TRexBarrel : public TRexBaseDetector{
-public:
-	TRexBarrel();
-	TRexBarrel(std::string name, std::string direction, int nbOfTelescopes);
-	virtual ~TRexBarrel();
+class TRexBarrel : public TRexBaseDetector {
+	public:
+		TRexBarrel();
+		TRexBarrel(std::string name, std::string direction, int nbOfTelescopes);
+		virtual ~TRexBarrel();
 
-	void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	std::vector<ParticleMC>* GetParticleMCvector();
+		void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		std::vector<ParticleMC>* GetParticleMCvector();
 
-private:
-	std::string fDirection;
-	int fNbOfTelescopes;
+	private:
+		std::string fDirection;
+		int fNbOfTelescopes;
 
-	TRexBarrelDeltaE* fBarrelDeltaE;
-	TRexBarrelErest* fBarrelErest;
+		TRexBarrelDeltaE* fBarrelDeltaE;
+		TRexBarrelErest* fBarrelErest;
 };
 
 #endif /* TREXBARREL_HH_ */

@@ -21,27 +21,30 @@
 class G4ParticleGun;
 
 class TRexTestSource : public TRexBaseGenerator {
-public:
-	TRexTestSource();
-	virtual ~TRexTestSource();
+	public:
+		TRexTestSource();
+		virtual ~TRexTestSource();
 
-	void GeneratePrimaries(G4Event *anEvent);
-	//void CreateTreeBranches(TTree &tree);
-	//void FillTree(TTree &tree);
-	void CreateTreeBranches();
+		void GeneratePrimaries(G4Event *anEvent);
+		//void CreateTreeBranches(TTree &tree);
+		//void FillTree(TTree &tree);
+		void CreateTreeBranches();
 
-private:
-	// shoot fReactionX, fReactionY, fReactionZ of the source
-	void ShootReactionPosition();
+	private:
+		// shoot fReactionX, fReactionY, fReactionZ of the source
+		void ShootReactionPosition();
 
-	// shoot fThetaCM and fPhi isotropically 
-	void CreateIsotropicDistribution();
+		// shoot fThetaCM and fPhi isotropically 
+		void CreateIsotropicDistribution();
 
-	G4ParticleGun* particleGun;
+		G4ParticleGun* fParticleGun;
 
-	G4double fReactionEnergy;
-	G4double fReactionX, fReactionY, fReactionZ;
-	G4double fThetaCM, fPhi;
+		G4double fReactionEnergy;
+		G4double fReactionX;
+		G4double fReactionY;
+		G4double fReactionZ;
+		G4double fThetaCM;
+		G4double fPhi;
 };
 
 #endif /* TREXTESTSOURCE_HH_ */

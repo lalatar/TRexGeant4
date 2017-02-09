@@ -1,17 +1,15 @@
 #include "TRexColour.hh"
 
-TRexColour* TRexColour::colour = NULL;
+TRexColour* TRexColour::fColour = NULL;
 
-TRexColour* TRexColour::Get(void)
-{
-  if (colour == NULL) {
-    colour = new TRexColour();
+TRexColour* TRexColour::Get() {
+  if(fColour == NULL) {
+    fColour = new TRexColour();
   }
-  return colour;
+  return fColour;
 }
 
-TRexColour::TRexColour(void)
-{
+TRexColour::TRexColour() {
   red        = new G4VisAttributes(true, G4Colour(1.0, 0.0, 0.0));
   darkred    = new G4VisAttributes(true, G4Colour(0.5, 0.0, 0.0));
   orange     = new G4VisAttributes(true, G4Colour(1.0, 0.3, 0.0));

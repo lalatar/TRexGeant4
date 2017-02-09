@@ -16,18 +16,18 @@
 #include <vector>
 #include <string>
 
-class TRexTrapezoidDeltaE : public TRexBaseDetector{
-public:
-	TRexTrapezoidDeltaE();
-	TRexTrapezoidDeltaE(std::string name, std::string direction, int nbOfSingles);
-	virtual ~TRexTrapezoidDeltaE();
+class TRexTrapezoidDeltaE : public TRexBaseDetector {
+	public:
+		TRexTrapezoidDeltaE();
+		TRexTrapezoidDeltaE(std::string name, std::string direction, int nbOfSingles);
+		virtual ~TRexTrapezoidDeltaE();
 
-	void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	std::vector<ParticleMC>* GetParticleMCvector();
+		void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		std::vector<ParticleMC>* GetParticleMCvector();
 
-private:
-	int fNbOfSingles;
-	std::vector<TRexTrapezoidDeltaESingle*> fTrapezoidDeltaESingles;
+	private:
+		int fNbOfSingles;
+		std::vector<TRexTrapezoidDeltaESingle*> fTrapezoidDeltaESingles;
 };
 
 #endif /* TREXBARRELDELTAE_HH_ */

@@ -8,7 +8,7 @@
 #include "TRexBarrelErestSingleSensitiveDetector.hh"
 #include "TRexSettings.hh"
 
-//TRexBarrelErestSingleSensitiveDetector::TRexBarrelErestSingleSensitiveDetector(){
+//TRexBarrelErestSingleSensitiveDetector::TRexBarrelErestSingleSensitiveDetector() {
 //}
 
 TRexBarrelErestSingleSensitiveDetector::TRexBarrelErestSingleSensitiveDetector(G4String name, G4String direction, int id):
@@ -25,16 +25,13 @@ TRexBarrelErestSingleSensitiveDetector::TRexBarrelErestSingleSensitiveDetector(G
 
 	fBarrelErestSingle = new ParticleMC();
 
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fEnergyResolution = TRexSettings::Get()->GetFBarrelErestSingleEnergyResolution();
-	}
-	else if(fDirection == "middle"){
+	} else if(fDirection == "middle") {
 		fEnergyResolution = TRexSettings::Get()->GetMBarrelErestSingleEnergyResolution();
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fEnergyResolution = TRexSettings::Get()->GetBBarrelErestSingleEnergyResolution();
-	}
-	else{
+	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward, middle or backward." << std::endl;
 	}
 }
@@ -47,12 +44,12 @@ TRexBarrelErestSingleSensitiveDetector::~TRexBarrelErestSingleSensitiveDetector(
 }
 
 // initialize event
-void TRexBarrelErestSingleSensitiveDetector::Initialize(G4HCofThisEvent *HCE){
+void TRexBarrelErestSingleSensitiveDetector::Initialize(G4HCofThisEvent *HCE) {
   //G4std::cout << "Initialize sensitive detector" << G4std::endl;
 
   fHitCollection = new TRexHitsCollection(SensitiveDetectorName, collectionName[0]);
 
-  if(fCollectionID < 0){
+  if(fCollectionID < 0) {
 	  fCollectionID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
   }
 
@@ -62,15 +59,15 @@ void TRexBarrelErestSingleSensitiveDetector::Initialize(G4HCofThisEvent *HCE){
 
 // process hits
 G4bool TRexBarrelErestSingleSensitiveDetector::ProcessHits(G4Step *aStep,
-				      G4TouchableHistory *ROHist){
+				      G4TouchableHistory *ROHist) {
   return ProcessHits_constStep(aStep, ROHist);
 }
 
 
 G4bool TRexBarrelErestSingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
-						G4TouchableHistory* ROHist){
+						G4TouchableHistory* ROHist) {
   // only primary particle hits are considered (no secondaries)
-  if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV){
+  if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV) {
 	  return false;
   }
 
@@ -83,7 +80,7 @@ G4bool TRexBarrelErestSingleSensitiveDetector::ProcessHits_constStep(const G4Ste
 
 
 // write into root file
-void TRexBarrelErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*){
+void TRexBarrelErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 	// clear old event
 	fBarrelErestSingle->ClearParticleMC();
 
@@ -92,17 +89,16 @@ void TRexBarrelErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*){
 	//G4std::cout << "NbOfHits = " << fHitCollection->entries() << G4std::endl;
 	//G4std::cout << "Deposited energy = " << totalEnergy / keV << G4std::endl;
 
-	if(GetTotalEnergyDeposition() > 0){
+	if(GetTotalEnergyDeposition() > 0) {
 		fBarrelErestSingle->ID(fID);
 
-		if(TRexSettings::Get()->IncludeEnergyResolution()){
+		if(TRexSettings::Get()->IncludeEnergyResolution()) {
 			fBarrelErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
-		}
-		else{
+		} else {
 			fBarrelErestSingle->SetEdet(totalEnergy / keV);
 		}
 
-		if(fHitCollection->entries() > 0){
+		if(fHitCollection->entries() > 0) {
 			fBarrelErestSingle->SetTime((*fHitCollection)[0]->GetTime() / ns);
 			fBarrelErestSingle->SetZ((*fHitCollection)[0]->GetParticleZ());
 			fBarrelErestSingle->SetA((*fHitCollection)[0]->GetParticleA());
@@ -111,25 +107,24 @@ void TRexBarrelErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*){
 			double resKinEnergy;
 			fBarrelErestSingle->SetStopped(IsStopped(fHitCollection->entries() - 1, resKinEnergy));
 			fBarrelErestSingle->SetResKinEnergy(resKinEnergy);
-		}
-		else{
+		} else {
 			fBarrelErestSingle->SetStopped(-10);
 		}
 	}
 }
 
-G4double TRexBarrelErestSingleSensitiveDetector::GetTotalEnergyDeposition(){
+G4double TRexBarrelErestSingleSensitiveDetector::GetTotalEnergyDeposition() {
 	G4double totalEnergy = 0.;
 
 	// loop over all hits
-	for(G4int i = 0; i < fHitCollection->entries(); i++){
+	for(G4int i = 0; i < fHitCollection->entries(); i++) {
 		totalEnergy += (*fHitCollection)[i]->GetEnergyDeposition();
 	}
 
 	return totalEnergy;
 }
 
-int TRexBarrelErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEnergy){
+int TRexBarrelErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEnergy) {
   // set default value resKinEnergy (residual energy of punch through particles)
   resKinEnergy = -100.;
 
@@ -139,13 +134,11 @@ int TRexBarrelErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resK
 
   // check if the hitIndex is the last particle hit
   bool isLastHit;
-  if(hitIndex == fHitCollection->entries() - 1){
+  if(hitIndex == fHitCollection->entries() - 1) {
 	  isLastHit = true;
-  }
-  else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ){ // check if it is the same particle
+  } else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ) { // check if it is the same particle
     isLastHit = false;
-  }
-  else{
+  } else {
     isLastHit = true;
   }
 
@@ -155,11 +148,10 @@ int TRexBarrelErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resK
   resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / keV;
 
   // check if particle is stopped
-  if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV){
+  if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV) {
     // stopped
     return 1;
-  }
-  else{
+  }  else {
     // not stopped
     return 0;
   }

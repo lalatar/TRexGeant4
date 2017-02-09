@@ -401,7 +401,7 @@ G4Material* TRexMaterials::BuildBc408_noOptical() {
 			1.032 * CLHEP::g / CLHEP::cm3, 2);
 	bc408_noOptical->AddElement(fElC, 9);
 	bc408_noOptical->AddElement(fElH, 10);
-	
+
 	return bc408_noOptical;
 }
 
@@ -509,7 +509,7 @@ G4Material* TRexMaterials::BuildC4F10_noOptical() {
 	G4Material* c4f10_noOptical = new G4Material("C4F10_noOptical", 11.21 * CLHEP::kg / CLHEP::m3, 2, kStateGas, 298 * CLHEP::kelvin, 1.0 * CLHEP::atmosphere);
 	c4f10_noOptical->AddElement(fElC, 4);
 	c4f10_noOptical->AddElement(fElF, 10);
-	
+
 	return c4f10_noOptical;
 }
 
@@ -734,7 +734,7 @@ G4Material* TRexMaterials::GetMaterial(std::string name) {//, double pressure) {
 		return material; 
 	}
 
-	if(name == "vacuum" || name == "dummy"){
+	if(name == "vacuum" || name == "dummy") {
 		material = MiniBallMaterial::Get()->GetMaterialVacuum();
 	} else if(((G4String)name).contains("G4_")) {
 		material = TRexMaterials::Get()->GetNistManager()->FindOrBuildMaterial(name);

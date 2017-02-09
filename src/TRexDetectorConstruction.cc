@@ -45,7 +45,7 @@ G4VPhysicalVolume* TRexDetectorConstruction::Construct() {
 	ConstructExperimentalHall();
 
 	// Miniball for gammas
-	if(TRexSettings::Get()->SimulateGammas()){
+	if(TRexSettings::Get()->SimulateGammas()) {
 		DefineMiniball();
 	}
 
@@ -53,7 +53,7 @@ G4VPhysicalVolume* TRexDetectorConstruction::Construct() {
 	ConstructVacuumChamber();
 
 	// Silicon particle detectors
-	for(unsigned int i = 0; i < fDetectors.size(); i++){
+	for(unsigned int i = 0; i < fDetectors.size(); i++) {
 		std::cout << "Constructing detector " << fDetectors[i]->GetName() << " ....\n" << std::endl;
 		fDetectors[i]->Construct(fVacuumChamberGas_log, fSDMan);
 	}
@@ -97,7 +97,7 @@ void TRexDetectorConstruction::ConstructTarget() {
 	}
 }
 
-void TRexDetectorConstruction::ConstructVacuumChamber(){
+void TRexDetectorConstruction::ConstructVacuumChamber() {
 	if(TRexSettings::Get()->IncludeVacuumChamber()) {
 		if(TRexSettings::Get()->GetVacuumChamberType() == "cylinder") {
 			std::cout << "Constructing vacuum chamber with type " << TRexSettings::Get()->GetVacuumChamberType() << " ....\n" << std::endl;
@@ -124,7 +124,7 @@ void TRexDetectorConstruction::ConstructVacuumChamber(){
 	fVacuumChamberGas_log = fVacuumChamberGas->ConstructChamberGas(fExperimentalHall_log);
 }
 
-void TRexDetectorConstruction::ConstructExperimentalHall(){
+void TRexDetectorConstruction::ConstructExperimentalHall() {
 	// experimental hall material
 	//G4Material* experimentalHallMaterial = TRexMaterials::Get()->vacuum;
 	G4Material* experimentalHallMaterial = MiniBallMaterial::Get()->GetMaterialVacuum();
@@ -152,121 +152,120 @@ void TRexDetectorConstruction::ConstructExperimentalHall(){
 	fExperimentalHall_log->SetVisAttributes(G4VisAttributes::Invisible);
 }
 
-void TRexDetectorConstruction::DefineDetectors(){
+void TRexDetectorConstruction::DefineDetectors() {
 	// Forward CD deltaE
-	if(TRexSettings::Get()->UseFCDdeltaE() && !TRexSettings::Get()->UseFCDErest()){
+	if(TRexSettings::Get()->UseFCDdeltaE() && !TRexSettings::Get()->UseFCDErest()) {
 		// loop over all FCDErest single detectors
-		//for(int i = 0; i < TRexSettings::Get()->GetNbOfFCDdeltaESingles(); i++){
+		//for(int i = 0; i < TRexSettings::Get()->GetNbOfFCDdeltaESingles(); i++) {
 		//	fDetectors.push_back(new TRexCDdeltaESingle(Form("FCDdeltaESingle%d", i), i);
 		//}
 		fDetectors.push_back(new TRexCDdeltaE("FCDdeltaE", "forward", TRexSettings::Get()->GetNbOfFCDdeltaESingles()));
 	}
 	// Forward CD Erest
-	if(TRexSettings::Get()->UseFCDErest() && !TRexSettings::Get()->UseFCDdeltaE()){
+	if(TRexSettings::Get()->UseFCDErest() && !TRexSettings::Get()->UseFCDdeltaE()) {
 		// loop over all FCDErest single detectors
-		//for(int i = 0; i < TRexSettings::Get()->GetNbOfFCDErestSingles(); i++){
+		//for(int i = 0; i < TRexSettings::Get()->GetNbOfFCDErestSingles(); i++) {
 		//	fDetectors.push_back(new TRexCDErestSingle(Form("FCDErestSingle%d", i), i);
 		//}
 		fDetectors.push_back(new TRexCDErest("FCDErest", "forward", TRexSettings::Get()->GetNbOfFCDErestSingles()));
 	}
 	// Forward CD deltaE and forward CD Erest
-	if(TRexSettings::Get()->UseFCDdeltaE() && TRexSettings::Get()->UseFCDErest()){
+	if(TRexSettings::Get()->UseFCDdeltaE() && TRexSettings::Get()->UseFCDErest()) {
 		// loop over all FCDErest single detectors
-		//for(int i = 0; i < TRexSettings::Get()->GetNbOfFCDdeltaESingles(); i++){
+		//for(int i = 0; i < TRexSettings::Get()->GetNbOfFCDdeltaESingles(); i++) {
 		//	fDetectors.push_back(new TRexCDdeltaESingle(Form("FCDdeltaESingle%d", i), i);
 		//}
 		fDetectors.push_back(new TRexCD("FCD", "forward", TRexSettings::Get()->GetNbOfFCDdeltaESingles()));
 	}
 
 	// Backward CD deltaE
-	if(TRexSettings::Get()->UseBCDdeltaE() && !TRexSettings::Get()->UseBCDErest()){
-		//std::cout << "BIn daaaaaaa" << TRexSettings::Get()->UseBCDdeltaE() << "  " << TRexSettings::Get()->UseBCDErest() << std::endl;
+	if(TRexSettings::Get()->UseBCDdeltaE() && !TRexSettings::Get()->UseBCDErest()) {
 		fDetectors.push_back(new TRexCDdeltaE("BCDdeltaE", "backward", TRexSettings::Get()->GetNbOfBCDdeltaESingles()));
 	}
 	// Backward CD Erest
-	if(TRexSettings::Get()->UseBCDErest() && !TRexSettings::Get()->UseBCDdeltaE()){
+	if(TRexSettings::Get()->UseBCDErest() && !TRexSettings::Get()->UseBCDdeltaE()) {
 		fDetectors.push_back(new TRexCDErest("BCDErest", "backward", TRexSettings::Get()->GetNbOfBCDErestSingles()));
 	}
 	// Backward CD deltaE and backward CD Erest
-	if(TRexSettings::Get()->UseBCDdeltaE() && TRexSettings::Get()->UseBCDErest()){
+	if(TRexSettings::Get()->UseBCDdeltaE() && TRexSettings::Get()->UseBCDErest()) {
 		fDetectors.push_back(new TRexCD("BCD", "backward", TRexSettings::Get()->GetNbOfBCDdeltaESingles()));
 	}
 
 	// Forward Barrel deltaE
-	if(TRexSettings::Get()->UseFBarrelDeltaE() && !TRexSettings::Get()->UseFBarrelErest()){
+	if(TRexSettings::Get()->UseFBarrelDeltaE() && !TRexSettings::Get()->UseFBarrelErest()) {
 		fDetectors.push_back(new TRexBarrelDeltaE("FBarrelDeltaE", "forward", TRexSettings::Get()->GetNbOfFBarrelDeltaESingles()));
 	}
 	// Forward Barrel Erest
-	if(TRexSettings::Get()->UseFBarrelErest() && !TRexSettings::Get()->UseFBarrelDeltaE()){
+	if(TRexSettings::Get()->UseFBarrelErest() && !TRexSettings::Get()->UseFBarrelDeltaE()) {
 		fDetectors.push_back(new TRexBarrelErest("FBarrelErest", "forward", TRexSettings::Get()->GetNbOfFBarrelErestSingles()));
 	}
 	// Forward Barrel deltaE and forward Barrel Erest
-	if(TRexSettings::Get()->UseFBarrelDeltaE() && TRexSettings::Get()->UseFBarrelErest()){
+	if(TRexSettings::Get()->UseFBarrelDeltaE() && TRexSettings::Get()->UseFBarrelErest()) {
 		fDetectors.push_back(new TRexBarrel("FBarrel", "forward", TRexSettings::Get()->GetNbOfFBarrelDeltaESingles()));
 	}
 	// 2nd Forward Barrel deltaE
-	if(TRexSettings::Get()->UseSecondFBarrelDeltaE()){
+	if(TRexSettings::Get()->UseSecondFBarrelDeltaE()) {
 		fDetectors.push_back(new TRexBarrelDeltaE("SecondFBarrelDeltaE", "forward", TRexSettings::Get()->GetNbOfSecondFBarrelDeltaESingles()));
 	}
 
 	// Middle Barrel deltaE
-	if(TRexSettings::Get()->UseMBarrelDeltaE() && !TRexSettings::Get()->UseMBarrelErest()){
+	if(TRexSettings::Get()->UseMBarrelDeltaE() && !TRexSettings::Get()->UseMBarrelErest()) {
 		fDetectors.push_back(new TRexBarrelDeltaE("MBarrelDeltaE", "middle", TRexSettings::Get()->GetNbOfMBarrelDeltaESingles()));
 	}
 	// Middle Barrel Erest
-	if(TRexSettings::Get()->UseMBarrelErest() && !TRexSettings::Get()->UseMBarrelDeltaE()){
+	if(TRexSettings::Get()->UseMBarrelErest() && !TRexSettings::Get()->UseMBarrelDeltaE()) {
 		fDetectors.push_back(new TRexBarrelErest("MBarrelErest", "middle", TRexSettings::Get()->GetNbOfMBarrelErestSingles()));
 	}
 	// Middle Barrel deltaE and middle Barrel Erest
-	if(TRexSettings::Get()->UseMBarrelDeltaE() && TRexSettings::Get()->UseMBarrelErest()){
+	if(TRexSettings::Get()->UseMBarrelDeltaE() && TRexSettings::Get()->UseMBarrelErest()) {
 		fDetectors.push_back(new TRexBarrel("MBarrel", "middle", TRexSettings::Get()->GetNbOfMBarrelDeltaESingles()));
 	}
 
 	// Backward Barrel deltaE
-	if(TRexSettings::Get()->UseBBarrelDeltaE() && !TRexSettings::Get()->UseBBarrelErest()){
+	if(TRexSettings::Get()->UseBBarrelDeltaE() && !TRexSettings::Get()->UseBBarrelErest()) {
 		fDetectors.push_back(new TRexBarrelDeltaE("BBarrelDeltaE", "backward", TRexSettings::Get()->GetNbOfBBarrelDeltaESingles()));
 	}
 	// Backward Barrel Erest
-	if(TRexSettings::Get()->UseBBarrelErest() && !TRexSettings::Get()->UseBBarrelDeltaE()){
+	if(TRexSettings::Get()->UseBBarrelErest() && !TRexSettings::Get()->UseBBarrelDeltaE()) {
 		fDetectors.push_back(new TRexBarrelErest("BBarrelErest", "backward", TRexSettings::Get()->GetNbOfBBarrelErestSingles()));
 	}
 	// Backward Barrel deltaE and backward Barrel Erest
-	if(TRexSettings::Get()->UseBBarrelDeltaE() && TRexSettings::Get()->UseBBarrelErest()){
+	if(TRexSettings::Get()->UseBBarrelDeltaE() && TRexSettings::Get()->UseBBarrelErest()) {
 		fDetectors.push_back(new TRexBarrel("BBarrel", "backward", TRexSettings::Get()->GetNbOfBBarrelDeltaESingles()));
 	}
 	// 2nd Forward Barrel deltaE
-	if(TRexSettings::Get()->UseSecondBBarrelDeltaE()){
+	if(TRexSettings::Get()->UseSecondBBarrelDeltaE()) {
 		fDetectors.push_back(new TRexBarrelDeltaE("SecondBBarrelDeltaE", "backward", TRexSettings::Get()->GetNbOfSecondBBarrelDeltaESingles()));
 	}
 
 	// Forward Trapezoid deltaE
-	if(TRexSettings::Get()->UseFTrapezoidDeltaE() && !TRexSettings::Get()->UseFTrapezoidErest()){
+	if(TRexSettings::Get()->UseFTrapezoidDeltaE() && !TRexSettings::Get()->UseFTrapezoidErest()) {
 		fDetectors.push_back(new TRexTrapezoidDeltaE("FTrapezoidDeltaE", "forward", TRexSettings::Get()->GetNbOfFTrapezoidDeltaESingles()));
 	}
 	// Forward Trapezoid deltaE
-	if(TRexSettings::Get()->UseFTrapezoidErest() && !TRexSettings::Get()->UseFTrapezoidDeltaE()){
+	if(TRexSettings::Get()->UseFTrapezoidErest() && !TRexSettings::Get()->UseFTrapezoidDeltaE()) {
 		fDetectors.push_back(new TRexTrapezoidErest("FTrapezoidErest", "forward", TRexSettings::Get()->GetNbOfFTrapezoidErestSingles()));
 	}
 	// Forward Trapezoid deltaE and forward Trapezoid Erest
-	if(TRexSettings::Get()->UseFTrapezoidDeltaE() && TRexSettings::Get()->UseFTrapezoidErest()){
+	if(TRexSettings::Get()->UseFTrapezoidDeltaE() && TRexSettings::Get()->UseFTrapezoidErest()) {
 		fDetectors.push_back(new TRexTrapezoid("FTrapezoid", "forward", TRexSettings::Get()->GetNbOfFTrapezoidDeltaESingles()));
 	}
 
 	// Backward Trapezoid deltaE
-	if(TRexSettings::Get()->UseBTrapezoidDeltaE() && !TRexSettings::Get()->UseBTrapezoidErest()){
+	if(TRexSettings::Get()->UseBTrapezoidDeltaE() && !TRexSettings::Get()->UseBTrapezoidErest()) {
 		fDetectors.push_back(new TRexTrapezoidDeltaE("BTrapezoidDeltaE", "backward", TRexSettings::Get()->GetNbOfBTrapezoidDeltaESingles()));
 	}
 	// Backward Trapezoid deltaE
-	if(TRexSettings::Get()->UseBTrapezoidErest() && !TRexSettings::Get()->UseBTrapezoidDeltaE()){
+	if(TRexSettings::Get()->UseBTrapezoidErest() && !TRexSettings::Get()->UseBTrapezoidDeltaE()) {
 		fDetectors.push_back(new TRexTrapezoidErest("BTrapezoidErest", "backward", TRexSettings::Get()->GetNbOfBTrapezoidErestSingles()));
 	}
 	// Backward Trapezoid deltaE and backward Trapezoid Erest
-	if(TRexSettings::Get()->UseBTrapezoidDeltaE() && TRexSettings::Get()->UseBTrapezoidErest()){
+	if(TRexSettings::Get()->UseBTrapezoidDeltaE() && TRexSettings::Get()->UseBTrapezoidErest()) {
 		fDetectors.push_back(new TRexTrapezoid("BTrapezoid", "backward", TRexSettings::Get()->GetNbOfBTrapezoidDeltaESingles()));
 	}
 }
 
-void TRexDetectorConstruction::DefineMiniball(){
+void TRexDetectorConstruction::DefineMiniball() {
 	std::cout << "Constructing MINIBALL ....\n" << std::endl;
 
 	G4bool MiniballCapsule = true;
@@ -279,14 +278,14 @@ void TRexDetectorConstruction::DefineMiniball(){
 
 	fMiniball->SetAllDeadlayer(0.7*micrometer, DEADLAYER_OUTER_CONTACT);
 
-	/*	for(i = 0; i < 8; i++){
-		if(data->settings->MiniballRelativeEfficiency[i][0] > 0.){
+	/*	for(i = 0; i < 8; i++) {
+		if(data->settings->MiniballRelativeEfficiency[i][0] > 0.) {
 		fMiniball->SetRelativeEfficiencyDetA(i, data->settings->MiniballRelativeEfficiency[i][0]);
 		}
-		if(data->settings->MiniballRelativeEfficiency[i][1] > 0.){
+		if(data->settings->MiniballRelativeEfficiency[i][1] > 0.) {
 		fMiniball->SetRelativeEfficiencyDetB(i, data->settings->MiniballRelativeEfficiency[i][1]);
 		}
-		if(data->settings->MiniballRelativeEfficiency[i][2] > 0.){
+		if(data->settings->MiniballRelativeEfficiency[i][2] > 0.) {
 		fMiniball->SetRelativeEfficiencyDetC(i, data->settings->MiniballRelativeEfficiency[i][2]);
 		}
 		}*/

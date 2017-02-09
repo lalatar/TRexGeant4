@@ -16,25 +16,25 @@
 #include <string>
 
 class TRexData {
-public:
-	TRexData();
-	TRexData(int argc, char* argv[]);
-	virtual ~TRexData();
+	public:
+		TRexData();
+		TRexData(int argc, char* argv[]);
+		virtual ~TRexData();
 
-	void run(G4RunManager*);
+		void run(G4RunManager*);
 
-	inline std::string GetOutputFileName() { return fOutputFileName; }
-	inline std::string GetSettingsFileName() { return fSettingsFileName; }
-	inline int GetNbOfEvents() { return fNbOfEvents; }
+		inline std::string GetOutputFileName() { return fOutputFileName; }
+		inline std::string GetSettingsFileName() { return fSettingsFileName; }
+		inline int GetNbOfEvents() { return fNbOfEvents; }
 
-private:
-	std::string fCommandLine;
-	std::string fOutputFileName;
-	std::string fSettingsFileName;
-	int fNbOfEvents;
-	bool fVis;
-	bool fVisCut;
-	bool fInteractive;
+	private:
+		std::string fCommandLine;
+		std::string fOutputFileName;
+		std::string fSettingsFileName;
+		int fNbOfEvents;
+		bool fVis;
+		bool fVisCut;
+		bool fInteractive;
 };
 
 #endif /* TREXDATA_HH_ */

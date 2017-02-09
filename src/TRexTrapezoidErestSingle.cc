@@ -12,28 +12,26 @@
 TRexTrapezoidErestSingle::TRexTrapezoidErestSingle() {
 }
 
-TRexTrapezoidErestSingle::TRexTrapezoidErestSingle(std::string name, std::string direction, int id){
+TRexTrapezoidErestSingle::TRexTrapezoidErestSingle(std::string name, std::string direction, int id) {
 	fName = name;
 	fId = id;
 	fDirection = direction;
 
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fDetectorInnerRadius = TRexSettings::Get()->GetFTrapezoidErestSingleInnerRadius();
 		fDetectorOuterRadius = TRexSettings::Get()->GetFTrapezoidErestSingleOuterRadius();
 		fDetectorDeltaZ = TRexSettings::Get()->GetFTrapezoidErestSingleDeltaZ();
 		fThicknessDetector = TRexSettings::Get()->GetFTrapezoidErestSingleThickness()[fId];
 		fStartAngleDetector = TRexSettings::Get()->GetFTrapezoidErestSingleStartAngle()[fId];
 		fPosZ = TRexSettings::Get()->GetFTrapezoidErestSinglePosZ()[fId];
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fDetectorInnerRadius = TRexSettings::Get()->GetBTrapezoidErestSingleInnerRadius();
 		fDetectorOuterRadius = TRexSettings::Get()->GetBTrapezoidErestSingleOuterRadius();
 		fDetectorDeltaZ = TRexSettings::Get()->GetBTrapezoidErestSingleDeltaZ();
 		fThicknessDetector = TRexSettings::Get()->GetBTrapezoidErestSingleThickness()[fId];
 		fStartAngleDetector = TRexSettings::Get()->GetBTrapezoidErestSingleStartAngle()[fId];
 		fPosZ = TRexSettings::Get()->GetBTrapezoidErestSinglePosZ()[fId];
-	}
-	else{
+	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}
 
@@ -47,7 +45,7 @@ TRexTrapezoidErestSingle::~TRexTrapezoidErestSingle() {
 }
 
 
-void TRexTrapezoidErestSingle::SetPcbParameters(){
+void TRexTrapezoidErestSingle::SetPcbParameters() {
 	// radii
 	fPcbOuterRadius = fDetectorOuterRadius * 1.3;
 	fPcbInnerRadius = fDetectorInnerRadius * 1.3;
@@ -76,16 +74,15 @@ void TRexTrapezoidErestSingle::SetPcbParameters(){
 
 	// set rotation matrix
 	fRotMatrixPcb = new G4RotationMatrix;
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fRotMatrixPcb->rotateX(-fPcbBeta);
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fRotMatrixPcb->rotateX(fPcbBeta);
 	}
 	fRotMatrixPcb->rotateZ(fStartAngleDetector);
 }
 
-void TRexTrapezoidErestSingle::SetSiliconParameters(){
+void TRexTrapezoidErestSingle::SetSiliconParameters() {
 	// base length of the trapezoid panel detector
 	fBaseLarge = fDetectorOuterRadius * sqrt(2. - sqrt(2.)) / 2.;
 	fBaseSmall = fDetectorInnerRadius * sqrt(2. - sqrt(2.)) / 2.;
@@ -112,22 +109,21 @@ void TRexTrapezoidErestSingle::SetSiliconParameters(){
 
 	// set rotation matrix
 	fRotMatrix = new G4RotationMatrix;
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fRotMatrix->rotateX(-fBeta);
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fRotMatrix->rotateX(fBeta);
 	}
 	fRotMatrix->rotateZ(fStartAngleDetector);
 }
 
 void TRexTrapezoidErestSingle::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan) {
-        // active detector
+	// active detector
 	ConstructSilicon(experimentalHall_log, SDMan);
 
 	// PCB
-	if(TRexSettings::Get()->ConstructPCB()){
-	  ConstructPCB(experimentalHall_log);
+	if(TRexSettings::Get()->ConstructPCB()) {
+		ConstructPCB(experimentalHall_log);
 	}
 }
 
@@ -158,7 +154,7 @@ void TRexTrapezoidErestSingle::ConstructSilicon(G4LogicalVolume* experimentalHal
 	SDMan->AddNewDetector(fTrapezoidErestSingleSensitiveDetector);
 	fLogicalVolume->SetSensitiveDetector(fTrapezoidErestSingleSensitiveDetector);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		fLogicalVolume->SetVisAttributes(TRexColour::Get()->yellow);
 	}
 }
@@ -167,12 +163,12 @@ void TRexTrapezoidErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_lo
 	G4Material* detectorMaterial = TRexMaterials::Get()->GetMaterial("pcb");
 
 	G4Trap *pcb = new G4Trap("detector_pcb", fThicknessPcb/2., 0*deg, 0*deg,
-							fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg,
-		                    fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg);
+			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg,
+			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg);
 
 	G4Trap *pcbHole = new G4Trap("detector", fThicknessPcb, 0*deg, 0*deg,
-			                        fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg,
-			                        fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg);
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg,
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg);
 
 	// subtract hole for detector
 	G4SubtractionSolid* pcbTotal = new G4SubtractionSolid("deltaPCB_solid", pcb, pcbHole, 0, G4ThreeVector(0, 0, 0));
@@ -187,7 +183,7 @@ void TRexTrapezoidErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_lo
 	new G4PVPlacement(G4Transform3D(*fRotMatrixPcb, fPcbPos),
 			pcb_log, "TrapezoidErest_pcb", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		pcb_log->SetVisAttributes(TRexColour::Get()->darkgreen);
 	}
 }

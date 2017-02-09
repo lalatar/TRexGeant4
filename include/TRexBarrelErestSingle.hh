@@ -22,32 +22,32 @@
 #include <string>
 #include <vector>
 
-class TRexBarrelErestSingle : public TRexBaseDetector{
-public:
-	TRexBarrelErestSingle();
-	TRexBarrelErestSingle(std::string name, std::string direction, int id);
-	virtual ~TRexBarrelErestSingle();
+class TRexBarrelErestSingle : public TRexBaseDetector {
+	public:
+		TRexBarrelErestSingle();
+		TRexBarrelErestSingle(std::string name, std::string direction, int id);
+		virtual ~TRexBarrelErestSingle();
 
-	void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	ParticleMC* GetParticleMC() {return fBarrelErestSingleSensitiveDetector->GetParticleMC(); };
-	std::vector<ParticleMC>* GetParticleMCvector();
+		void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		ParticleMC* GetParticleMC() { return fBarrelErestSingleSensitiveDetector->GetParticleMC(); }
+		std::vector<ParticleMC>* GetParticleMCvector();
 
-private:
-	void ConstructSilicon(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	void ConstructPCB(G4LogicalVolume* experimentalHall_log);
-	void ConstructDeadLayer(G4LogicalVolume* experimentalHall_log);
+	private:
+		void ConstructSilicon(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		void ConstructPCB(G4LogicalVolume* experimentalHall_log);
+		void ConstructDeadLayer(G4LogicalVolume* experimentalHall_log);
 
-	TRexBarrelErestSingleSensitiveDetector* fBarrelErestSingleSensitiveDetector;
+		TRexBarrelErestSingleSensitiveDetector* fBarrelErestSingleSensitiveDetector;
 
-	G4double fDetectorLengthX;
-	G4double fDetectorLengthY;
-	G4double fThicknessDetector;
-	G4double fStartAngleDetector;
-	G4double fDeadLayer;
+		G4double fDetectorLengthX;
+		G4double fDetectorLengthY;
+		G4double fThicknessDetector;
+		G4double fStartAngleDetector;
+		G4double fDeadLayer;
 
-	G4ThreeVector fPos;
-	G4RotationMatrix* fRotMatrix;
-	G4RotationMatrix* fRotMatrixPcb;
+		G4ThreeVector fPos;
+		G4RotationMatrix* fRotMatrix;
+		G4RotationMatrix* fRotMatrixPcb;
 };
 
 #endif /* TREXBARRELEREST_HH_ */

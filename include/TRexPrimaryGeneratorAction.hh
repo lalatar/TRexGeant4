@@ -21,20 +21,20 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-class TRexPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction{
-public:
-	TRexPrimaryGeneratorAction();
-	virtual ~TRexPrimaryGeneratorAction();
+class TRexPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+	public:
+		TRexPrimaryGeneratorAction();
+		virtual ~TRexPrimaryGeneratorAction();
 
-	void GeneratePrimaries(G4Event *anEvent);
-	TRexBaseGenerator* GetGenerator() {return fCurrentGenerator; };
+		void GeneratePrimaries(G4Event *anEvent);
+		TRexBaseGenerator* GetGenerator() { return fCurrentGenerator; };
 
-	void SetTree(TTree *tree);
+		void SetTree(TTree *tree);
 
-private:
-	void SetGenerator();
+	private:
+		void SetGenerator();
 
-	TRexBaseGenerator* fCurrentGenerator;
+		TRexBaseGenerator* fCurrentGenerator;
 };
 
 #endif /* TREXPRIMARYGENERATORACTION_HH_ */

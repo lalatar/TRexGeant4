@@ -13,21 +13,21 @@
 #include "G4Event.hh"
 
 class TRexBaseGenerator {
-public:
-	TRexBaseGenerator();
-	virtual ~TRexBaseGenerator();
+	public:
+		TRexBaseGenerator();
+		virtual ~TRexBaseGenerator();
 
-	//virtual void GeneratePrimaries(G4Event *anEvent) {};
-	virtual void GeneratePrimaries(G4Event*) {};
-	//virtual void CreateTreeBranches(TTree &tree) {};
-	//virtual void FillTree(TTree &tree);
-	virtual void CreateTreeBranches() {};
-	virtual void FillTree();
+		//virtual void GeneratePrimaries(G4Event *anEvent) {};
+		virtual void GeneratePrimaries(G4Event*) {}
+		//virtual void CreateTreeBranches(TTree &tree) {};
+		//virtual void FillTree(TTree &tree);
+		virtual void CreateTreeBranches() {}
+		virtual void FillTree();
 
-	void SetTree(TTree* tree);
+		void SetTree(TTree* tree);
 
-protected:
-	TTree* fTree;
+	protected:
+		TTree* fTree;
 };
 
 #endif /* TREXBASEGENERATOR_HH_ */

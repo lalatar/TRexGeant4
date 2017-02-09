@@ -12,36 +12,34 @@
 
 #include "TRexBaseGenerator.hh"
 
-#include "G4Alpha.hh"
-
-#include "Randomize.hh"
-
-#include "math.h"
+//#include "math.h"
 
 class G4ParticleGun;
 
 class TRexAlphaSource : public TRexBaseGenerator {
-public:
-	TRexAlphaSource();
-	virtual ~TRexAlphaSource();
+	public:
+		TRexAlphaSource();
+		virtual ~TRexAlphaSource();
 
-	void GeneratePrimaries(G4Event *anEvent);
-	//void CreateTreeBranches(TTree &tree);
-	//void FillTree(TTree &tree);
-	void CreateTreeBranches();
+		void GeneratePrimaries(G4Event *anEvent);
+		//void CreateTreeBranches(TTree &tree);
+		//void FillTree(TTree &tree);
+		void CreateTreeBranches();
 
-private:
-	// shoot fReactionX, fReactionY, fReactionZ at the surface of the alpha source
-	void ShootReactionPosition();
+	private:
+		// shoot fReactionX, fReactionY, fReactionZ at the surface of the alpha source
+		void ShootReactionPosition();
 
-	// shoot fThetaCM and fPhi isotropically in a half sphere
-	void CreateIsotropicDistribution();
+		// shoot fThetaCM and fPhi isotropically in a half sphere
+		void CreateIsotropicDistribution();
 
-	G4ParticleGun* particleGun;
+		G4ParticleGun* fParticleGun;
 
-	G4double fReactionEnergy;
-	G4double fReactionX, fReactionY, fReactionZ;
-	G4double fThetaCM, fPhi;
+		G4double fReactionEnergy;
+		G4double fReactionX;
+		G4double fReactionY;
+		G4double fReactionZ;
+		G4double fThetaCM, fPhi;
 };
 
 #endif /* TREXALPHASOURCE_HH_ */

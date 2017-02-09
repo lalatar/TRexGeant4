@@ -12,12 +12,12 @@
 TRexBarrelErestSingle::TRexBarrelErestSingle() {
 }
 
-TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direction, int id){
+TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direction, int id) {
 	fName = name;
 	fId = id;
 	fDirection = direction;
 
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fDetectorLengthX = TRexSettings::Get()->GetFBarrelErestSingleLengthX();
 		fDetectorLengthY = TRexSettings::Get()->GetFBarrelErestSingleLengthY();
 		fThicknessDetector = TRexSettings::Get()->GetFBarrelErestSingleThickness()[fId];
@@ -26,10 +26,9 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 		fDeadLayer = TRexSettings::Get()->GetFBarrelErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-							TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-							TRexSettings::Get()->GetFBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
-	}
-	else if(fDirection == "middle"){
+				TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+				TRexSettings::Get()->GetFBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+	} else if(fDirection == "middle") {
 		fDetectorLengthX = TRexSettings::Get()->GetMBarrelErestSingleLengthX();
 		fDetectorLengthY = TRexSettings::Get()->GetMBarrelErestSingleLengthY();
 		fThicknessDetector = TRexSettings::Get()->GetMBarrelErestSingleThickness()[fId];
@@ -38,10 +37,9 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 		fDeadLayer = TRexSettings::Get()->GetMBarrelErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-							TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-							TRexSettings::Get()->GetMBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
-	}
-	else if(fDirection == "backward"){
+				TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+				TRexSettings::Get()->GetMBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+	} else if(fDirection == "backward") {
 		fDetectorLengthX = TRexSettings::Get()->GetBBarrelErestSingleLengthX();
 		fDetectorLengthY = TRexSettings::Get()->GetBBarrelErestSingleLengthY();
 		fThicknessDetector = TRexSettings::Get()->GetBBarrelErestSingleThickness()[fId];
@@ -50,10 +48,9 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 		fDeadLayer = TRexSettings::Get()->GetBBarrelErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-							TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-							TRexSettings::Get()->GetBBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
-	}
-	else{
+				TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+				TRexSettings::Get()->GetBBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}
 
@@ -66,16 +63,16 @@ TRexBarrelErestSingle::~TRexBarrelErestSingle() {
 }
 
 void TRexBarrelErestSingle::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan) {
-        // active detector
-        ConstructSilicon(experimentalHall_log, SDMan);
+	// active detector
+	ConstructSilicon(experimentalHall_log, SDMan);
 
 	// PCB
-	if(TRexSettings::Get()->ConstructPCB()){
-	  ConstructPCB(experimentalHall_log);
+	if(TRexSettings::Get()->ConstructPCB()) {
+		ConstructPCB(experimentalHall_log);
 	}
 
 	// include dead layers ?
-	if(fDeadLayer > 0.1*um){
+	if(fDeadLayer > 0.1*um) {
 		ConstructDeadLayer(experimentalHall_log);
 	}
 }
@@ -100,7 +97,7 @@ void TRexBarrelErestSingle::ConstructSilicon(G4LogicalVolume* experimentalHall_l
 	SDMan->AddNewDetector(fBarrelErestSingleSensitiveDetector);
 	fLogicalVolume->SetSensitiveDetector(fBarrelErestSingleSensitiveDetector);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		fLogicalVolume->SetVisAttributes(TRexColour::Get()->red);
 	}
 }
@@ -142,17 +139,17 @@ void TRexBarrelErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) 
 	pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / rad));
 	pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / rad));
 
-	if(fabs(fPos.x()) < 0.1){
+	if(fabs(fPos.x()) < 0.1) {
 		fRotMatrixPcb->rotateX(180.*degree);
 		pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / rad));
 		pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / rad));
 	}
 
-	if(fDirection == "backward"){
+	if(fDirection == "backward") {
 		pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / rad));
 		pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / rad));
 
-		if(fabs(fPos.y()) < 0.1){
+		if(fabs(fPos.y()) < 0.1) {
 			fRotMatrixPcb->rotateY(180.*degree);
 			pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / rad));
 			pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / rad));
@@ -164,7 +161,7 @@ void TRexBarrelErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) 
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(fRotMatrixPcb, pcbPos, PCBCD_log, "PCBForwardBarrel1", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		PCBCD_log->SetVisAttributes(TRexColour::Get()->darkgreen);
 	}
 }
@@ -184,7 +181,7 @@ void TRexBarrelErestSingle::ConstructDeadLayer(G4LogicalVolume* experimentalHall
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(G4Transform3D(*fRotMatrix, fPos), deadLayer_log, "deadLayerBarrelErest", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		fLogicalVolume->SetVisAttributes(TRexColour::Get()->yellow);
 	}
 }

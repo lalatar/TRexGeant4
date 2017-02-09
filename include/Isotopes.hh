@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <iostream>
+#include <vector>
 
 #include "Element.hh"
 
@@ -15,24 +16,24 @@ int CalculateQ(Element**,double*,double*);
 
 class Isotopes : Element {
 public:
-  Isotopes();
-  Isotopes(const char*);
+  Isotopes(const char* massFile = "./mass.dat", bool debug = false);
   ~Isotopes();
   Element* Search(char*);
-  Element* Search(int,int);
-  double Mass(int,int);
-  double MassExcess(int,int);
-  void ProjectileOneNeutronGain(Element*&,Element*&);
-  void ProjectileOneNeutronLoss(Element*&,Element*&);
-  void ProjectileTwoNeutronGain(Element*&,Element*&);
-  void ProjectileTwoNeutronLoss(Element*&,Element*&);
-  Element* Reaction(Element*,int,int);
-  int NumberOfIsotopes() { return max_elements; }
+  Element* Search(int, int);
+  double Mass(int, int);
+  double MassExcess(int, int);
+  void ProjectileOneNeutronGain(Element*&, Element*&);
+  void ProjectileOneNeutronLoss(Element*&, Element*&);
+  void ProjectileTwoNeutronGain(Element*&, Element*&);
+  void ProjectileTwoNeutronLoss(Element*&, Element*&);
+  Element* Reaction(Element*, int, int);
+  size_t NumberOfIsotopes() { return fIsotopeTable.size(); }
 
 private:
-  Element* IsotopeTable[5012];
-  double amu;
-  int max_elements;
+  size_t GetIndex(int, int);
+  std::vector<Element*> fIsotopeTable;
+  static double fAmu;
+  static bool fDebug;
 
   //ClassDef(Isotopes, 1);
 };

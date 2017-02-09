@@ -18,25 +18,25 @@ TRexVacuumChamberSphere::~TRexVacuumChamberSphere() {
 void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall_log) {
 	G4Material* chamberMaterial = TRexMaterials::Get()->GetMaterial("aluminium");
 
-/*	Chamber.WallThickness:	2.
-	Chamber.InnerRadius:	98.
-	Chamber.Length:		70.
-	Chamber.FrontThickness:	10.
-	Chamber.BackThickness:	2.
+	/*	Chamber.WallThickness:	2.
+		Chamber.InnerRadius:	98.
+		Chamber.Length:		70.
+		Chamber.FrontThickness:	10.
+		Chamber.BackThickness:	2.
 
-	Chamber.Flange.ConnectionThickness:		3.
-	Chamber.Flange.Forward.InnerRadius:		20.
-	Chamber.Flange.Forward.OuterRadius:		40.
-	Chamber.Flange.Forward.Length:			10.
-	Chamber.Flange.Forward.ConnectionLength:	10.
-	Chamber.Flange.Backward.InnerRadius:		70.
-	Chamber.Flange.Backward.OuterRadius:		85.
-	Chamber.Flange.Backward.Length:			10.
-	Chamber.Flange.Backward.ConnectionLength:	30.
-	Chamber.Flange.Target.InnerRadius:		20.25
-	Chamber.Flange.Target.OuterRadius:		27.5
-	Chamber.Flange.Target.Length:			3.
-	Chamber.Flange.Target.ConnectionLength:		27. */
+		Chamber.Flange.ConnectionThickness:		3.
+		Chamber.Flange.Forward.InnerRadius:		20.
+		Chamber.Flange.Forward.OuterRadius:		40.
+		Chamber.Flange.Forward.Length:			10.
+		Chamber.Flange.Forward.ConnectionLength:	10.
+		Chamber.Flange.Backward.InnerRadius:		70.
+		Chamber.Flange.Backward.OuterRadius:		85.
+		Chamber.Flange.Backward.Length:			10.
+		Chamber.Flange.Backward.ConnectionLength:	30.
+		Chamber.Flange.Target.InnerRadius:		20.25
+		Chamber.Flange.Target.OuterRadius:		27.5
+		Chamber.Flange.Target.Length:			3.
+		Chamber.Flange.Target.ConnectionLength:		27. */
 
 	// commented values: T-REX spherical vaccum chamber
 	// current values: adapted to Coulex chamber
@@ -79,18 +79,18 @@ void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall
 	G4Polycone* backward_flange;
 
 	G4double forward_flange_z[4] = {0, -chamberForwardFlangeConnectionLength, -chamberForwardFlangeConnectionLength,
-			-(chamberForwardFlangeConnectionLength + chamberForwardFlangeLength)};
+		-(chamberForwardFlangeConnectionLength + chamberForwardFlangeLength)};
 	G4double forward_flange_inner_radius[4] = {chamberForwardFlangeInnerRadius, chamberForwardFlangeInnerRadius,
-			chamberForwardFlangeInnerRadius, chamberForwardFlangeInnerRadius};
+		chamberForwardFlangeInnerRadius, chamberForwardFlangeInnerRadius};
 	G4double forward_flange_outer_radius[4] = {chamberForwardFlangeInnerRadius + chamberFlangeConnectionThickness,
-			chamberForwardFlangeInnerRadius + chamberFlangeConnectionThickness, chamberForwardFlangeOuterRadius, chamberForwardFlangeOuterRadius};
+		chamberForwardFlangeInnerRadius + chamberFlangeConnectionThickness, chamberForwardFlangeOuterRadius, chamberForwardFlangeOuterRadius};
 
 	G4double backward_flange_z[4] = {0, chamberBackwardFlangeConnectionLength, chamberBackwardFlangeConnectionLength,
-			chamberBackwardFlangeConnectionLength + chamberBackwardFlangeLength};
+		chamberBackwardFlangeConnectionLength + chamberBackwardFlangeLength};
 	G4double backward_flange_inner_radius[4] = {chamberBackwardFlangeInnerRadius, chamberBackwardFlangeInnerRadius,
-			chamberBackwardFlangeInnerRadius, chamberBackwardFlangeInnerRadius};
+		chamberBackwardFlangeInnerRadius, chamberBackwardFlangeInnerRadius};
 	G4double backward_flange_outer_radius[4] = {chamberBackwardFlangeInnerRadius + chamberFlangeConnectionThickness,
-			chamberBackwardFlangeInnerRadius + chamberFlangeConnectionThickness, chamberBackwardFlangeOuterRadius, chamberBackwardFlangeOuterRadius};
+		chamberBackwardFlangeInnerRadius + chamberFlangeConnectionThickness, chamberBackwardFlangeOuterRadius, chamberBackwardFlangeOuterRadius};
 
 
 	//flanges
@@ -123,12 +123,12 @@ void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall
 	G4Polycone* target_flange;
 
 	G4double target_flange_z[4] = {0,
-			-(chamberTargetFlangeConnectionLength - sin(20.*degree) * (chamberTargetFlangeOuterRadius - chamberTargetFlangeInnerRadius + chamberWallThickness)),
-			-chamberTargetFlangeConnectionLength, -(chamberTargetFlangeConnectionLength + chamberTargetFlangeLength)};
+		-(chamberTargetFlangeConnectionLength - sin(20.*degree) * (chamberTargetFlangeOuterRadius - chamberTargetFlangeInnerRadius + chamberWallThickness)),
+		-chamberTargetFlangeConnectionLength, -(chamberTargetFlangeConnectionLength + chamberTargetFlangeLength)};
 	G4double target_flange_inner_radius[4] = {chamberTargetFlangeInnerRadius, chamberTargetFlangeInnerRadius,
-			chamberTargetFlangeInnerRadius, chamberTargetFlangeInnerRadius};
+		chamberTargetFlangeInnerRadius, chamberTargetFlangeInnerRadius};
 	G4double target_flange_outer_radius[4] = {chamberTargetFlangeInnerRadius + chamberWallThickness,
-			chamberTargetFlangeInnerRadius + chamberWallThickness,  chamberTargetFlangeOuterRadius, chamberTargetFlangeOuterRadius};
+		chamberTargetFlangeInnerRadius + chamberWallThickness,  chamberTargetFlangeOuterRadius, chamberTargetFlangeOuterRadius};
 
 
 	if(TRexSettings::Get()->VisualizationCut()){

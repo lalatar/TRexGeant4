@@ -12,12 +12,12 @@
 TRexTrapezoidDeltaESingle::TRexTrapezoidDeltaESingle() {
 }
 
-TRexTrapezoidDeltaESingle::TRexTrapezoidDeltaESingle(std::string name, std::string direction, int id){
+TRexTrapezoidDeltaESingle::TRexTrapezoidDeltaESingle(std::string name, std::string direction, int id) {
 	fName = name;
 	fId = id;
 	fDirection = direction;
 
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fDetectorInnerRadius = TRexSettings::Get()->GetFTrapezoidDeltaESingleInnerRadius();
 		fDetectorOuterRadius = TRexSettings::Get()->GetFTrapezoidDeltaESingleOuterRadius();
 		fDetectorDeltaZ = TRexSettings::Get()->GetFTrapezoidDeltaESingleDeltaZ();
@@ -25,8 +25,7 @@ TRexTrapezoidDeltaESingle::TRexTrapezoidDeltaESingle(std::string name, std::stri
 		fStartAngleDetector = TRexSettings::Get()->GetFTrapezoidDeltaESingleStartAngle()[fId];
 		fPosZ = TRexSettings::Get()->GetFTrapezoidDeltaESinglePosZ()[fId];
 		fFoilThickness = TRexSettings::Get()->GetFTrapezoidDeltaESingleFoilThickness();
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fDetectorInnerRadius = TRexSettings::Get()->GetBTrapezoidDeltaESingleInnerRadius();
 		fDetectorOuterRadius = TRexSettings::Get()->GetBTrapezoidDeltaESingleOuterRadius();
 		fDetectorDeltaZ = TRexSettings::Get()->GetBTrapezoidDeltaESingleDeltaZ();
@@ -34,8 +33,7 @@ TRexTrapezoidDeltaESingle::TRexTrapezoidDeltaESingle(std::string name, std::stri
 		fStartAngleDetector = TRexSettings::Get()->GetBTrapezoidDeltaESingleStartAngle()[fId];
 		fPosZ = TRexSettings::Get()->GetBTrapezoidDeltaESinglePosZ()[fId];
 		fFoilThickness = TRexSettings::Get()->GetBTrapezoidDeltaESingleFoilThickness();
-	}
-	else{
+	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}
 
@@ -50,7 +48,7 @@ TRexTrapezoidDeltaESingle::~TRexTrapezoidDeltaESingle() {
 }
 
 
-void TRexTrapezoidDeltaESingle::SetPcbParameters(){
+void TRexTrapezoidDeltaESingle::SetPcbParameters() {
 	// radii
 	fPcbOuterRadius = fDetectorOuterRadius * 1.3;
 	fPcbInnerRadius = fDetectorInnerRadius * 1.3;
@@ -79,16 +77,15 @@ void TRexTrapezoidDeltaESingle::SetPcbParameters(){
 
 	// set rotation matrix
 	fRotMatrixPcb = new G4RotationMatrix;
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fRotMatrixPcb->rotateX(-fPcbBeta);
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fRotMatrixPcb->rotateX(fPcbBeta);
 	}
 	fRotMatrixPcb->rotateZ(fStartAngleDetector);
 }
 
-void TRexTrapezoidDeltaESingle::SetSiliconParameters(){
+void TRexTrapezoidDeltaESingle::SetSiliconParameters() {
 	// base length of the trapezoid panel detector
 	fBaseLarge = fDetectorOuterRadius * sqrt(2. - sqrt(2.)) / 2.;
 	fBaseSmall = fDetectorInnerRadius * sqrt(2. - sqrt(2.)) / 2.;
@@ -115,16 +112,15 @@ void TRexTrapezoidDeltaESingle::SetSiliconParameters(){
 
 	// set rotation matrix
 	fRotMatrix = new G4RotationMatrix;
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fRotMatrix->rotateX(-fBeta);
-	}
-	else if(fDirection == "backward"){
+	} else if(fDirection == "backward") {
 		fRotMatrix->rotateX(fBeta);
 	}
 	fRotMatrix->rotateZ(fStartAngleDetector);
 }
 
-void TRexTrapezoidDeltaESingle::SetFoilParameters(){
+void TRexTrapezoidDeltaESingle::SetFoilParameters() {
 	// radii
 	fFoilOuterRadius = fPcbOuterRadius - (5.0 + 2.0)*mm;
 	fFoilInnerRadius = fPcbInnerRadius - (5.0 + 2.0)*mm;
@@ -150,10 +146,10 @@ void TRexTrapezoidDeltaESingle::SetFoilParameters(){
 
 	// set rotation matrix
 	fRotMatrixFoil = new G4RotationMatrix;
-	if(fDirection == "forward"){
+	if(fDirection == "forward") {
 		fRotMatrixFoil->rotateX(-fFoilBeta);
 	}
-	else if(fDirection == "backward"){
+	else if(fDirection == "backward") {
 		fRotMatrixFoil->rotateX(fFoilBeta);
 	}
 	fRotMatrixFoil->rotateZ(fStartAngleDetector);
@@ -164,12 +160,12 @@ void TRexTrapezoidDeltaESingle::Construct(G4LogicalVolume* experimentalHall_log,
 	ConstructSilicon(experimentalHall_log, SDMan);
 
 	// PCB
-	if(TRexSettings::Get()->ConstructPCB()){
-	  ConstructPCB(experimentalHall_log);
+	if(TRexSettings::Get()->ConstructPCB()) {
+		ConstructPCB(experimentalHall_log);
 	}
 
 	// protection foils ?
-	if(fFoilThickness > 0.1*um){
+	if(fFoilThickness > 0.1*um) {
 		ConstructFoil(experimentalHall_log);
 	}
 }
@@ -201,7 +197,7 @@ void TRexTrapezoidDeltaESingle::ConstructSilicon(G4LogicalVolume* experimentalHa
 	SDMan->AddNewDetector(fTrapezoidDeltaESingleSensitiveDetector);
 	fLogicalVolume->SetSensitiveDetector(fTrapezoidDeltaESingleSensitiveDetector);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		fLogicalVolume->SetVisAttributes(TRexColour::Get()->yellow);
 	}
 }
@@ -210,12 +206,12 @@ void TRexTrapezoidDeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_l
 	G4Material* detectorMaterial = TRexMaterials::Get()->GetMaterial("pcb");
 
 	G4Trap *pcb = new G4Trap("detector_pcb", fThicknessPcb/2., 0*deg, 0*deg,
-							fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg,
-		                    fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg);
+			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg,
+			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg);
 
 	G4Trap *pcbHole = new G4Trap("detector", fThicknessPcb, 0*deg, 0*deg,
-			                        fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg,
-			                        fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg);
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg,
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg);
 
 	// subtract hole for detector
 	G4SubtractionSolid* pcbTotal = new G4SubtractionSolid("deltaPCB_solid", pcb, pcbHole, 0, G4ThreeVector(0, 0, 0));
@@ -230,7 +226,7 @@ void TRexTrapezoidDeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_l
 	new G4PVPlacement(G4Transform3D(*fRotMatrixPcb, fPcbPos),
 			pcb_log, "TrapezoidDeltaE_pcb", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		pcb_log->SetVisAttributes(TRexColour::Get()->darkgreen);
 	}
 }
@@ -240,8 +236,8 @@ void TRexTrapezoidDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_
 	G4Material* foilMaterial = TRexMaterials::Get()->GetMaterial("mylar");
 
 	G4Trap *foil_solid = new G4Trap("detector_foil", fFoilThickness/2., 0*deg, 0*deg,
-							fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*deg,
-		                    fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*deg);
+			fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*deg,
+			fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*deg);
 
 	G4LogicalVolume* foil_log = new G4LogicalVolume(foil_solid, foilMaterial, fName + "_log", 0,0 ,0);
 
@@ -253,7 +249,7 @@ void TRexTrapezoidDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_
 	new G4PVPlacement(G4Transform3D(*fRotMatrixFoil, fFoilPos),
 			foil_log, "TrapezoidDeltaE_foil", experimentalHall_log, false, 0);
 
-	if(TRexSettings::Get()->Colours()){
+	if(TRexSettings::Get()->Colours()) {
 		foil_log->SetVisAttributes(TRexColour::Get()->silver);
 	}
 }

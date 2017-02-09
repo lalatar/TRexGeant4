@@ -23,13 +23,13 @@
 #include "G4PVPlacement.hh"
 
 class TRexVacuumChamberSphere : public TRexVacuumChamber {
-public:
-	TRexVacuumChamberSphere();
-	virtual ~TRexVacuumChamberSphere();
+	public:
+		TRexVacuumChamberSphere();
+		virtual ~TRexVacuumChamberSphere();
 
-	void ConstructChamber(G4LogicalVolume* experimentalHall_log);
+		void ConstructChamber(G4LogicalVolume* experimentalHall_log);
 
-private:
+	private:
 
 };
 

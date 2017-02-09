@@ -17,23 +17,28 @@
 
 
 class TRexRutherford : public TRexBeam {
-public:
-	TRexRutherford();
-	virtual ~TRexRutherford();
+	public:
+		TRexRutherford();
+		virtual ~TRexRutherford();
 
-	void GeneratePrimaries(G4Event *anEvent);
-	
-private:
-	void ShootEjectileAndRecoilDirections();
-	void CalculateScatteringProbability();
-	void DoKinematicCalculation();
+		void GeneratePrimaries(G4Event *anEvent);
 
-	G4double fNorm;
-	G4double fEcm, fTcm;
-	G4double fTcm3, fTcm4;
-	G4double fPcm3, fPcm4;
-	G4double fBeta, fGamma;
-	G4double fBetaCm3, fBetaCm4;
+	private:
+		void ShootEjectileAndRecoilDirections();
+		void CalculateScatteringProbability();
+		void DoKinematicCalculation();
+
+		G4double fNorm;
+		G4double fEcm;
+		G4double fTcm;
+		G4double fTcm3;
+		G4double fTcm4;
+		G4double fPcm3;
+		G4double fPcm4;
+		G4double fBeta;
+		G4double fGamma;
+		G4double fBetaCm3;
+		G4double fBetaCm4;
 };
 
 #endif /* TREXRUTHERFORD_HH_ */

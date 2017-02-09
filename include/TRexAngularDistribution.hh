@@ -25,52 +25,52 @@
 #include <vector>
 
 class TRexAngularDistribution : public TRexBeam, public MiniBallSource {
-public:
-	TRexAngularDistribution();
-	virtual ~TRexAngularDistribution();
+	public:
+		TRexAngularDistribution();
+		virtual ~TRexAngularDistribution();
 
-	void GeneratePrimaries(G4Event *anEvent);
-	
-private:
-	void ShootEjectileAndRecoilDirections();
-	void ShootGamma();
-	void CalculateArealDensity();
-	void CalculateCrossSectionIntegral();
-	void CalculateScatteringProbability();
+		void GeneratePrimaries(G4Event *anEvent);
 
-	void ReadLevelFile();
-	void FillMiniballLevels();
-	void FillAngularDistributionGraphs();
-	void FillAngularDistributionHistos();
-	void SetEjectileAndRecoil();
-	void ShootThetaCm(int levelNb);
-	void ShootReactionTypeAndExcitationEnergy();
+	private:
+		void ShootEjectileAndRecoilDirections();
+		void ShootGamma();
+		void CalculateArealDensity();
+		void CalculateCrossSectionIntegral();
+		void CalculateScatteringProbability();
+
+		void ReadLevelFile();
+		void FillMiniballLevels();
+		void FillAngularDistributionGraphs();
+		void FillAngularDistributionHistos();
+		void SetEjectileAndRecoil();
+		void ShootThetaCm(int levelNb);
+		void ShootReactionTypeAndExcitationEnergy();
 
 
-	int fNbOfLevels;
-	std::vector<G4double> fLevelEnergy;
-	std::vector<double> fFeedingProbability;
-	std::vector<int> fNbOfDecays;
-	std::vector<double> fLevelSpin;
-	std::vector<int> fLevelParity;
-	std::vector<int> fLevelID;
-	std::vector<std::vector<int> > fDecayLevel;
-	std::vector<std::vector<double> > fDecayProbability;
-	std::vector<std::vector<int> > fDecayType;
-	std::vector<std::vector<double> > fDecayDelta;
-	//std::vector<std::vector<MiniBallSourceLevel> > fLevelsMB;
-	std::vector<MiniBallSourceLevel> fLevelsMB;
-	MiniBallSourceLevel fFeedingMB;
+		size_t fNbOfLevels;
+		std::vector<G4double> fLevelEnergy;
+		std::vector<double> fFeedingProbability;
+		std::vector<int> fNbOfDecays;
+		std::vector<double> fLevelSpin;
+		std::vector<int> fLevelParity;
+		std::vector<int> fLevelID;
+		std::vector<std::vector<int> > fDecayLevel;
+		std::vector<std::vector<double> > fDecayProbability;
+		std::vector<std::vector<int> > fDecayType;
+		std::vector<std::vector<double> > fDecayDelta;
+		//std::vector<std::vector<MiniBallSourceLevel> > fLevelsMB;
+		std::vector<MiniBallSourceLevel> fLevelsMB;
+		MiniBallSourceLevel fFeedingMB;
 
-	G4double fExcitationEnergy;
+		G4double fExcitationEnergy;
 
-	//std::vector<TGraph> fGraphs;
-	std::vector<TGraph> fGraphsSin;
-	std::vector<TH1F> fHistos;
+		//std::vector<TGraph> fGraphs;
+		std::vector<TGraph> fGraphsSin;
+		std::vector<TH1F> fHistos;
 
-	std::vector<G4double> fArealDensity;
-	std::vector<G4double> fCrossSectionIntegral;
-	std::vector<G4double> fScatteringProbabilitySingle;
+		std::vector<G4double> fArealDensity;
+		std::vector<G4double> fCrossSectionIntegral;
+		std::vector<G4double> fScatteringProbabilitySingle;
 };
 
 #endif /* TREXANGULARDISTRIBUTION_HH_ */

@@ -36,46 +36,46 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 
 class TRexDetectorConstruction : public G4VUserDetectorConstruction {
-public:
-	TRexDetectorConstruction();
-	TRexDetectorConstruction(MiniBallHistoManager* miniballHistoManager);
-	virtual ~TRexDetectorConstruction();
+	public:
+		TRexDetectorConstruction();
+		TRexDetectorConstruction(MiniBallHistoManager* miniballHistoManager);
+		virtual ~TRexDetectorConstruction();
 
-	G4VPhysicalVolume* Construct();
+		G4VPhysicalVolume* Construct();
 
-	//void SetTree(TTree *tree);
+		//void SetTree(TTree *tree);
 
-	std::vector<TRexBaseDetector*> GetAllDetectors() {return fDetectors; };
+		std::vector<TRexBaseDetector*> GetAllDetectors() {return fDetectors; }
 
-private:
-	void ConstructExperimentalHall();
-	void ConstructTarget();
-	void ConstructVacuumChamber();
-	void DefineDetectors();
-	void DefineMiniball();
+	private:
+		void ConstructExperimentalHall();
+		void ConstructTarget();
+		void ConstructVacuumChamber();
+		void DefineDetectors();
+		void DefineMiniball();
 
-	// Miniball histo manager (needed to make Miniball a sensitive detector)
-	MiniBallHistoManager* fMiniballHistoManager;
+		// Miniball histo manager (needed to make Miniball a sensitive detector)
+		MiniBallHistoManager* fMiniballHistoManager;
 
-	// experimental hall
-	G4Box* fExperimentalHall_box;
-	G4LogicalVolume* fExperimentalHall_log;
-	G4VPhysicalVolume* fExperimentalHall_phys;
+		// experimental hall
+		G4Box* fExperimentalHall_box;
+		G4LogicalVolume* fExperimentalHall_log;
+		G4VPhysicalVolume* fExperimentalHall_phys;
 
-	// stores all detectors and their position
-	std::vector<TRexBaseDetector*> fDetectors;
+		// stores all detectors and their position
+		std::vector<TRexBaseDetector*> fDetectors;
 
-	// sensitive detector manager
-	G4SDManager* fSDMan;
+		// sensitive detector manager
+		G4SDManager* fSDMan;
 
-	MiniBallDetectorArray* fMiniball;
+		MiniBallDetectorArray* fMiniball;
 
-	// vacuum chamber
-	TRexVacuumChamber* fVacuumChamber;
+		// vacuum chamber
+		TRexVacuumChamber* fVacuumChamber;
 
-	// vacuum chamber gas
-	TRexVacuumChamberGas* fVacuumChamberGas;
-	G4LogicalVolume* fVacuumChamberGas_log;
+		// vacuum chamber gas
+		TRexVacuumChamberGas* fVacuumChamberGas;
+		G4LogicalVolume* fVacuumChamberGas_log;
 };
 
 #endif /* TREXDETECTORCONSTRUCTION_HH_ */

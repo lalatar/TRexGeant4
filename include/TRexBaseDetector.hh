@@ -24,35 +24,35 @@ class G4VPhysicalVolume;
 #include <string>
 
 class TRexBaseDetector {
-public:
-	TRexBaseDetector();
-	TRexBaseDetector(std::string name, std::string direction, int id);
-	virtual ~TRexBaseDetector();
+	public:
+		TRexBaseDetector();
+		TRexBaseDetector(std::string name, std::string direction, int id);
+		virtual ~TRexBaseDetector();
 
-	//virtual void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan) {};
-	virtual void Construct(G4LogicalVolume*, G4SDManager*) {};
-	//virtual void CreateTreeBranches() = 0;
-	//virtual ParticleMC* GetParticleMC() = 0;
-	virtual std::vector<ParticleMC>* GetParticleMCvector() = 0;
+		//virtual void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan) {};
+		virtual void Construct(G4LogicalVolume*, G4SDManager*) {}
+		//virtual void CreateTreeBranches() = 0;
+		//virtual ParticleMC* GetParticleMC() = 0;
+		virtual std::vector<ParticleMC>* GetParticleMCvector() = 0;
 
-	std::string GetName() {return fName; };
+		std::string GetName() {return fName; }
 
 
-protected:
-	std::string fName;
-   std::string fBaseName;
-	std::string fDirection;
-	int fId;
+	protected:
+		std::string fName;
+		std::string fBaseName;
+		std::string fDirection;
+		int fId;
 
-	G4VSolid* fSolid;
-	G4LogicalVolume* fLogicalVolume;
-	G4VPhysicalVolume* fPhysicalVolume;
+		G4VSolid* fSolid;
+		G4LogicalVolume* fLogicalVolume;
+		G4VPhysicalVolume* fPhysicalVolume;
 
-	//! combines the data from a DeltaE and a rest detector
-	//! @param deltaEDet the deltaE detector
-	//! @param restDet the rest detector
-	//! @return the combined particle MC vector, the caller takes ownership of the vector
-	virtual std::vector<ParticleMC>* combineDeltaEErestData(TRexBaseDetector * deltaEDet, TRexBaseDetector * restDet) const;
+		//! combines the data from a DeltaE and a rest detector
+		//! @param deltaEDet the deltaE detector
+		//! @param restDet the rest detector
+		//! @return the combined particle MC vector, the caller takes ownership of the vector
+		virtual std::vector<ParticleMC>* CombineDeltaEErestData(TRexBaseDetector * deltaEDet, TRexBaseDetector * restDet) const;
 };
 
 #endif /* TREXBASEDETECTOR_HH_ */

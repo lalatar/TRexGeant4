@@ -17,29 +17,29 @@
 #include "TFile.h"
 #include "TTree.h"
 
-class TRexRunAction : public G4UserRunAction{
-public:
-	TRexRunAction();
-	TRexRunAction(TRexData &data,TRexPrimaryGeneratorAction* generator, TRexEventAction* eventAction);
+class TRexRunAction : public G4UserRunAction {
+	public:
+		TRexRunAction();
+		TRexRunAction(TRexData &data,TRexPrimaryGeneratorAction* generator, TRexEventAction* eventAction);
 
-	virtual ~TRexRunAction();
+		virtual ~TRexRunAction();
 
-	// processed every time a run starts
-	void BeginOfRunAction(const G4Run*);
+		// processed every time a run starts
+		void BeginOfRunAction(const G4Run*);
 
-	// processed every time a run ends
-	void EndOfRunAction(const G4Run*);
+		// processed every time a run ends
+		void EndOfRunAction(const G4Run*);
 
 
-private:
-	TRexData fData;
+	private:
+		TRexData fData;
 
-	TRexPrimaryGeneratorAction* fGenerator;
-	TRexEventAction* fEventAction;
+		TRexPrimaryGeneratorAction* fGenerator;
+		TRexEventAction* fEventAction;
 
-	TFile* fOutputFile;
-	TTree* fGeneratorTree;
-	TTree* fDetectorTree;
+		TFile* fOutputFile;
+		TTree* fGeneratorTree;
+		TTree* fDetectorTree;
 };
 
 #endif /* TREXRUNACTION_HH_ */

@@ -33,10 +33,10 @@ TRexBeam::TRexBeam() :
 	// energy loss in the target
 	fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (mg/cm2)));
 
-//	TFile bla("bla.root", "recreate");
-//	bla.cd();
-//	fEnergyVsTargetDepth.Write();
-//	bla.Close();
+	//	TFile bla("bla.root", "recreate");
+	//	bla.cd();
+	//	fEnergyVsTargetDepth.Write();
+	//	bla.Close();
 
 	// set minimal thetaCM
 	fThetaCM_min = TRexSettings::Get()->GetThetaCmMin();
@@ -46,9 +46,9 @@ TRexBeam::~TRexBeam() {
 	// TODO Auto-generated destructor stub
 }
 
-void TRexBeam::ShootReactionPosition(){
+void TRexBeam::ShootReactionPosition() {
 	//select random x and y position on a disk with diameter beamWidth
-	do{
+	do {
 		fReactionX = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * mm;
 		fReactionY = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * mm;
 	} while(sqrt(pow(fReactionX,2)+pow(fReactionY,2)) > fBeamWidth / 2.);
@@ -60,7 +60,7 @@ void TRexBeam::ShootReactionPosition(){
 	fReactionZ = CLHEP::RandFlat::shoot(-TRexSettings::Get()->GetTargetPhysicalLength()/(2*um), TRexSettings::Get()->GetTargetPhysicalLength()/(2*um))*um;
 }
 
-void TRexBeam::DefineNuclei(){
+void TRexBeam::DefineNuclei() {
 	fProjectileZ = TRexSettings::Get()->GetProjectileZ();
 	fProjectileA = TRexSettings::Get()->GetProjectileA();
 	fTargetZ = TRexSettings::Get()->GetTargetZ();
@@ -92,30 +92,30 @@ void TRexBeam::DefineNuclei(){
 	fRecoil = *(fIsotopeTable->Search((char*)TRexSettings::Get()->GetRecoilName().c_str()));
 
 	std::cout << "Shooting the projectile " << fProjectile.A() << fProjectile.Name() << " with (Z,A) = (" << fProjectileZ << "," <<  fProjectileA
-			<< ") on the target " << fTarget.A() << fTarget.Name() << " with (Z,A) = (" << fTargetZ << "," << fTargetA << ") => ejectile "
-			<< fEjectile.A() << fEjectile.Name() << " with (Z,A) = (" << fEjectileZ << "," << fEjectileA  << ") with recoil "
-			<< fRecoil.A() << fRecoil.Name() << " with (Z,A) = (" << fRecoilZ << "," << fRecoilA << ")." << std::endl;
+		<< ") on the target " << fTarget.A() << fTarget.Name() << " with (Z,A) = (" << fTargetZ << "," << fTargetA << ") => ejectile "
+		<< fEjectile.A() << fEjectile.Name() << " with (Z,A) = (" << fEjectileZ << "," << fEjectileA  << ") with recoil "
+		<< fRecoil.A() << fRecoil.Name() << " with (Z,A) = (" << fRecoilZ << "," << fRecoilA << ")." << std::endl;
 
 	// check settings
 	if(fProjectile.Z() != fProjectileZ || fProjectile.A() != fProjectileA ||
 			fTarget.Z() != fTargetZ || fTarget.A() != fTargetA ||
 			fEjectile.Z() != fEjectileZ || fEjectile.A() != fEjectileA ||
-			fRecoil.Z() != fRecoilZ || fRecoil.A() != fRecoilA){
+			fRecoil.Z() != fRecoilZ || fRecoil.A() != fRecoilA) {
 		std::cerr << "Given particle names do not match to the given charge and mass numbers!" << std::endl;
 		exit(1);
 	}
 }
 
-Material* TRexBeam::GetTargetMaterial(){
+Material* TRexBeam::GetTargetMaterial() {
 	Material* TargetMaterial;
 
 	//PE and MY are implemented as materials, everything else should be the name of the element
-	if(((G4String)TRexSettings::Get()->GetTargetMaterialName()).contains("PE") || ((G4String)TRexSettings::Get()->GetTargetMaterialName()).contains("MY")){
+	if(((G4String)TRexSettings::Get()->GetTargetMaterialName()).contains("PE") || ((G4String)TRexSettings::Get()->GetTargetMaterialName()).contains("MY")) {
 		TargetMaterial = new Material((char*)TRexSettings::Get()->GetTargetMaterialName().c_str());
 	} else {
 		//if target material name is the same as the name of the scattering target build set the material to only this element
 		if(TRexSettings::Get()->GetTargetMaterialName() == TRexSettings::Get()->GetTargetName() || TRexSettings::Get()->GetTargetMaterialName() == "dummy" ||
-				TRexSettings::Get()->GetTargetMaterialName() == "solidDeuterium"){           //changed from "Solid" to "solid"
+				TRexSettings::Get()->GetTargetMaterialName() == "solidDeuterium") {           //changed from "Solid" to "solid"
 			TargetMaterial = new Material((char*)TRexSettings::Get()->GetTargetName().c_str(),false);
 		} else {
 			std::cout<<"'"<<TRexSettings::Get()->GetTargetMaterialName()<<"' != '"<<TRexSettings::Get()->GetTargetName()<<"'"<<std::endl;
@@ -145,7 +145,7 @@ Material* TRexBeam::GetTargetMaterial(){
 }
 
 
-void TRexBeam::CalculateReactionEnergyInTheTarget(){
+void TRexBeam::CalculateReactionEnergyInTheTarget() {
 	G4double reactionPosInTarget = fReactionZ * TRexSettings::Get()->GetTargetMaterialDensity() + TRexSettings::Get()->GetTargetThickness() / 2.;
 
 	fReactionEnergy = fEnergyVsTargetDepth.Eval(reactionPosInTarget /(mg/cm2))*MeV;
@@ -154,7 +154,7 @@ void TRexBeam::CalculateReactionEnergyInTheTarget(){
 }
 
 void TRexBeam::CreateTreeBranches() {
-	if(!fTree){
+	if(!fTree) {
 		std::cout << "\n\n\nTRexBeam: Tree doesn't exist!\n\n" << std::endl;
 	}
 	fTree->Branch("beamEnergy", &fBeamEnergy, "beamEnergy/D");
@@ -179,31 +179,26 @@ void TRexBeam::CreateTreeBranches() {
 	fTree->Branch("recoilZ", &fRecoilZ, "recoilZ/I");
 	fTree->Branch("recoilA", &fRecoilA, "recoilA/I");
 	fTree->Branch("scatteringProbability", &fScatteringProbability, "scatteringProbability/D");
-	fTree->Branch("reaction", &fReaction, "reaction/I");
+	fTree->Branch("reaction", &fReaction, "reaction/i");
 
 	fTree->Branch("gammaTheta", &fGammaTheta);
 	fTree->Branch("gammaPhi", &fGammaPhi);
 	fTree->Branch("gammaEnergy", &fGammaEnergy);
 }
 
-G4ParticleDefinition* TRexBeam::ParticleDefinition(int Z, int N, double eex){
-	if(Z+N > 4){ // create ion from ion table
+G4ParticleDefinition* TRexBeam::ParticleDefinition(int Z, int N, double eex) {
+	if(Z+N > 4) { // create ion from ion table
 		return G4ParticleTable::GetParticleTable()->GetIon(Z, Z+N, eex);
-	}
-	else{
-		if(Z == 1 && N == 0){ // proton
+	} else {
+		if(Z == 1 && N == 0) { // proton
 			return G4Proton::ProtonDefinition();
-		}
-		else if(Z == 1 && N == 1){ // deuteron
+		} else if(Z == 1 && N == 1) { // deuteron
 			return G4Deuteron::DeuteronDefinition();
-		}
-		else if(Z == 1 && N == 2){ // triton
+		} else if(Z == 1 && N == 2) { // triton
 			return G4Triton::TritonDefinition();
-		}
-		else if(Z == 2 && N == 1){ // 3He
+		} else if(Z == 2 && N == 1) { // 3He
 			return G4He3::He3Definition();
-		}
-		else if(Z == 2 && N == 2){ // alpha
+		} else if(Z == 2 && N == 2) { // alpha
 			return G4Alpha::AlphaDefinition();
 		}
 	}
@@ -213,7 +208,7 @@ G4ParticleDefinition* TRexBeam::ParticleDefinition(int Z, int N, double eex){
 }
 
 
-void TRexBeam::SetEjectileGun(G4Event *anEvent){
+void TRexBeam::SetEjectileGun(G4Event *anEvent) {
 	// particle definition
 	fParticleGunEjectile->SetParticleDefinition(ParticleDefinition(fEjectileZ, fEjectileA - fEjectileZ, fReactionEnergy));
 
@@ -236,7 +231,7 @@ void TRexBeam::SetEjectileGun(G4Event *anEvent){
 }
 
 
-void TRexBeam::SetRecoilGun(G4Event *anEvent){
+void TRexBeam::SetRecoilGun(G4Event *anEvent) {
 	// particle definition
 	fParticleGunRecoil->SetParticleDefinition(ParticleDefinition(fRecoilZ, fRecoilA - fRecoilZ, 0));
 
@@ -258,14 +253,14 @@ void TRexBeam::SetRecoilGun(G4Event *anEvent){
 	fRecoilEnergy = (fRecoilLab.e() - fRecoilRestMass) / keV;
 }
 
-void TRexBeam::SetGammaGun(G4Event *anEvent){
+void TRexBeam::SetGammaGun(G4Event *anEvent) {
 	// clear old event
 	fGammaTheta->resize(0);
 	fGammaPhi->resize(0);
 	fGammaEnergy->resize(0);
 
 	// loop over all gammas
-	for(unsigned int i = 0; i < fGammaLab->size(); i++){
+	for(unsigned int i = 0; i < fGammaLab->size(); i++) {
 		// particle definition
 		fParticleGunGamma->SetParticleDefinition(G4Gamma::GammaDefinition());
 

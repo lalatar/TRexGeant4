@@ -19,15 +19,14 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
+class TRexVacuumChamber {
+	public:
+		TRexVacuumChamber();
+		virtual ~TRexVacuumChamber();
 
-class TRexVacuumChamber{
-public:
-	TRexVacuumChamber();
-	virtual ~TRexVacuumChamber();
+		virtual void ConstructChamber(G4LogicalVolume*) {};
 
-	virtual void ConstructChamber(G4LogicalVolume*) {};
-
-protected:
+	protected:
 };
 
 #endif /* TREXVACUUMCHAMBER_HH_ */

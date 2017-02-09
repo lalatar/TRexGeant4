@@ -11,7 +11,7 @@
 TRexBarrel::TRexBarrel() {
 }
 
-TRexBarrel::TRexBarrel(std::string name, std::string direction, int nbOfTelescopes){
+TRexBarrel::TRexBarrel(std::string name, std::string direction, int nbOfTelescopes) {
 	fName = name;
 	fDirection = direction;
 	fNbOfTelescopes = nbOfTelescopes;
@@ -30,5 +30,5 @@ void TRexBarrel::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *S
 }
 
 std::vector<ParticleMC>* TRexBarrel::GetParticleMCvector() {
-	return (combineDeltaEErestData(fBarrelDeltaE, fBarrelErest));
+	return CombineDeltaEErestData(fBarrelDeltaE, fBarrelErest);
 }

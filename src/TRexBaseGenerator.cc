@@ -9,7 +9,6 @@
 
 TRexBaseGenerator::TRexBaseGenerator() {
 	// TODO Auto-generated constructor stub
-
 }
 
 TRexBaseGenerator::~TRexBaseGenerator() {

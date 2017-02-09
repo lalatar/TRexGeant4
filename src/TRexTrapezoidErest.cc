@@ -10,12 +10,12 @@
 TRexTrapezoidErest::TRexTrapezoidErest() {
 }
 
-TRexTrapezoidErest::TRexTrapezoidErest(std::string name, std::string direction, int nbOfSingles){
+TRexTrapezoidErest::TRexTrapezoidErest(std::string name, std::string direction, int nbOfSingles) {
 	fName = name;
 	fDirection = direction;
 	fNbOfSingles = nbOfSingles;
 
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		fTrapezoidErestSingles.push_back(new TRexTrapezoidErestSingle(fName + Form("Single%d", i), direction, i));
 	}
 }
@@ -26,7 +26,7 @@ TRexTrapezoidErest::~TRexTrapezoidErest() {
 
 void TRexTrapezoidErest::Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan) {
 	// loop over all FCDErest single detectors
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		fTrapezoidErestSingles[i]->Construct(experimentalHall_log, SDMan);
 	}
 }
@@ -34,9 +34,9 @@ void TRexTrapezoidErest::Construct(G4LogicalVolume* experimentalHall_log, G4SDMa
 std::vector<ParticleMC>* TRexTrapezoidErest::GetParticleMCvector() {
 	std::vector<ParticleMC>* particleMCvector = new std::vector<ParticleMC>;
 
-	for(int i = 0; i < fNbOfSingles; i++){
+	for(int i = 0; i < fNbOfSingles; i++) {
 		// include only detectors with a hit
-		if(fTrapezoidErestSingles[i]->GetParticleMC()->GetEdet() > 0.001){
+		if(fTrapezoidErestSingles[i]->GetParticleMC()->GetEdet() > 0.001) {
 			particleMCvector->push_back(*fTrapezoidErestSingles[i]->GetParticleMC());
 		}
 	}

@@ -8,12 +8,11 @@
 #include <string>
 #include <cstring>
 
-class Element
-{
+class Element {
 public:
   Element();
   Element(char*);
-  Element(int,int,double,double,double,char*,int);
+  Element(int, int, double, double, double, char*, int);
   ~Element();
   
   int Z();
@@ -26,17 +25,17 @@ public:
   int Index();
   
 private:
-  int get_charge(char*);
-  double get_mass(int);
+  int GetCharge(char*);
+  double GetMass(int);
   
-  double mass;
-  int proton_number;
-  int neutron_number;
-  double mass_excess;
-  double dmass;
-  char* code;
-  int index;
-  bool natural;
+  double fMass;
+  int fProtonNumber;
+  int fNeutronNumber;
+  double fMassExcess;
+  double fDeltaMass;
+  char* fCode;
+  int fIndex;
+  bool fNatural;
 
   //ClassDef(Element, 1);
 };

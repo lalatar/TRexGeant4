@@ -16,18 +16,18 @@
 #include <vector>
 #include <string>
 
-class TRexCDErest : public TRexBaseDetector{
-public:
-	TRexCDErest();
-	TRexCDErest(std::string name, std::string direction, int nbOfSingles);
-	virtual ~TRexCDErest();
+class TRexCDErest : public TRexBaseDetector {
+	public:
+		TRexCDErest();
+		TRexCDErest(std::string name, std::string direction, int nbOfSingles);
+		virtual ~TRexCDErest();
 
-	void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
-	std::vector<ParticleMC>* GetParticleMCvector();
+		void Construct(G4LogicalVolume* experimentalHall_log, G4SDManager *SDMan);
+		std::vector<ParticleMC>* GetParticleMCvector();
 
-private:
-	int fNbOfSingles;
-	std::vector<TRexCDErestSingle*> fCDErestSingles;
+	private:
+		int fNbOfSingles;
+		std::vector<TRexCDErestSingle*> fCDErestSingles;
 };
 
 #endif /* TREXCDEREST_HH_ */
