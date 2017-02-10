@@ -26,6 +26,7 @@ class TRexData {
 		inline std::string GetOutputFileName() { return fOutputFileName; }
 		inline std::string GetSettingsFileName() { return fSettingsFileName; }
 		inline int GetNbOfEvents() { return fNbOfEvents; }
+		inline bool VisualizationCut() { return fVisCut; }
 
 	private:
 		std::string fCommandLine;

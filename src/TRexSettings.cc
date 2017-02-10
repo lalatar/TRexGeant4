@@ -103,7 +103,7 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 	fTransferOrCoulexProbability = sett.GetValue("TransferOrCoulexProbability", 1.0);
 
 	fColours = sett.GetValue("SetColours", 0);
-	fVisualizationCut = sett.GetValue("VisualizationCut", false);
+	//fVisualizationCut = sett.GetValue("VisualizationCut", false); // this is actually set by TRexData!
 	// fill always the detector tree regardless if a detector was hit or not ?
 	fWriteAllEvents = sett.GetValue("WriteAllEvents", 0);
 	fConstructPCB =  sett.GetValue("ConstructPCB", 1);

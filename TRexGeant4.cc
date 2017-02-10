@@ -33,8 +33,7 @@
 using namespace std;
 using namespace CLHEP;
 
-int main(int argc,char** argv)
-{
+int main(int argc,char** argv) {
   // class to organize command line
   TRexData data(argc, argv);
 

@@ -16,15 +16,15 @@
 #include <sys/stat.h>
 
 TRexData::TRexData() :
-	fOutputFileName("TRexGeant4.root"), fVis(false), fVisCut(false), fInteractive(false) {
+	fOutputFileName("TRexGeant4.root"), fNbOfEvents(0), fVis(false), fVisCut(false), fInteractive(false) {
 		// no visualization or interactive mode by default
 }
 
 TRexData::TRexData(int argc, char* argv[]) :
-	fOutputFileName("TRexGeant4.root"), fVis(false), fVisCut(false), fInteractive(false) {
+	fOutputFileName("TRexGeant4.root"), fNbOfEvents(0), fVis(false), fVisCut(false), fInteractive(false) {
 	// write the command line in the fCommandLine variable
 	for(int i = 0; i < argc; i++) {
-		std::cout << argv[i] << " ";
+		std::cout<<argv[i]<<" ";
 		fCommandLine += argv[i];
 		fCommandLine += " ";
 	}

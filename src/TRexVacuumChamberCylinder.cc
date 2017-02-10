@@ -25,7 +25,7 @@ void TRexVacuumChamberCylinder::ConstructChamber(G4LogicalVolume* experimentalHa
 	G4Cons *chamber_cons1;
 	G4Cons *chamber_cons2;
 
-	if(TRexSettings::Get()->VisualizationCut()){
+	if(TRexSettings::Get()->VisualizationCut()) {
 		//chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,62.*mm,270.*degree,360.*degree);
 		chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,112.*mm,270.*degree,180.*degree);
 		//chamber_tubs1 = new G4Tubs("ChamberTubs1",70.*mm,72.*mm,34.*mm,270.*degree,180.*degree);
@@ -33,8 +33,7 @@ void TRexVacuumChamberCylinder::ConstructChamber(G4LogicalVolume* experimentalHa
 		//chamber_tubs3 = new G4Tubs("ChamberTubs3",51.*mm,54.*mm,41.5*mm,270.*degree,180.*degree);
 		chamber_cons1 = new G4Cons("ChamberCons1",59.*mm,61.*mm,70.*mm,72.*mm,10.*mm,270.*degree,180.*degree);
 		chamber_cons2 = new G4Cons("ChamberCons2",12.5*mm,14.5*mm,59.*mm,61.*mm,9.5*mm,270.*degree,180.*degree);
-	}
-	else{
+	} else {
 		//chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,62.*mm,0.*degree,360.*degree);
 		chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,112.*mm,0.*degree,360.*degree);
 		//chamber_tubs1 = new G4Tubs("ChamberTubs1",70.*mm,72.*mm,34.*mm,0.*degree,360.*degree);
