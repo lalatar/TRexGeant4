@@ -9,12 +9,12 @@ Running
 -----------------------------------------
 TRexGeant4 has the following input flags:
 ```
-        [-f <string>: <output filename>]
-		  [-n <int   >: <# of events>]
-		  [-s <string>: <settings file>                        (specify file with the settings)]
-		  [-v         : start visualization]
-		  [-c         : use visualization cut]
-		  [-i         : interactive mode]
+	[-f <string>: <output filename>]
+	[-n <int   >: <# of events>]
+	[-s <string>: <settings file>                        (specify file with the settings)]
+	[-v         : start visualization]
+	[-c         : use visualization cut]
+	[-i         : interactive mode]
 ```
 																
 More to follow...
