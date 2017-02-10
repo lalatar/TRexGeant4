@@ -8,12 +8,14 @@ In addition to ROOT and Geant4 (version 4.9), this simulation requires the Minib
 Running
 -----------------------------------------
 TRexGeant4 has the following input flags:
+```
         [-f <string>: <output filename>]
 		  [-n <int   >: <# of events>]
 		  [-s <string>: <settings file>                        (specify file with the settings)]
 		  [-v         : start visualization]
 		  [-c         : use visualization cut]
 		  [-i         : interactive mode]
+```
 																
 More to follow...
 
