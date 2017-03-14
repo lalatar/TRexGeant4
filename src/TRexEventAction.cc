@@ -78,7 +78,7 @@ void TRexEventAction::EndOfEventAction(const G4Event* evt) {
 
 	if(event_id < 100) {
 		std::cout<<">>> Event "<<evt->GetEventID()<<"\r"<<std::flush;
-	} else if(event_id == 100 || event_id%10000 == 0) {
+	} else if(event_id == 100 || event_id%1000 == 0) {
 		std::cout<<">>> Event "<<evt->GetEventID()<<"\r"<<std::endl;
 	}
 }

@@ -40,7 +40,7 @@ G4LogicalVolume* TRexVacuumChamberGasCylinder::ConstructChamberGas(G4LogicalVolu
 	G4LogicalVolume* chamberGas_log = new G4LogicalVolume(chamberGas_solid, chamberGasMaterial, "chambergas_log");
 
 	// physical volume
-	new G4PVPlacement(0, G4ThreeVector(0,0,50), chamberGas_log, "chamber_gas", experimentalHall_log, false, 0);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0), chamberGas_log, "chamber_gas", experimentalHall_log, false, 0);
 
 	return chamberGas_log;
 }

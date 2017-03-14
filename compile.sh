@@ -9,4 +9,4 @@
 
 # this scripts passes all commandline flags onto the make command
 # (mainly intended for -jN flags)
-make $@ && make $@ clean_libs && make $@
+make $@ && make clean_libs && make $@

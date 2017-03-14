@@ -44,8 +44,6 @@ TRexHit::TRexHit(const G4Step* aStep, G4TouchableHistory*) {
 	G4TouchableHandle theTouchable = aStep->GetPreStepPoint()->GetTouchableHandle();
 	G4ThreeVector localPosition = theTouchable->GetHistory()->GetTopTransform().TransformPoint(position);
 	SetLocalHitPosition(localPosition);
-
-	//G4cout << "global pos = " << position << " , local pos = " << localPosition << " , global - local = " << position - localPosition << G4endl;
 }
 
 TRexHit::~TRexHit() {

@@ -52,8 +52,7 @@ void TRexVacuumChamberCylinder::ConstructChamber(G4LogicalVolume* experimentalHa
 	G4LogicalVolume* chamber_log = new G4LogicalVolume(chamber_solid, chamberMaterial, "chamber_log");
 
 	// physical volume
-	//new G4PVPlacement(0, G4ThreeVector(0,0,0), chamber_log, "chamber", experimentalHall_log, false, 0);
-	new G4PVPlacement(0, G4ThreeVector(0,0,50), chamber_log, "chamber", experimentalHall_log, false, 0);
+	new G4PVPlacement(0, G4ThreeVector(0,0,0), chamber_log, "chamber", experimentalHall_log, false, 0);
 
 	// grey color
 	//chamber_log->SetVisAttributes(new G4VisAttributes(true, G4Colour(0.7,0.7,0.7)));
