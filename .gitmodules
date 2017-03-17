@@ -1,0 +1,3 @@
+[submodule "TRexGeant4Analysis"]
+	path = TRexGeant4Analysis
+	url = https://github.com/VinzenzBildstein/TRexGeant4Analysis.git
