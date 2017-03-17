@@ -207,29 +207,29 @@ G4ParticleDefinition* TRexBeam::ParticleDefinition(int Z, int N, double eex) {
 	exit(1);
 }
 
-
 void TRexBeam::SetEjectileGun(G4Event *anEvent) {
-	// particle definition
-	fParticleGunEjectile->SetParticleDefinition(ParticleDefinition(fEjectileZ, fEjectileA - fEjectileZ, fReactionEnergy));
+	if(TRexSettings::Get()->SimulateEjectiles()) {
+		// particle definition
+		fParticleGunEjectile->SetParticleDefinition(ParticleDefinition(fEjectileZ, fEjectileA - fEjectileZ, fReactionEnergy));
 
-	// emission point
-	fParticleGunEjectile->SetParticlePosition(G4ThreeVector(fReactionX, fReactionY, fReactionZ));
+		// emission point
+		fParticleGunEjectile->SetParticlePosition(G4ThreeVector(fReactionX, fReactionY, fReactionZ));
 
-	// set energy
-	fParticleGunEjectile->SetParticleEnergy(fEjectileLab.e() - fEjectileRestMass);
+		// set energy
+		fParticleGunEjectile->SetParticleEnergy(fEjectileLab.e() - fEjectileRestMass);
 
-	// direction
-	fParticleGunEjectile->SetParticleMomentumDirection(fEjectileLab.vect());
+		// direction
+		fParticleGunEjectile->SetParticleMomentumDirection(fEjectileLab.vect());
 
-	// generate primary vertex
-	fParticleGunEjectile->GeneratePrimaryVertex(anEvent);
+		// generate primary vertex
+		fParticleGunEjectile->GeneratePrimaryVertex(anEvent);
+	}
 
 	// set variables for the tree
 	fEjectileTheta = fEjectileLab.theta() / radian;
 	fEjectilePhi = fEjectileLab.phi() / radian;
 	fEjectileEnergy = (fEjectileLab.e() - fEjectileRestMass) / keV;
 }
-
 
 void TRexBeam::SetRecoilGun(G4Event *anEvent) {
 	// particle definition

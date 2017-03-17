@@ -19,11 +19,13 @@ class TRexSettings : public TObject {
 		static TRexSettings* Get();
 		virtual ~TRexSettings();
 
+		void SetSettingsFile(std::string settingsFile) { fSettingsFile = settingsFile; }  //SetSettingsFile
 		void ReadSettingsFile(std::string settingsFile);
 		std::string GetSettingsFile() { return fSettingsFile; }  //GetSettingsFile
 		std::string GetPrimaryGenerator() { return fPrimaryGenerator; }
 
-		int SimulateGammas() { return fSimulateGammas; }
+		bool SimulateEjectiles() { return fSimulateEjectiles; }
+		bool SimulateGammas() { return fSimulateGammas; }
 		int IncludeEnergyResolution() { return fIncludeEnergyResolution; }
 		int IncludeVacuumChamber() { return fIncludeVacuumChamber; }
 		std::string GetVacuumChamberType() { return fVacuumChamberType; }
@@ -68,6 +70,7 @@ class TRexSettings : public TObject {
 		// target dimensions (or inactive alpha source dimensions)
 		double GetTargetDiameter() { return fTargetDiameter; }
 		double GetTargetThickness() { return fTargetThickness; }
+		double GetTargetThicknessMgPerCm2();
 		double GetGasTargetLength() { return fGasTargetLength; }
 		double GetTargetPressure() { return fTargetPressure; }
 		// returns the target length in um
@@ -333,7 +336,8 @@ class TRexSettings : public TObject {
 
 		std::string fSettingsFile;
 		std::string fPrimaryGenerator;
-		int fSimulateGammas;
+		bool fSimulateEjectiles;
+		bool fSimulateGammas;
 		int fIncludeEnergyResolution;
 		int fIncludeVacuumChamber;
 		std::string fVacuumChamberType;

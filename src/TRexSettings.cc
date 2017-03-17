@@ -38,14 +38,15 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 
 	fPrimaryGenerator = sett.GetValue("PrimaryGenerator", "beam");
 
-	fSimulateGammas = sett.GetValue("SimulateGammas", 0);
+	fSimulateEjectiles = sett.GetValue("SimulateEjectiles", false);
+	fSimulateGammas = sett.GetValue("SimulateGammas", false);
 	fIncludeEnergyResolution = sett.GetValue("IncludeEnergyResolution", 0);
 
 	//vacuum chamber
 	fIncludeVacuumChamber = sett.GetValue("IncludeVacuumChamber", 1);
 	fVacuumChamberType = sett.GetValue("VacuumChamberType", "cylinder");
 	fVacuumChamberGas = sett.GetValue("VacuumChamberGas", "helium");
-	fVacuumChamberGasPressure = sett.GetValue("VacuumChamberGasPressure", 1e-6);
+	fVacuumChamberGasPressure = sett.GetValue("VacuumChamberGasPressure", 1e-6) /1000. * bar;
 
 	fTestSourceEnergy = sett.GetValue("TestSourceEnergy", 5000.0) * keV;
 
@@ -392,6 +393,7 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 void TRexSettings::Print(Option_t* opt) const {
 	std::cout<<"TRexSettings: "<<opt<<std::endl
 		<<"fPrimaryGenerator = "<<fPrimaryGenerator<<std::endl
+		<<"fSimulateEjectiles = "<<fSimulateEjectiles<<std::endl
 		<<"fSimulateGammas = "<<fSimulateGammas<<std::endl
 		<<"fIncludeEnergyResolution = "<<fIncludeEnergyResolution<<std::endl
 		<<"fIncludeVacuumChamber = "<<fIncludeVacuumChamber<<std::endl
@@ -447,4 +449,8 @@ G4double TRexSettings::GetTargetPhysicalLength(){
 	G4double thickness = GetTargetThickness() / GetTargetMaterialDensity() ;
 
 	return (thickness);
+}
+
+double TRexSettings::GetTargetThicknessMgPerCm2() { 
+	return fTargetThickness/(mg/cm2); 
 }
