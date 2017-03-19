@@ -2,8 +2,8 @@
 # Primary generator
 ################################################################################
 PrimaryGenerator:	AngularDistribution
-LevelFile:		/tulkas/geant4/vbildste/simulation/LevelFiles/132Sn_dp.dat
-AngularDistributionFile:	/tulkas/geant4/vbildste/simulation/AngularDistributionFiles/132Sn_dp.dat
+LevelFile:		LevelFiles/132Sn_dp.dat
+AngularDistributionFile:	AngularDistributionFiles/132Sn_dp.dat
 
 # energy of the beam
 BeamEnergy:		792.0		in MeV
@@ -55,6 +55,7 @@ UseSecondBBarrelDeltaE:	1
 UseBBarrelErest:	1
 
 ConstructPCB:		0
+ResistiveStrips:  0
 
 FBarrelDeltaESinglesStripWidth:	0.1	in mm		#pitch size of first layer forward
 SecondFBarrelDeltaESinglesStripWidth:	0.1 		#pitch size of second layer forward

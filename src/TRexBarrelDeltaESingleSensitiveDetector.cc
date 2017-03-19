@@ -51,7 +51,7 @@ TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector
 		fStripWidth = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidth();
 		fEnergyResolution = TRexSettings::Get()->GetSecondBBarrelDeltaESingleEnergyResolution();
 	} else {
-		std::cerr << "Detector Name " << fBaseName << " is wrong!" << std::endl;
+		std::cerr<<"Detector Name "<<fBaseName<<" is wrong!"<<std::endl;
 	}
 
 	//histoXvsY = new TH2F(Form("histoXvsY_%d", fID), "histoXvsY", 600, -30, 30, 700, 0, 70);
@@ -70,7 +70,7 @@ TRexBarrelDeltaESingleSensitiveDetector::~TRexBarrelDeltaESingleSensitiveDetecto
 
 // initialize event
 void TRexBarrelDeltaESingleSensitiveDetector::Initialize(G4HCofThisEvent *HCE) {
-	//G4std::cout << "Initialize sensitive detector" << G4std::endl;
+	//G4std::cout<<"Initialize sensitive detector"<<G4std::endl;
 
 	fHitCollection = new TRexHitsCollection(SensitiveDetectorName, collectionName[0]);
 
@@ -110,107 +110,112 @@ void TRexBarrelDeltaESingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 	if(GetTotalEnergyDeposition() > 0) {
 		fBarrelDeltaESingle->ID(fID);
 
-		//for(int i = 0; i < fHitCollection->entries(); i++) {
-		//	G4ThreeVector pos = (*fHitCollection)[i]->GetHitPosition();
-		//	histoXvsY->Fill(pos.x() / mm, pos.z() / mm);
-		//	histoZ->Fill(pos.y() / mm);
-		//}
-
 		double resEnergy;
-		//std::cout << "nbOfHits = " << fHitCollection->entries() << std::endl;
 
-		// initialize first and second strips
-		int firstStripNb = -99;
-		G4double firstStripEnergy = 0. * keV;
-		int firstStripA, firstStripZ;
-		int firstStripTrackID;
-		G4double firstStripTime;
-		int firstStripStopped;
+		// initialize strips
+		// in the following strips are perpendicular to the beam direction,
+		// and rings are parallel to the beam direction
+		std::vector<int> stripNb;
+		std::vector<G4double> stripEnergy;
+		std::vector<int> stripA;
+		std::vector<int> stripZ;
+		std::vector<int> stripTrackID;
+		std::vector<G4double> stripTime;
+		std::vector<int> stripStopped;
+		std::vector<int> ringNb;
+		std::vector<G4double> ringEnergy;
+		std::vector<int> ringA;
+		std::vector<int> ringZ;
+		std::vector<int> ringTrackID;
+		std::vector<G4double> ringTime;
+		std::vector<int> ringStopped;
 
-		int secondStripNb = -99;
-		G4double secondStripEnergy = 0. * keV;
-		int secondStripA, secondStripZ;
-		int secondStripTrackID;
-		G4double secondStripTime;
-		int secondStripStopped;
-
-		int currentStripNb;
-		double posAlongStrip;
+		int currentStripNb = -1;
+		int currentRingNb = -1;
+		double posAlongStrip = -99.;
 
 		for(int i = 0; i < fHitCollection->entries(); i++) {
 			currentStripNb = GetStripNumber((*fHitCollection)[i]->GetLocalHitPosition());
-
-			// if(fDirection == "forward") {
-			// 	// attention .y() due to rotated coordinate system !! (.x() is the thickness of the detector)
-			// 	posAlongStrip = ((*fHitCollection)[i]->GetLocalHitPosition().y() + fLengthX / 2.) / fLengthX;
-			// } else if(fDirection == "middle") {
-			// 	// attention .y() due to rotated coordinate system !! (.x() is the thickness of the detector)
-			// 	posAlongStrip = ((*fHitCollection)[i]->GetLocalHitPosition().y() + fLengthX / 2.) / fLengthX;
-			// } else {
-			posAlongStrip = ((*fHitCollection)[i]->GetLocalHitPosition().y() + fLengthX / 2.) / fLengthX;
-			//}
-
-			//std::cout << "PosAlongStrip = " << posAlongStrip << std::endl;
-
-			if(firstStripNb == -99 || firstStripNb == currentStripNb) {
-				// check if the first strip is hit (for the first time or more than once)
-				firstStripNb = currentStripNb;
-				firstStripEnergy += (*fHitCollection)[i]->GetEnergyDeposition() * posAlongStrip;
-				firstStripA = (*fHitCollection)[i]->GetParticleA();
-				firstStripZ = (*fHitCollection)[i]->GetParticleZ();
-				firstStripTrackID = (*fHitCollection)[i]->GetTrackID();
-				firstStripTime = (*fHitCollection)[i]->GetTime();
-				firstStripStopped = IsStopped(i, resEnergy);
-			} else if(secondStripNb == -99 || secondStripNb == currentStripNb) {
-				// check if the second strip is hit (for the first time or more than once)
-				secondStripNb = currentStripNb;
-				secondStripEnergy += (*fHitCollection)[i]->GetEnergyDeposition() * posAlongStrip;
-				secondStripA = (*fHitCollection)[i]->GetParticleA();
-				secondStripZ = (*fHitCollection)[i]->GetParticleZ();
-				secondStripTrackID = (*fHitCollection)[i]->GetTrackID();
-				secondStripTime = (*fHitCollection)[i]->GetTime();
-				secondStripStopped = IsStopped(i, resEnergy);
+			if(TRexSettings::Get()->ResistiveStrips()) {
+				posAlongStrip = ((*fHitCollection)[i]->GetLocalHitPosition().y() + fLengthX / 2.) / fLengthX;
 			} else {
-				// more than two different strips have been hit
-				std::cout << "There are more than two different hit strips in the BarrelDeltaE detector." << std::endl;
+				currentRingNb = GetRingNumber((*fHitCollection)[i]->GetLocalHitPosition());
+			}
+
+			//loop over the strips perpendicular to the beam we already have and see if we can find the current one
+			size_t j;
+			for(j = 0; j < stripNb.size(); ++j) {
+				//same strip number
+				if(currentStripNb == stripNb[j]) {
+					if(TRexSettings::Get()->ResistiveStrips()) {
+						stripEnergy[j] += (*fHitCollection)[i]->GetEnergyDeposition() * posAlongStrip;
+						break;
+					} else {
+						stripEnergy[j] += (*fHitCollection)[i]->GetEnergyDeposition();
+						break;
+					}
+				}
+			}
+			if(j == stripNb.size()) {
+				//new strip
+				stripNb.push_back(currentStripNb);
+				if(TRexSettings::Get()->ResistiveStrips()) {
+					stripEnergy.push_back((*fHitCollection)[i]->GetEnergyDeposition() * posAlongStrip);
+				} else {
+					stripEnergy.push_back((*fHitCollection)[i]->GetEnergyDeposition());
+				}
+				stripA.push_back((*fHitCollection)[i]->GetParticleA());
+				stripZ.push_back((*fHitCollection)[i]->GetParticleZ());
+				stripTrackID.push_back((*fHitCollection)[i]->GetTrackID());
+				stripTime.push_back((*fHitCollection)[i]->GetTime());
+				stripStopped.push_back(IsStopped(i, resEnergy));
+			}
+			// for double-sided strip detectors we have to do the same for the strips parallel to the beam (called rings here)
+			if(!TRexSettings::Get()->ResistiveStrips()) {
+				//loop over the strips perpendicular to the beam we already have and see if we can find the current one
+				size_t j;
+				for(j = 0; j < ringNb.size(); ++j) {
+					//same ring number
+					if(currentRingNb == ringNb[j]) {
+						ringEnergy[j] += (*fHitCollection)[i]->GetEnergyDeposition();
+						break;
+					}
+				}
+				if(j == ringNb.size()) {
+					//new ring
+					ringNb.push_back(currentRingNb);
+					if(TRexSettings::Get()->ResistiveStrips()) {
+						ringEnergy.push_back((*fHitCollection)[i]->GetEnergyDeposition() * posAlongStrip);
+					} else {
+						ringEnergy.push_back((*fHitCollection)[i]->GetEnergyDeposition());
+					}
+					ringA.push_back((*fHitCollection)[i]->GetParticleA());
+					ringZ.push_back((*fHitCollection)[i]->GetParticleZ());
+					ringTrackID.push_back((*fHitCollection)[i]->GetTrackID());
+					ringTime.push_back((*fHitCollection)[i]->GetTime());
+					ringStopped.push_back(IsStopped(i, resEnergy));
+				}
 			}
 		}
 
-		if(firstStripNb != -99 && secondStripNb == -99) {
+		// loop over all strips we've found and add them
+		for(size_t i = 0; i < stripNb.size(); ++i) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-				firstStripEnergy += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
+					stripEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
 			}
-
-			fBarrelDeltaESingle->SetStrip(firstStripNb, firstStripEnergy / GetTotalEnergyDeposition(), firstStripA, firstStripZ,
-					firstStripTrackID, firstStripTime / ns, firstStripStopped);
-
-			fBarrelDeltaESingle->SetMult(1);
-
-			// if(firstStripNb < 0 || firstStripNb > (int)(TRexSettings::Get()->GetBBarrelDeltaESingleLengthY() / TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth() + 1.e-5)) {
-			//   std::cout << "firstStripNb = " << firstStripNb << std::endl;
-			// }
-		} else if(firstStripNb != -99 && secondStripNb != -99) {
-			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-				firstStripEnergy += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
-				secondStripEnergy += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
-			}
-
-			fBarrelDeltaESingle->Set2Strips(firstStripNb, firstStripEnergy / GetTotalEnergyDeposition(), firstStripA, firstStripZ,
-					firstStripTrackID, firstStripTime / ns, firstStripStopped,
-					secondStripNb, secondStripEnergy / GetTotalEnergyDeposition(), secondStripA, secondStripZ,
-					secondStripTrackID, secondStripTime / ns, secondStripStopped);
-
-			fBarrelDeltaESingle->SetMult(2);
-
-			// if(firstStripNb < 0 || firstStripNb > (int)(TRexSettings::Get()->GetBBarrelDeltaESingleLengthY() / TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth() + 1.e-5)) {
-			// 	std::cout << "firstStripNb = " << firstStripNb << std::endl;
-			// }
-			// if(secondStripNb < 0 || secondStripNb > (int)(TRexSettings::Get()->GetBBarrelDeltaESingleLengthY() / TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth() + 1.e-5)) {
-			// 	std::cout << "secondStripNb = " << secondStripNb << std::endl;
-			// }
+			fBarrelDeltaESingle->AddStrip(stripNb[i], stripEnergy[i]/keV, stripA[i], stripZ[i], stripTrackID[i], stripTime[i], stripStopped[i]);
 		}
 
-		if(fHitCollection->entries() > 0) {
+		// loop over all rings we've found and add them
+		for(size_t i = 0; i < ringNb.size(); ++i) {
+			if(TRexSettings::Get()->IncludeEnergyResolution()) {
+					ringEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
+			}
+			fBarrelDeltaESingle->AddRing(ringNb[i], ringEnergy[i]/keV, ringA[i], ringZ[i], ringTrackID[i], ringTime[i], ringStopped[i]);
+		}
+
+		// for a resistive strip detector we set the energy of the rear to the total energy deposited
+		if(fHitCollection->entries() > 0 && TRexSettings::Get()->ResistiveStrips()) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
 				fBarrelDeltaESingle->SetRear((GetTotalEnergyDeposition() + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
 			} else {
@@ -233,63 +238,53 @@ G4double TRexBarrelDeltaESingleSensitiveDetector::GetTotalEnergyDeposition() {
 }
 
 int TRexBarrelDeltaESingleSensitiveDetector::GetStripNumber(G4ThreeVector localPos) {
+	// this is the strip number for strips perpendicular to the beam
 	G4double z;
 	int stripNb = -1;
 
-	// if(fDirection == "forward") {
-	// 	z = localPos.z() + TRexSettings::Get()->GetFBarrelDeltaESingleLengthY() / 2.;
-	// 	stripNb =  (int)((z / TRexSettings::Get()->GetFBarrelDeltaESingleStripWidth()) - 1.e-5);
-	// 	//std::cout << "fID = " << fID << " , localZ = " << z << " , stripNb = " << stripNb << std::endl;
-	// }
-	// else {
-	// 	z = localPos.z() - TRexSettings::Get()->GetBBarrelDeltaESingleLengthY() / 2.;
-	// 	stripNb =  (int)((fabs(z) / TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth()) - 1.e-5);
-	// }
-	// if(fDirection == "forward") {
-	//   z = localPos.z() + fLengthY / 2.;
-	//   stripNb =  (int)((z / fStripWidth) - 1.e-5);
-
-	//   if(stripNb > (int)(fLengthY / fStripWidth + 1.e-5) || stripNb < 0) {
-	//     std::cout << "Problem: fID = " << fID << " , localZ = " << z << " , stripNb = " << stripNb << std::endl;
-	//     return -1;
-	//   }
-	// }
-	// else if(fDirection == "middle") {
-	//   z = localPos.z() - fLengthY / 2.;
-	//   stripNb =  (int)((fabs(z) / fStripWdith) - 1.e-5);
-
-	//   if(stripNb > (int)(fLengthY / fStripWidth + 1.e-5) || stripNb < 0) {
-	//     std::cout << "Problem: fID = " << fID << " , localZ = " << z << " , stripNb = " << stripNb << std::endl;
-	//     return -1;
-	//   }
-	// }
-	// else {
-	//   z = localPos.z() - fLengthY / 2.;
-	//   stripNb =  (int)((fabs(z) / fStripWdith) - 1.e-5);
-
-	//   if(stripNb > (int)(fLengthY / fStripWidth + 1.e-5) || stripNb < 0) {
-	//     std::cout << "Problem: fID = " << fID << " , localZ = " << z << " , stripNb = " << stripNb << std::endl;
-	//     return -1;
-	//   }
-	// }
-
 	if(fDirection == "forward") {
 		z = localPos.z() + fLengthY / 2.;
-		stripNb =  (int)((z / fStripWidth) - 1.e-5);
 	} else if(fDirection == "middle") {
 		z = localPos.z() - fLengthY / 2.;
 	} else {
 		z = localPos.z() - fLengthY / 2.;
 	}
 
-	stripNb =  (int)((fabs(z) / fStripWidth) - 1.e-5);
+	z = fabs(z);
+	if(z == fLengthY) {
+		//counts on the edge are counted towards the highest strip
+		z -= 1e-5;
+	}
 
-	if(stripNb > (int)(fLengthY / fStripWidth + 1.e-5) || stripNb < 0) {
-		std::cout << "Problem: fID = " << fID << " , localZ = " << z << " , stripNb = " << stripNb << std::endl;
+	stripNb =  static_cast<int>(z/fStripWidth);
+
+	if(stripNb > static_cast<int>(fLengthY/fStripWidth) || stripNb < 0) {
+		std::cout<<"Problem: fID = "<<fID<<" , localZ = "<<z<<" , stripNb = "<<stripNb<<std::endl;
 		return -1;
 	}
 
 	return stripNb ;
+}
+
+int TRexBarrelDeltaESingleSensitiveDetector::GetRingNumber(G4ThreeVector localPos) {
+	// this is the strip number for strips parallel to the beam
+	G4double y;
+	int ringNb = -1;
+
+	y = localPos.y() + fLengthX / 2.;
+	if(y == fLengthX) {
+		//counts on the edge are counted towards the highest ring
+		y -= 1e-5;
+	}
+
+	ringNb =  static_cast<int>(y/fStripWidth);
+
+	if(ringNb > static_cast<int>(fLengthX/fStripWidth) || ringNb < 0) {
+		std::cout<<"Problem: fID = "<<fID<<" , localZ = "<<y<<" , ringNb = "<<ringNb<<std::endl;
+		return -1;
+	}
+
+	return ringNb ;
 }
 
 int TRexBarrelDeltaESingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEnergy) {

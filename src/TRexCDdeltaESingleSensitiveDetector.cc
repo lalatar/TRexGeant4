@@ -95,7 +95,6 @@ void TRexCDdeltaESingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 
 	if(GetTotalEnergyDeposition() > 0) {
 		fCDdeltaESingle->ID(fID);
-		//fCDdeltaESingle->SetMult(fHitCollection->entries());
 
 		SetRingsOrStrips("ring");
 		SetRingsOrStrips("strip");
@@ -212,7 +211,7 @@ void TRexCDdeltaESingleSensitiveDetector::SetRingsOrStrips(std::string ringOrStr
 				firstRingOrStripEnergy += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
 			}
 
-			fCDdeltaESingle->SetStrip(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
+			fCDdeltaESingle->AddStrip(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
 					firstRingOrStripTrackID, firstRingOrStripTime / ns, firstRingOrStripStopped);
 		} else if(firstRingOrStripNb != -99 && secondRingOrStripNb != -99) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
@@ -220,9 +219,9 @@ void TRexCDdeltaESingleSensitiveDetector::SetRingsOrStrips(std::string ringOrStr
 				secondRingOrStripEnergy += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
 			}
 
-			fCDdeltaESingle->Set2Strips(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
-					firstRingOrStripTrackID, firstRingOrStripTime / ns, firstRingOrStripStopped,
-					secondRingOrStripNb, secondRingOrStripEnergy / keV, secondRingOrStripA, secondRingOrStripZ,
+			fCDdeltaESingle->AddStrip(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
+					firstRingOrStripTrackID, firstRingOrStripTime / ns, firstRingOrStripStopped);
+			fCDdeltaESingle->AddStrip(secondRingOrStripNb, secondRingOrStripEnergy / keV, secondRingOrStripA, secondRingOrStripZ,
 					secondRingOrStripTrackID, secondRingOrStripTime / ns, secondRingOrStripStopped);
 		}
 	} else if(ringOrStrip == "ring") {
@@ -231,7 +230,7 @@ void TRexCDdeltaESingleSensitiveDetector::SetRingsOrStrips(std::string ringOrStr
 				firstRingOrStripEnergy += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
 			}
 
-			fCDdeltaESingle->SetRing(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
+			fCDdeltaESingle->AddRing(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
 					firstRingOrStripTrackID, firstRingOrStripTime / ns, firstRingOrStripStopped);
 		} else if(firstRingOrStripNb != -99 && secondRingOrStripNb != -99) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
@@ -239,9 +238,9 @@ void TRexCDdeltaESingleSensitiveDetector::SetRingsOrStrips(std::string ringOrStr
 				secondRingOrStripEnergy += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
 			}
 
-			fCDdeltaESingle->Set2Rings(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
-					firstRingOrStripTrackID, firstRingOrStripTime / ns, firstRingOrStripStopped,
-					secondRingOrStripNb, secondRingOrStripEnergy / keV, secondRingOrStripA, secondRingOrStripZ,
+			fCDdeltaESingle->AddRing(firstRingOrStripNb, firstRingOrStripEnergy / keV, firstRingOrStripA, firstRingOrStripZ,
+					firstRingOrStripTrackID, firstRingOrStripTime / ns, firstRingOrStripStopped);
+			fCDdeltaESingle->AddRing(secondRingOrStripNb, secondRingOrStripEnergy / keV, secondRingOrStripA, secondRingOrStripZ,
 					secondRingOrStripTrackID, secondRingOrStripTime / ns, secondRingOrStripStopped);
 		}
 	} else {

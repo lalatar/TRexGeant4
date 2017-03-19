@@ -44,6 +44,7 @@ class TRexBarrelDeltaESingleSensitiveDetector : public G4VSensitiveDetector {
 	private:
 		G4double GetTotalEnergyDeposition();
 		int GetStripNumber(G4ThreeVector localPos);
+		int GetRingNumber(G4ThreeVector localPos);
 		int IsStopped(int hitIndex, double &resKinEnergy);
 
 		G4String fName;

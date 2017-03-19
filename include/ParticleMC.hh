@@ -18,7 +18,7 @@ class ParticleMC : public TObject {
 
 		void ClearParticleMC() {
 			fID = -1;
-			fMult = -1;
+			fMult = 0;
 			fRear = -1;
 			fEdet = -1;
 			fStopped = -1;
@@ -51,36 +51,18 @@ class ParticleMC : public TObject {
 		void SetResKinEnergy(double resKinEnergy)  { fResKinEnergy = resKinEnergy; }
 		void SetRear(double rear)  { fRear = rear; }
 		void SetEdet(double edet)    { fEdet = edet; }
-		void SetStrip(int strip, double energy, int a, int z, int trackID, double time, int stopped)  {
-			fStripNr.push_back(strip);
+		void AddStrip(int xstrip, double energy, int a, int z, int trackID, double time, int stopped)  {
+			// version for resistive strip detectors
+			fStripNr.push_back(xstrip);
 			fStripEnergy.push_back(energy);
 			fStripA.push_back(a);
 			fStripZ.push_back(z);
 			fStripTrackID.push_back(trackID);
 			fStripTime.push_back(time);
 			fStripStopped.push_back(stopped);
+			fMult++;
 		}
-		void Set2Strips(int firststrip, double firstenergy, int firstA, int firstZ, 
-				int firstTrackID, double firstTime, int firstStopped,
-				int secondstrip, double secondenergy, int secondA, int secondZ, 
-				int secondTrackID, double secondTime, int secondStopped) {
-			fStripNr.push_back(firststrip);
-			fStripEnergy.push_back(firstenergy);
-			fStripA.push_back(firstA);
-			fStripZ.push_back(firstZ);
-			fStripTrackID.push_back(firstTrackID);
-			fStripTime.push_back(firstTime);
-			fStripStopped.push_back(firstStopped);
-
-			fStripNr.push_back(secondstrip);
-			fStripEnergy.push_back(secondenergy);
-			fStripA.push_back(secondA);
-			fStripZ.push_back(secondZ);
-			fStripTrackID.push_back(secondTrackID);
-			fStripTime.push_back(secondTime);
-			fStripStopped.push_back(secondStopped);
-		}
-		void SetRing(int strip, double energy, int a, int z, int trackID, double time, int stopped)  {
+		void AddRing(int strip, double energy, int a, int z, int trackID, double time, int stopped)  {
 			fRingNr.push_back(strip);
 			fRingEnergy.push_back(energy);
 			fRingA.push_back(a);
@@ -88,26 +70,7 @@ class ParticleMC : public TObject {
 			fRingTrackID.push_back(trackID);
 			fRingTime.push_back(time);
 			fRingStopped.push_back(stopped);
-		}
-		void Set2Rings(int firststrip, double firstenergy, int firstA, int firstZ, 
-				int firstTrackID, double firstTime, int firstStopped, 
-				int secondstrip, double secondenergy, int secondA, int secondZ, 
-				int secondTrackID, double secondTime, int secondStopped)  {
-			fRingNr.push_back(firststrip);
-			fRingEnergy.push_back(firstenergy);
-			fRingA.push_back(firstA);
-			fRingZ.push_back(firstZ);
-			fRingTrackID.push_back(firstTrackID);
-			fRingTime.push_back(firstTime);
-			fRingStopped.push_back(firstStopped);
-
-			fRingNr.push_back(secondstrip);
-			fRingEnergy.push_back(secondenergy);
-			fRingA.push_back(secondA);
-			fRingZ.push_back(secondZ);
-			fRingTrackID.push_back(secondTrackID);
-			fRingTime.push_back(secondTime);
-			fRingStopped.push_back(secondStopped);
+			fMult++;
 		}
 		void SetMult(int mult) { fMult = mult; }
 
@@ -123,8 +86,15 @@ class ParticleMC : public TObject {
 		double GetEdet() { return fEdet; }
 		int GetMult() { return fMult; }
 		std::vector<int> GetStripNr() { return fStripNr; }
-		bool GetNeighbor() {
+		bool GetNeighborStrip() {
 			if(fStripNr.size() == 2 && fabs(fStripNr[0] - fStripNr[1]) == 1) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+		bool GetNeighborRing() {
+			if(fRingNr.size() == 2 && fabs(fRingNr[0] - fRingNr[1]) == 1) {
 				return true;
 			} else {
 				return false;

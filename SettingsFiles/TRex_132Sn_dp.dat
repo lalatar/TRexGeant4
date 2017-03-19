@@ -2,8 +2,8 @@
 # Primary generator
 ################################################################################
 PrimaryGenerator:	AngularDistribution
-LevelFile:		/home/sklupp/transfer/miniball/simulationNew/LevelFiles/132Sn_dp.dat
-AngularDistributionFile:	/home/sklupp/transfer/miniball/simulationNew/AngularDistributionFiles/132Sn_dp.dat
+LevelFile:		LevelFiles/132Sn_dp.dat
+AngularDistributionFile:	AngularDistributionFiles/132Sn_dp.dat
 
 
 # energy of the beam

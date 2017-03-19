@@ -92,7 +92,8 @@ class TRexSettings : public TObject {
 		//////////////////
 		// detectors
 		//////////////////
-		int ConstructPCB(){ return fConstructPCB;}
+		bool ConstructPCB() { return fConstructPCB; }
+		bool ResistiveStrips() { return fResistiveStrips; }
 
 		// FCD deltaE
 		int UseFCDdeltaE() { return fUseFCDdeltaE; }
@@ -377,7 +378,8 @@ class TRexSettings : public TObject {
 		int fWriteAllEvents;
 		bool fVisualizationCut;
 
-		int fConstructPCB;
+		bool fConstructPCB;
+		bool fResistiveStrips;
 
 		// FCD deltaE
 		int fUseFCDdeltaE;

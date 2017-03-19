@@ -107,7 +107,8 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 	//fVisualizationCut = sett.GetValue("VisualizationCut", false); // this is actually set by TRexData!
 	// fill always the detector tree regardless if a detector was hit or not ?
 	fWriteAllEvents = sett.GetValue("WriteAllEvents", 0);
-	fConstructPCB =  sett.GetValue("ConstructPCB", 1);
+	fConstructPCB =  sett.GetValue("ConstructPCB", true);
+	fResistiveStrips =  sett.GetValue("ResistiveStrips", true);
 
 	// FCD deltaE
 	fUseFCDdeltaE = sett.GetValue("UseFCDdeltaE", 0);

@@ -56,6 +56,7 @@ UseSecondBBarrelDeltaE:	1
 UseBBarrelErest:	1
 
 ConstructPCB:		0
+ResistiveStrips:  0
 
 FBarrelDeltaESinglesStripWidth:	0.1	in mm		#pitch size of first layer forward
 SecondFBarrelDeltaESinglesStripWidth:	0.1 		#pitch size of second layer forward
