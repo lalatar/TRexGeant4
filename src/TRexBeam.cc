@@ -115,7 +115,7 @@ Material* TRexBeam::GetTargetMaterial() {
 	} else {
 		//if target material name is the same as the name of the scattering target build set the material to only this element
 		if(TRexSettings::Get()->GetTargetMaterialName() == TRexSettings::Get()->GetTargetName() || TRexSettings::Get()->GetTargetMaterialName() == "dummy" ||
-				TRexSettings::Get()->GetTargetMaterialName() == "solidDeuterium") {           //changed from "Solid" to "solid"
+				TRexSettings::Get()->GetTargetMaterialName() == "SolidDeuterium") {        
 			TargetMaterial = new Material((char*)TRexSettings::Get()->GetTargetName().c_str(),false);
 		} else {
 			std::cout<<"'"<<TRexSettings::Get()->GetTargetMaterialName()<<"' != '"<<TRexSettings::Get()->GetTargetName()<<"'"<<std::endl;
