@@ -26,8 +26,8 @@ TRexCDErestSingle::TRexCDErestSingle(std::string name, std::string direction, in
 		fDeadLayer = TRexSettings::Get()->GetFCDErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetFCDErestSinglePosX()[fId],
-				TRexSettings::Get()->GetFCDErestSinglePosY()[fId],
-				TRexSettings::Get()->GetFCDErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetFCDErestSinglePosY()[fId],
+									TRexSettings::Get()->GetFCDErestSinglePosZ()[fId] - fThicknessDetector / 2.);
 	} else if(fDirection == "backward") {
 		fInnerRadiusDetector = TRexSettings::Get()->GetBCDErestSingleInnerRadius();
 		fOuterRadiusDetector = TRexSettings::Get()->GetBCDErestSingleOuterRadius();
@@ -37,8 +37,8 @@ TRexCDErestSingle::TRexCDErestSingle(std::string name, std::string direction, in
 		fDeadLayer = TRexSettings::Get()->GetBCDErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetBCDErestSinglePosX()[fId],
-				TRexSettings::Get()->GetBCDErestSinglePosY()[fId],
-				TRexSettings::Get()->GetBCDErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetBCDErestSinglePosY()[fId],
+									TRexSettings::Get()->GetBCDErestSinglePosZ()[fId] - fThicknessDetector / 2.);
 	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}

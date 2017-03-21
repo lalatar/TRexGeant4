@@ -30,8 +30,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 		fDeadLayer = TRexSettings::Get()->GetFBarrelDeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetFBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetFBarrelDeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetFBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetFBarrelDeltaESingleFoilThickness();
 	} else if(fBaseName == "SecondFBarrelDeltaESingle") {
@@ -43,8 +43,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 		fDeadLayer = TRexSettings::Get()->GetSecondFBarrelDeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetSecondFBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetSecondFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetSecondFBarrelDeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetSecondFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetSecondFBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetSecondFBarrelDeltaESingleFoilThickness();
 	} else if(fBaseName == "MBarrelDeltaESingle") {  
@@ -56,8 +56,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 		fDeadLayer = TRexSettings::Get()->GetMBarrelDeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetMBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetMBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetMBarrelDeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetMBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetMBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetMBarrelDeltaESingleFoilThickness();
 	} else if(fBaseName == "BBarrelDeltaESingle") {
@@ -69,8 +69,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 		fDeadLayer = TRexSettings::Get()->GetBBarrelDeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetBBarrelDeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetBBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetBBarrelDeltaESingleFoilThickness();
 	} else if(fBaseName == "SecondBBarrelDeltaESingle") {
@@ -82,8 +82,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 		fDeadLayer = TRexSettings::Get()->GetSecondBBarrelDeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetSecondBBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetSecondBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetSecondBBarrelDeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetSecondBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetSecondBBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetSecondBBarrelDeltaESingleFoilThickness();
 	} else {

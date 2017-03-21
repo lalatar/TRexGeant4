@@ -26,8 +26,8 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 		fDeadLayer = TRexSettings::Get()->GetFBarrelErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetFBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetFBarrelErestSinglePosZ()[fId]);
 	} else if(fDirection == "middle") {
 		fDetectorLengthX = TRexSettings::Get()->GetMBarrelErestSingleLengthX();
 		fDetectorLengthY = TRexSettings::Get()->GetMBarrelErestSingleLengthY();
@@ -37,8 +37,8 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 		fDeadLayer = TRexSettings::Get()->GetMBarrelErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetMBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetMBarrelErestSinglePosZ()[fId]);
 	} else if(fDirection == "backward") {
 		fDetectorLengthX = TRexSettings::Get()->GetBBarrelErestSingleLengthX();
 		fDetectorLengthY = TRexSettings::Get()->GetBBarrelErestSingleLengthY();
@@ -48,8 +48,8 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 		fDeadLayer = TRexSettings::Get()->GetBBarrelErestSingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
-				TRexSettings::Get()->GetBBarrelErestSinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+									TRexSettings::Get()->GetBBarrelErestSinglePosZ()[fId]);
 	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
 	}

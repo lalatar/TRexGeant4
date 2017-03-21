@@ -27,8 +27,8 @@ TRexCDdeltaESingle::TRexCDdeltaESingle(std::string name, std::string direction, 
 		fDeadLayer = TRexSettings::Get()->GetFCDdeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetFCDdeltaESinglePosX()[fId],
-				TRexSettings::Get()->GetFCDdeltaESinglePosY()[fId],
-				TRexSettings::Get()->GetFCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetFCDdeltaESinglePosY()[fId],
+									TRexSettings::Get()->GetFCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
 
 		fFoilThickness = TRexSettings::Get()->GetFCDdeltaESingleFoilThickness();
 	} else if(fDirection == "backward") {
@@ -41,8 +41,8 @@ TRexCDdeltaESingle::TRexCDdeltaESingle(std::string name, std::string direction, 
 		fDeadLayer = TRexSettings::Get()->GetBCDdeltaESingleDeadLayer();
 
 		fPos = G4ThreeVector(TRexSettings::Get()->GetBCDdeltaESinglePosX()[fId],
-				TRexSettings::Get()->GetBCDdeltaESinglePosY()[fId],
-				TRexSettings::Get()->GetBCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
+									TRexSettings::Get()->GetBCDdeltaESinglePosY()[fId],
+									TRexSettings::Get()->GetBCDdeltaESinglePosZ()[fId] - fThicknessDetector / 2.);
 
 		fFoilThickness = TRexSettings::Get()->GetBCDdeltaESingleFoilThickness();
 	} else {
