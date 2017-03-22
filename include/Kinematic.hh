@@ -66,9 +66,9 @@ private:
   double b_he(int index, int z);
   double shell_correction(int z);
 
-  Element* projectile;
-  Material* target;
-  double target_thickness;
+  Element* fProjectile;
+  Material* fTarget;
+  double fTargetThickness;
 };
 
 double dot(double* x,double* y);
