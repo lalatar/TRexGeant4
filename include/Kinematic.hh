@@ -36,6 +36,7 @@ public:
   // included by S.Klupp
   int orbits(Element* projectile, Element* target, Element* recoil, Element* ejectile, double energy, double cm, double ex, int code, double& results_en, double& results_ang);
   int orbits(Element* projectile, Element* target, Element* recoil, Element* ejectile, double energy, double cm_start, double cm_stop, double cm_step, double ex, int code, std::vector<double>& results_en, std::vector<double>& results_ang);
+
   double CMAngle(double LabAngle, Element* projectile, Element* target, Element* recoil, Element* ejectile, int energies, double* energy, double ex, int code, double limit = 1e-3);
   void SetThickness(double target_thick);
   void Projectile(Element*);
@@ -46,25 +47,27 @@ public:
   double EnergyAfterTarget(double);
   double Energy(double,double,double);
   //double ReverseEnergy(double,double,double,double*&);
+
   TSpline3* RangeVsEnergy(double,double);
   TSpline3* EnergyVsRange(double,double);
   TSpline3* EnergyVsThickness(double,double);
   TSpline3* RutherfordVsThickness(double,double,bool);
   TSpline3* EnergyLossVsEnergy(double, double step_size = 0.1, double factor = 1.);
+
   void EnergyLossVsEnergy(double, std::vector<double>&, std::vector<double>&, double step_size = 0.1, double factor = 1.);
   double Momentum(double Ekin, double mass);
 private:
-  double compound_range(Element* projectile, Material* target, double energy, int integration_limit);
-  double compound_stopping_power(Element* projectile, Material* target, double energy);
-  double stopping_power(Element* projectile, Element* target, double energy, bool gaseous);
-  double energy_loss(Element* projectile, Material* target, double target_thickness, double energy, int integration_limit);
-  double energy_straggling(Element* projectile, Material* target, double dE_dx, double dE_dx_after_target, double energy_loss);
-  double angular_straggling(Element* projectile, Material* target, double target_thickness, double energy);
-  double charge_state(Element* projectile, double energy);
-  double a_h(int index, int z);
-  double a_he(int index, int z);
-  double b_he(int index, int z);
-  double shell_correction(int z);
+  double CompoundRange(Element* projectile, Material* target, double energy, int integration_limit);
+  double CompoundStoppingPower(Element* projectile, Material* target, double energy);
+  double StoppingPower(Element* projectile, Element* target, double energy, bool gaseous);
+  double EnergyLoss(Element* projectile, Material* target, double target_thickness, double energy, int integration_limit);
+  double EnergyStraggling(Element* projectile, Material* target, double dE_dx, double dE_dx_after_target, double energy_loss);
+  double AngularStraggling(Element* projectile, Material* target, double target_thickness, double energy);
+  double ChargeState(Element* projectile, double energy);
+  double HydrogenA(int index, int z);
+  double HeliumA(int index, int z);
+  double HeliumB(int index, int z);
+  double ShellCorrection(int z);
 
   Element* fProjectile;
   Material* fTarget;

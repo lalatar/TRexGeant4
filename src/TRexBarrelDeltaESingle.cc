@@ -226,9 +226,7 @@ void TRexBarrelDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log
 	G4Material* foilMaterial = TRexMaterials::Get()->GetMaterial("mylar");
 
 	G4double foilDistance = (1.0 + 2.0) * mm;
-	//G4double foilWidth = (TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] -  1 * (foilDistance - fFoilThickness / 2.)) * 2;
 	G4double foilWidth = (TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] - 1 * (foilDistance - fFoilThickness / 2.)) * 2;
-	//G4double foilLength = 54 * mm;
 	G4double foilLength = 4 * mm;
 
 	if(fDirection == "forward") {
@@ -249,7 +247,6 @@ void TRexBarrelDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log
 	position.setX(fPos.x() - (foilDistance - fFoilThickness / 2.) * cos(fStartAngleDetector / rad));
 	position.setY(fPos.y() - (foilDistance - fFoilThickness / 2.) * sin(fStartAngleDetector / rad));
 
-	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(G4Transform3D(*fRotMatrix, position), foil_log, "foil", experimentalHall_log, false, 0);
 
 	if(TRexSettings::Get()->Colours()) {
