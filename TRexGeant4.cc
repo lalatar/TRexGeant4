@@ -5,10 +5,19 @@
  *      Author: sklupp
  */
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
+#endif
+
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -30,8 +39,8 @@
 #include "MiniBallRootGenerator.hh"
 
 #include "Randomize.hh"
-using namespace std;
-using namespace CLHEP;
+
+static __thread int foo;
 
 int main(int argc,char** argv) {
   // class to organize command line
@@ -41,13 +50,21 @@ int main(int argc,char** argv) {
   TRexSettings::Get()->ReadSettingsFile(data.GetSettingsFileName());
 
   // choose the Random engine
-  HepRandom::setTheEngine(new RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   G4long seed;
   seed = time(0);
-  HepRandom::setTheSeed(seed);
+  CLHEP::HepRandom::setTheSeed(seed);
 
   // Construct the default run manager  //
-  G4RunManager* runManager = new G4RunManager;
+  //#ifdef G4MULTITHREADED
+  //  G4cout << "RUNNING MULTITHREADED" << G4endl;
+  //  G4int nThreads = 2;
+  //  G4MTRunManager * runManager = new G4MTRunManager;
+  //	runManager->SetNumberOfThreads(nThreads);
+  //#else
+  G4RunManager * runManager = new G4RunManager;
+  //#endif
+
 
   // initalize Miniball
   MiniBallRootGenerator* miniballHistoGen = new MiniBallRootGenerator(data.GetOutputFileName(), 5);
@@ -80,12 +97,12 @@ int main(int argc,char** argv) {
   //runManager->Initialize();
 
   // visualization
-  #ifdef G4VIS_USE
+#ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->RegisterGraphicsSystem(new G4OpenGLStoredX);
   visManager->RegisterGraphicsSystem(new G4OpenGLStoredQt);
   visManager->Initialize();
-  #endif
+#endif
 
   // define UI terminal
   G4UIsession* session = new G4UIterminal(new G4UItcsh);
@@ -100,9 +117,9 @@ int main(int argc,char** argv) {
   //                 be deleted in the main() program !
   //
   delete runManager;
-  #ifdef G4VIS_USE
+#ifdef G4VIS_USE
   delete visManager;
-  #endif
+#endif
   delete session;
 
   return 0;

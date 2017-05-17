@@ -52,7 +52,7 @@ void TRexTrapezoidDeltaESingle::SetPcbParameters() {
 	// radii
 	fPcbOuterRadius = fDetectorOuterRadius * 1.3;
 	fPcbInnerRadius = fDetectorInnerRadius * 1.3;
-	fThicknessPcb = 2.0 * mm;
+	fThicknessPcb = 2.0 * CLHEP::mm;
 
 	// base length of the trapezoid panel
 	fPcbBaseLarge = fPcbOuterRadius * sqrt(2. - sqrt(2.)) / 2.;
@@ -102,7 +102,7 @@ void TRexTrapezoidDeltaESingle::SetSiliconParameters() {
 	//fBeta = asin(fDetectorDeltaZ / fLength);
 	fBeta = asin(fDetectorDeltaZ / fPcbLength);
 
-	std::cout << "fDetectorDeltaZ = " << fDetectorDeltaZ << " , fPcbLength = " << fPcbLength << " , fBeta = " << fBeta / degree << std::endl;
+	std::cout << "fDetectorDeltaZ = " << fDetectorDeltaZ << " , fPcbLength = " << fPcbLength << " , fBeta = " << fBeta / CLHEP::degree << std::endl;
 
 	// set position
 	//fPos = G4ThreeVector(0, (hOut - hIn) / 2., fPosZ);
@@ -122,8 +122,8 @@ void TRexTrapezoidDeltaESingle::SetSiliconParameters() {
 
 void TRexTrapezoidDeltaESingle::SetFoilParameters() {
 	// radii
-	fFoilOuterRadius = fPcbOuterRadius - (5.0 + 2.0)*mm;
-	fFoilInnerRadius = fPcbInnerRadius - (5.0 + 2.0)*mm;
+	fFoilOuterRadius = fPcbOuterRadius - (5.0 + 2.0)*CLHEP::mm;
+	fFoilInnerRadius = fPcbInnerRadius - (5.0 + 2.0)*CLHEP::mm;
 
 	// base length of the trapezoid panel
 	fFoilBaseLarge = fFoilOuterRadius * sqrt(2. - sqrt(2.)) / 2.;
@@ -165,7 +165,7 @@ void TRexTrapezoidDeltaESingle::Construct(G4LogicalVolume* experimentalHall_log,
 	}
 
 	// protection foils ?
-	if(fFoilThickness > 0.1*um) {
+	if(fFoilThickness > 0.1*CLHEP::um) {
 		ConstructFoil(experimentalHall_log);
 	}
 }
@@ -174,13 +174,13 @@ void TRexTrapezoidDeltaESingle::ConstructSilicon(G4LogicalVolume* experimentalHa
 	G4Material* detectorMaterial = TRexMaterials::Get()->GetMaterial("silicon");
 
 	// original Gaspard simulation
-	//	fSolid = new G4Trap("detector", Length/2, 0*deg, 0*deg,
-	//		                            Height/2, BaseLarge/2, BaseSmall/2, 0*deg,
-	//		                            Height/2, BaseLarge/2, BaseSmall/2, 0*deg);
+	//	fSolid = new G4Trap("detector", Length/2, 0*CLHEP::deg, 0*CLHEP::deg,
+	//		                            Height/2, BaseLarge/2, BaseSmall/2, 0*CLHEP::deg,
+	//		                            Height/2, BaseLarge/2, BaseSmall/2, 0*CLHEP::deg);
 
-	fSolid = new G4Trap("detector", fThicknessDetector/2., 0*deg, 0*deg,
-			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg,
-			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg);
+	fSolid = new G4Trap("detector", fThicknessDetector/2., 0*CLHEP::deg, 0*CLHEP::deg,
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*CLHEP::deg,
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*CLHEP::deg);
 
 	fLogicalVolume = new G4LogicalVolume(fSolid, detectorMaterial, fName + "_log", 0,0 ,0);
 
@@ -205,13 +205,13 @@ void TRexTrapezoidDeltaESingle::ConstructSilicon(G4LogicalVolume* experimentalHa
 void TRexTrapezoidDeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) {
 	G4Material* detectorMaterial = TRexMaterials::Get()->GetMaterial("pcb");
 
-	G4Trap *pcb = new G4Trap("detector_pcb", fThicknessPcb/2., 0*deg, 0*deg,
-			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg,
-			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*deg);
+	G4Trap *pcb = new G4Trap("detector_pcb", fThicknessPcb/2., 0*CLHEP::deg, 0*CLHEP::deg,
+			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*CLHEP::deg,
+			fPcbLength/2., fPcbBaseSmall/2., fPcbBaseLarge/2., 0*CLHEP::deg);
 
-	G4Trap *pcbHole = new G4Trap("detector", fThicknessPcb, 0*deg, 0*deg,
-			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg,
-			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*deg);
+	G4Trap *pcbHole = new G4Trap("detector", fThicknessPcb, 0*CLHEP::deg, 0*CLHEP::deg,
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*CLHEP::deg,
+			fLength/2., fBaseSmall/2., fBaseLarge/2., 0*CLHEP::deg);
 
 	// subtract hole for detector
 	G4SubtractionSolid* pcbTotal = new G4SubtractionSolid("deltaPCB_solid", pcb, pcbHole, 0, G4ThreeVector(0, 0, 0));
@@ -235,9 +235,9 @@ void TRexTrapezoidDeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_l
 void TRexTrapezoidDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log) {
 	G4Material* foilMaterial = TRexMaterials::Get()->GetMaterial("mylar");
 
-	G4Trap *foil_solid = new G4Trap("detector_foil", fFoilThickness/2., 0*deg, 0*deg,
-			fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*deg,
-			fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*deg);
+	G4Trap *foil_solid = new G4Trap("detector_foil", fFoilThickness/2., 0*CLHEP::deg, 0*CLHEP::deg,
+			fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*CLHEP::deg,
+			fFoilLength/2., fFoilBaseSmall/2., fFoilBaseLarge/2., 0*CLHEP::deg);
 
 	G4LogicalVolume* foil_log = new G4LogicalVolume(foil_solid, foilMaterial, fName + "_log", 0,0 ,0);
 

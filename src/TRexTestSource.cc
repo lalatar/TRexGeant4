@@ -52,19 +52,19 @@ void TRexTestSource::GeneratePrimaries(G4Event *anEvent) {
 }
 
 void TRexTestSource::ShootReactionPosition() {
-	fReactionX = 0.0 * mm;
-	fReactionY = 0.0 * mm;
-	fReactionZ = 0.0 * mm;
+	fReactionX = 0.0 * CLHEP::mm;
+	fReactionY = 0.0 * CLHEP::mm;
+	fReactionZ = 0.0 * CLHEP::mm;
 }
 
 void TRexTestSource::CreateIsotropicDistribution() {
 	fThetaCM = CLHEP::RandFlat::shoot(-1., 1.);
 
-	fThetaCM = acos(fThetaCM)*radian;
+	fThetaCM = acos(fThetaCM)*CLHEP::radian;
 
-	fPhi = CLHEP::RandFlat::shoot(-M_PI,M_PI)*radian;
-	//fPhi = CLHEP::RandFlat::shoot(0., 2.* M_PI)*radian;
-	//fPhi = CLHEP::RandFlat::shoot(-M_PI / 2.,M_PI + M_PI / 2.)*radian;
+	fPhi = CLHEP::RandFlat::shoot(-M_PI,M_PI)*CLHEP::radian;
+	//fPhi = CLHEP::RandFlat::shoot(0., 2.* M_PI)*CLHEP::radian;
+	//fPhi = CLHEP::RandFlat::shoot(-M_PI / 2.,M_PI + M_PI / 2.)*CLHEP::radian;
 }
 
 void TRexTestSource::CreateTreeBranches() {

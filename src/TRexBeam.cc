@@ -9,6 +9,8 @@
 #include "TRexSettings.hh"
 
 #include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 TRexBeam::TRexBeam() :
 	fGammaTheta(new std::vector<G4double>(0)), fGammaPhi(new std::vector<G4double>(0)), fGammaEnergy(new std::vector<G4double>(0)),
@@ -28,10 +30,10 @@ TRexBeam::TRexBeam() :
 	// define reaction kinematics and energy loss calculations
 	fTargetMaterial = GetTargetMaterial();
 	std::cout << "TargetMaterialName for energy loss calculation in the target = " << fTargetMaterial->Name() << std::endl;
-	fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(mg/cm2));
+	fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
 
 	// energy loss in the target
-	fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (mg/cm2)));
+	fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
 
 	//	TFile bla("bla.root", "recreate");
 	//	bla.cd();
@@ -49,15 +51,15 @@ TRexBeam::~TRexBeam() {
 void TRexBeam::ShootReactionPosition() {
 	//select random x and y position on a disk with diameter beamWidth
 	do {
-		fReactionX = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * mm;
-		fReactionY = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * mm;
+		fReactionX = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * CLHEP::mm;
+		fReactionY = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * CLHEP::mm;
 	} while(sqrt(pow(fReactionX,2)+pow(fReactionY,2)) > fBeamWidth / 2.);
 
 	// choose z according to a flat distribution in the target
-	//fReactionZ = CLHEP::RandFlat::shoot(-TRexSettings::Get()->GetTargetThickness() / (2. * TRexSettings::Get()->GetTargetMaterialDensity()) / um,
-	//			     TRexSettings::Get()->GetTargetThickness() / (2. * TRexSettings::Get()->GetTargetMaterialDensity()) / um) * um;
-	//fReactionZ = CLHEP::RandFlat::shoot(-0.5, 0.5) * mm;
-	fReactionZ = CLHEP::RandFlat::shoot(-TRexSettings::Get()->GetTargetPhysicalLength()/(2*um), TRexSettings::Get()->GetTargetPhysicalLength()/(2*um))*um;
+	//fReactionZ = CLHEP::RandFlat::shoot(-TRexSettings::Get()->GetTargetThickness() / (2. * TRexSettings::Get()->GetTargetMaterialDensity()) / CLHEP::um,
+	//			     TRexSettings::Get()->GetTargetThickness() / (2. * TRexSettings::Get()->GetTargetMaterialDensity()) / CLHEP::um) * CLHEP::um;
+	//fReactionZ = CLHEP::RandFlat::shoot(-0.5, 0.5) * CLHEP::mm;
+	fReactionZ = CLHEP::RandFlat::shoot(-TRexSettings::Get()->GetTargetPhysicalLength()/(2*CLHEP::um), TRexSettings::Get()->GetTargetPhysicalLength()/(2*CLHEP::um))*CLHEP::um;
 }
 
 void TRexBeam::DefineNuclei() {
@@ -148,9 +150,9 @@ Material* TRexBeam::GetTargetMaterial() {
 void TRexBeam::CalculateReactionEnergyInTheTarget() {
 	G4double reactionPosInTarget = fReactionZ * TRexSettings::Get()->GetTargetMaterialDensity() + TRexSettings::Get()->GetTargetThickness() / 2.;
 
-	fReactionEnergy = fEnergyVsTargetDepth.Eval(reactionPosInTarget /(mg/cm2))*MeV;
+	fReactionEnergy = fEnergyVsTargetDepth.Eval(reactionPosInTarget /(CLHEP::mg/CLHEP::cm2))*CLHEP::MeV;
 
-	//std::cout << "fReactionZ = " << fReactionZ << " ,x = " << reactionPosInTarget /(mg/cm2) << " , E(x) = " << fReactionEnergy / MeV << std::endl;
+	//std::cout << "fReactionZ = " << fReactionZ << " ,x = " << reactionPosInTarget /(CLHEP::mg/CLHEP::cm2) << " , E(x) = " << fReactionEnergy / CLHEP::MeV << std::endl;
 }
 
 void TRexBeam::CreateTreeBranches() {
@@ -188,7 +190,7 @@ void TRexBeam::CreateTreeBranches() {
 
 G4ParticleDefinition* TRexBeam::ParticleDefinition(int Z, int N, double eex) {
 	if(Z+N > 4) { // create ion from ion table
-		return G4ParticleTable::GetParticleTable()->GetIon(Z, Z+N, eex);
+		return G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z, Z+N, eex);
 	} else {
 		if(Z == 1 && N == 0) { // proton
 			return G4Proton::ProtonDefinition();
@@ -226,9 +228,9 @@ void TRexBeam::SetEjectileGun(G4Event *anEvent) {
 	}
 
 	// set variables for the tree
-	fEjectileTheta = fEjectileLab.theta() / radian;
-	fEjectilePhi = fEjectileLab.phi() / radian;
-	fEjectileEnergy = (fEjectileLab.e() - fEjectileRestMass) / keV;
+	fEjectileTheta = fEjectileLab.theta() / CLHEP::radian;
+	fEjectilePhi = fEjectileLab.phi() / CLHEP::radian;
+	fEjectileEnergy = (fEjectileLab.e() - fEjectileRestMass) / CLHEP::keV;
 }
 
 void TRexBeam::SetRecoilGun(G4Event *anEvent) {
@@ -248,9 +250,9 @@ void TRexBeam::SetRecoilGun(G4Event *anEvent) {
 	fParticleGunRecoil->GeneratePrimaryVertex(anEvent);
 
 	// set variables for the tree
-	fRecoilTheta = fRecoilLab.theta() / radian;
-	fRecoilPhi = fRecoilLab.phi() / radian;
-	fRecoilEnergy = (fRecoilLab.e() - fRecoilRestMass) / keV;
+	fRecoilTheta = fRecoilLab.theta() / CLHEP::radian;
+	fRecoilPhi = fRecoilLab.phi() / CLHEP::radian;
+	fRecoilEnergy = (fRecoilLab.e() - fRecoilRestMass) / CLHEP::keV;
 }
 
 void TRexBeam::SetGammaGun(G4Event *anEvent) {
@@ -277,9 +279,9 @@ void TRexBeam::SetGammaGun(G4Event *anEvent) {
 		fParticleGunGamma->GeneratePrimaryVertex(anEvent);
 
 		// set variables for the tree
-		fGammaTheta->push_back((*fGammaLab)[i].theta() / radian);
-		fGammaPhi->push_back((*fGammaLab)[i].phi() / radian);
-		fGammaEnergy->push_back((*fGammaLab)[i].e() / keV);
+		fGammaTheta->push_back((*fGammaLab)[i].theta() / CLHEP::radian);
+		fGammaPhi->push_back((*fGammaLab)[i].phi() / CLHEP::radian);
+		fGammaEnergy->push_back((*fGammaLab)[i].e() / CLHEP::keV);
 
 		//std::cout << "fGammaEnergy[" << i << "] = " << (*fGammaEnergy)[i] << std::endl;
 	}

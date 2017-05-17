@@ -26,27 +26,27 @@ void TRexVacuumChamberCylinder::ConstructChamber(G4LogicalVolume* experimentalHa
 	G4Cons *chamber_cons2;
 
 	if(TRexSettings::Get()->VisualizationCut()) {
-		//chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,62.*mm,270.*degree,360.*degree);
-		chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,112.*mm,270.*degree,180.*degree);
-		//chamber_tubs1 = new G4Tubs("ChamberTubs1",70.*mm,72.*mm,34.*mm,270.*degree,180.*degree);
-		//chamber_tubs2 = new G4Tubs("ChamberTubs2",70.*mm,90.*mm,62.5*mm,270.*degree,180.*degree);
-		//chamber_tubs3 = new G4Tubs("ChamberTubs3",51.*mm,54.*mm,41.5*mm,270.*degree,180.*degree);
-		chamber_cons1 = new G4Cons("ChamberCons1",59.*mm,61.*mm,70.*mm,72.*mm,10.*mm,270.*degree,180.*degree);
-		chamber_cons2 = new G4Cons("ChamberCons2",12.5*mm,14.5*mm,59.*mm,61.*mm,9.5*mm,270.*degree,180.*degree);
+		//chamber_tubs = new G4Tubs("ChamberTubs",70.*CLHEP::mm,72.*CLHEP::mm,62.*CLHEP::mm,270.*CLHEP::degree,360.*CLHEP::degree);
+		chamber_tubs = new G4Tubs("ChamberTubs",70.*CLHEP::mm,72.*CLHEP::mm,112.*CLHEP::mm,270.*CLHEP::degree,180.*CLHEP::degree);
+		//chamber_tubs1 = new G4Tubs("ChamberTubs1",70.*CLHEP::mm,72.*CLHEP::mm,34.*CLHEP::mm,270.*CLHEP::degree,180.*CLHEP::degree);
+		//chamber_tubs2 = new G4Tubs("ChamberTubs2",70.*CLHEP::mm,90.*CLHEP::mm,62.5*CLHEP::mm,270.*CLHEP::degree,180.*CLHEP::degree);
+		//chamber_tubs3 = new G4Tubs("ChamberTubs3",51.*CLHEP::mm,54.*CLHEP::mm,41.5*CLHEP::mm,270.*CLHEP::degree,180.*CLHEP::degree);
+		chamber_cons1 = new G4Cons("ChamberCons1",59.*CLHEP::mm,61.*CLHEP::mm,70.*CLHEP::mm,72.*CLHEP::mm,10.*CLHEP::mm,270.*CLHEP::degree,180.*CLHEP::degree);
+		chamber_cons2 = new G4Cons("ChamberCons2",12.5*CLHEP::mm,14.5*CLHEP::mm,59.*CLHEP::mm,61.*CLHEP::mm,9.5*CLHEP::mm,270.*CLHEP::degree,180.*CLHEP::degree);
 	} else {
-		//chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,62.*mm,0.*degree,360.*degree);
-		chamber_tubs = new G4Tubs("ChamberTubs",70.*mm,72.*mm,112.*mm,0.*degree,360.*degree);
-		//chamber_tubs1 = new G4Tubs("ChamberTubs1",70.*mm,72.*mm,34.*mm,0.*degree,360.*degree);
-		//chamber_tubs2 = new G4Tubs("ChamberTubs2",70.*mm,90.*mm,62.5*mm,0.*degree,360.*degree);
-		//chamber_tubs3 = new G4Tubs("ChamberTubs3",51.*mm,54.*mm,41.5*mm,0.*degree,360.*degree);
-		chamber_cons1 = new G4Cons("ChamberCons1",59.*mm,61.*mm,70.*mm,72.*mm,10.*mm,0.*degree,360.*degree);
-		chamber_cons2 = new G4Cons("ChamberCons2",12.5*mm,14.5*mm,59.*mm,61.*mm,9.5*mm,0.*degree,360.*degree);
+		//chamber_tubs = new G4Tubs("ChamberTubs",70.*CLHEP::mm,72.*CLHEP::mm,62.*CLHEP::mm,0.*CLHEP::degree,360.*CLHEP::degree);
+		chamber_tubs = new G4Tubs("ChamberTubs",70.*CLHEP::mm,72.*CLHEP::mm,112.*CLHEP::mm,0.*CLHEP::degree,360.*CLHEP::degree);
+		//chamber_tubs1 = new G4Tubs("ChamberTubs1",70.*CLHEP::mm,72.*CLHEP::mm,34.*CLHEP::mm,0.*CLHEP::degree,360.*CLHEP::degree);
+		//chamber_tubs2 = new G4Tubs("ChamberTubs2",70.*CLHEP::mm,90.*CLHEP::mm,62.5*CLHEP::mm,0.*CLHEP::degree,360.*CLHEP::degree);
+		//chamber_tubs3 = new G4Tubs("ChamberTubs3",51.*CLHEP::mm,54.*CLHEP::mm,41.5*CLHEP::mm,0.*CLHEP::degree,360.*CLHEP::degree);
+		chamber_cons1 = new G4Cons("ChamberCons1",59.*CLHEP::mm,61.*CLHEP::mm,70.*CLHEP::mm,72.*CLHEP::mm,10.*CLHEP::mm,0.*CLHEP::degree,360.*CLHEP::degree);
+		chamber_cons2 = new G4Cons("ChamberCons2",12.5*CLHEP::mm,14.5*CLHEP::mm,59.*CLHEP::mm,61.*CLHEP::mm,9.5*CLHEP::mm,0.*CLHEP::degree,360.*CLHEP::degree);
 	}
 
-	G4UnionSolid* chamber_cons = new G4UnionSolid("chamber_cons", chamber_cons1, chamber_cons2, new G4RotationMatrix(),G4ThreeVector(0,0,-19.5*mm));
+	G4UnionSolid* chamber_cons = new G4UnionSolid("chamber_cons", chamber_cons1, chamber_cons2, new G4RotationMatrix(),G4ThreeVector(0,0,-19.5*CLHEP::mm));
 
-	//G4UnionSolid* chamber_solid = new G4UnionSolid("chamber_solid", chamber_tubs, chamber_cons, new G4RotationMatrix(),G4ThreeVector(0,0,-72.05*mm));
-	G4UnionSolid* chamber_solid = new G4UnionSolid("chamber_solid", chamber_tubs, chamber_cons, new G4RotationMatrix(),G4ThreeVector(0,0,-122.05*mm));
+	//G4UnionSolid* chamber_solid = new G4UnionSolid("chamber_solid", chamber_tubs, chamber_cons, new G4RotationMatrix(),G4ThreeVector(0,0,-72.05*CLHEP::mm));
+	G4UnionSolid* chamber_solid = new G4UnionSolid("chamber_solid", chamber_tubs, chamber_cons, new G4RotationMatrix(),G4ThreeVector(0,0,-122.05*CLHEP::mm));
 
 	// logical volume
 	G4LogicalVolume* chamber_log = new G4LogicalVolume(chamber_solid, chamberMaterial, "chamber_log");

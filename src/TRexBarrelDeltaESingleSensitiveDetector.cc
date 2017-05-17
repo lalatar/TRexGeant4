@@ -90,7 +90,7 @@ G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits(G4Step *aStep,
 G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 		G4TouchableHistory* ROHist) {
 	// only primary particle hits are considered (no secondaries)
-	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV) {
+	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
 		return false;
 	}
 
@@ -201,25 +201,25 @@ void TRexBarrelDeltaESingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 		// loop over all strips we've found and add them
 		for(size_t i = 0; i < stripNb.size(); ++i) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-					stripEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
+					stripEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV;
 			}
-			fBarrelDeltaESingle->AddStrip(stripNb[i], stripEnergy[i]/keV, stripA[i], stripZ[i], stripTrackID[i], stripTime[i], stripStopped[i]);
+			fBarrelDeltaESingle->AddStrip(stripNb[i], stripEnergy[i]/CLHEP::keV, stripA[i], stripZ[i], stripTrackID[i], stripTime[i], stripStopped[i]);
 		}
 
 		// loop over all rings we've found and add them
 		for(size_t i = 0; i < ringNb.size(); ++i) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-					ringEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
+					ringEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV;
 			}
-			fBarrelDeltaESingle->AddRing(ringNb[i], ringEnergy[i]/keV, ringA[i], ringZ[i], ringTrackID[i], ringTime[i], ringStopped[i]);
+			fBarrelDeltaESingle->AddRing(ringNb[i], ringEnergy[i]/CLHEP::keV, ringA[i], ringZ[i], ringTrackID[i], ringTime[i], ringStopped[i]);
 		}
 
 		// for a resistive strip detector we set the energy of the rear to the total energy deposited
 		if(fHitCollection->entries() > 0 && TRexSettings::Get()->ResistiveStrips()) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-				fBarrelDeltaESingle->SetRear((GetTotalEnergyDeposition() + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
+				fBarrelDeltaESingle->SetRear((GetTotalEnergyDeposition() + CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV) / CLHEP::keV);
 			} else {
-				fBarrelDeltaESingle->SetRear(GetTotalEnergyDeposition() / keV);
+				fBarrelDeltaESingle->SetRear(GetTotalEnergyDeposition() / CLHEP::keV);
 			}
 		}
 		//fBarrelDeltaESingle->SetRear(posAlongStrip);
@@ -299,7 +299,7 @@ int TRexBarrelDeltaESingleSensitiveDetector::IsStopped(int hitIndex, double &res
 	bool isLastHit;
 	if(hitIndex == fHitCollection->entries() - 1) {
 		isLastHit = true;
-	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ) { // check if it is the same particle
+	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*CLHEP::eV ) { // check if it is the same particle
 		isLastHit = false;
 	} else {
 		isLastHit = true;
@@ -308,10 +308,10 @@ int TRexBarrelDeltaESingleSensitiveDetector::IsStopped(int hitIndex, double &res
 	if(isLastHit == false)
 		return -2;
 
-	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / keV;
+	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / CLHEP::keV;
 
 	// check if particle is stopped
-	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV) {
+	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*CLHEP::eV) {
 		// stopped
 		return 1;
 	} else {

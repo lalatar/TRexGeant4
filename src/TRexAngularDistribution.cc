@@ -127,7 +127,7 @@ void TRexAngularDistribution::ShootReactionTypeAndExcitationEnergy() {
 			fReaction = fNbOfLevels;
 		} else {
 			// shoot elastic Rutherford channel
-			double tmp = CLHEP::RandFlat::shoot(fScatteringProbabilitySingle[fNbOfLevels - 1],
+			tmp = CLHEP::RandFlat::shoot(fScatteringProbabilitySingle[fNbOfLevels - 1],
 					fScatteringProbabilitySingle[fNbOfLevels + fTargetMaterial->NumberOfElements() - 1]);
 
 			for(fReaction = fNbOfLevels; tmp > fScatteringProbabilitySingle[fReaction]; fReaction++) {
@@ -333,12 +333,12 @@ void TRexAngularDistribution::FillAngularDistributionHistos() {
 
 void TRexAngularDistribution::CalculateArealDensity() {
 	if(fTargetMaterial->NumberOfElements() == 1) {
-		fArealDensity.push_back(TRexSettings::Get()->GetTargetThickness() * Avogadro / (fTargetMaterial->GetElement(0)->A() * g/mole));
+		fArealDensity.push_back(TRexSettings::Get()->GetTargetThickness() * CLHEP::Avogadro / (fTargetMaterial->GetElement(0)->A() * g/mole));
 	} else {
 		double atomicRatio[2] = {1.0, TRexSettings::Get()->GetTargetAtomicRatio()};
 
 		for(size_t i = 0; i < fTargetMaterial->NumberOfElements(); ++i) {
-			fArealDensity.push_back(atomicRatio[i] * TRexSettings::Get()->GetTargetThickness() * Avogadro /
+			fArealDensity.push_back(atomicRatio[i] * TRexSettings::Get()->GetTargetThickness() * CLHEP::Avogadro /
 					(fTargetMaterial->GetElement(0)->A() * g/mole + TRexSettings::Get()->GetTargetAtomicRatio() * fTargetMaterial->GetElement(1)->A() * g/mole));
 		}
 	}
@@ -367,7 +367,7 @@ void TRexAngularDistribution::CalculateCrossSectionIntegral() {
 	// elastic scattering (using Rutherford scattering)
 	for(size_t i = 0; i < fTargetMaterial->NumberOfElements(); ++i) {
 		// Rutherford factor
-		G4double RF = fProjectileZ * fTargetMaterial->Z(i) * eplus * eplus / (16. * M_PI * epsilon0);
+		G4double RF = fProjectileZ * fTargetMaterial->Z(i) * eplus * eplus / (16. * M_PI * CLHEP::epsilon0);
 		RF *= RF;
 
 		G4double fBeamEnergyMiddleTarget = fEnergyVsTargetDepth.Eval(TRexSettings::Get()->GetTargetThickness() / 2. /(mg/cm2))*MeV;

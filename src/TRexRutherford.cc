@@ -10,7 +10,7 @@
 
 TRexRutherford::TRexRutherford() {
 	// normalization constant
-	fNorm = 1./  (1./(sin(fThetaCM_min/rad * 0.5) * sin(fThetaCM_min/rad * 0.5)) -1);
+	fNorm = 1./  (1./(sin(fThetaCM_min/CLHEP::rad * 0.5) * sin(fThetaCM_min/CLHEP::rad * 0.5)) -1);
 
 	// calculate reaction energy in the middle of the target
 	fReactionZ = 0.;
@@ -48,7 +48,7 @@ void TRexRutherford::GeneratePrimaries(G4Event *anEvent) {
 
 void TRexRutherford::CalculateScatteringProbability() {
 	// Rutherford factor
-	G4double RF = fProjectileZ * fTargetZ * eplus * eplus / (16. * M_PI * epsilon0);
+	G4double RF = fProjectileZ * fTargetZ * CLHEP::eplus * CLHEP::eplus / (16. * M_PI * CLHEP::epsilon0);
 	RF *= RF;
 	//G4cout<<"RF = "<<RF/(MeV * MeV *millibarn)<<G4endl;
 
@@ -60,7 +60,7 @@ void TRexRutherford::CalculateScatteringProbability() {
 	G4double sigmaTot = -4. * M_PI * RF / (E_CM * E_CM) * (1. - 1./ (sin(fThetaCM_min *0.5) * sin(fThetaCM_min * 0.5)));
 	//G4cout<<"sigmaTot = "<<sigmaTot/millibarn<<G4endl;
 
-	G4double arealDensity = TRexSettings::Get()->GetTargetThickness() * Avogadro / (fTargetA* g/mole);
+	G4double arealDensity = TRexSettings::Get()->GetTargetThickness() * CLHEP::Avogadro / (fTargetA* CLHEP::g/CLHEP::mole);
 	//G4cout<<"areal density = "<<arealDensity*cm2<<G4endl;
 
 	fScatteringProbability = arealDensity * sigmaTot;
@@ -80,29 +80,29 @@ void TRexRutherford::DoKinematicCalculation() {
 	fTcm3 = 0.5 * fTcm * (fTcm + 2. * fTargetRestMass) / fEcm;
 	fTcm4 = 0.5 * fTcm * (fTcm + 2. * fProjectileRestMass) / fEcm;
 
-	fPcm3 = sqrt(fTcm3 * fTcm3 + 2. * fTcm3 * fProjectileRestMass) / c_light;
-	fPcm4 = sqrt(fTcm4 * fTcm4 + 2. * fTcm4 * fTargetRestMass) / c_light;
+	fPcm3 = sqrt(fTcm3 * fTcm3 + 2. * fTcm3 * fProjectileRestMass) / CLHEP::c_light;
+	fPcm4 = sqrt(fTcm4 * fTcm4 + 2. * fTcm4 * fTargetRestMass) / CLHEP::c_light;
 
 	fBeta = sqrt(pow(fReactionEnergy, 2) + 2. * fProjectileRestMass * fReactionEnergy) / (fReactionEnergy + fProjectileRestMass + fTargetRestMass);
 	fGamma = 1. / sqrt(1. - fBeta * fBeta);
 
-	fBetaCm3 = fPcm3 * c_light / (fProjectileRestMass + fTcm3);
-	fBetaCm4 = fPcm4 * c_light / (fTargetRestMass + fTcm4);
+	fBetaCm3 = fPcm3 * CLHEP::c_light / (fProjectileRestMass + fTcm3);
+	fBetaCm4 = fPcm4 * CLHEP::c_light / (fTargetRestMass + fTcm4);
 }
 
 
 void TRexRutherford::ShootEjectileAndRecoilDirections() {
 	// particle momentum direction
-	fEjectilePhi = CLHEP::RandFlat::shoot(-M_PI, M_PI) * rad;
+	fEjectilePhi = CLHEP::RandFlat::shoot(-M_PI, M_PI) * CLHEP::rad;
 	fRecoilPhi = -fEjectilePhi;
 
 	// shoot theta according Rutherford differential cross section
 	G4double rand = CLHEP::RandFlat::shoot(0., 1.);
 	/* not correct as the sin(thetaCM) from the spherical coordinates are missing
 	  do {
-	    thetaCM = CLHEP::RandFlat::shoot(thetaCM_min/rad,M_PI);
-	    rand = CLHEP::RandFlat::shoot(0., RF / (E_CM * E_CM) / pow(sin(thetaCM_min/2./rad),4));
-	  } while(rand > RF / (E_CM * E_CM) / pow(sin(thetaCM/2./rad),4));
+	    thetaCM = CLHEP::RandFlat::shoot(thetaCM_min/CLHEP::rad,M_PI);
+	    rand = CLHEP::RandFlat::shoot(0., RF / (E_CM * E_CM) / pow(sin(thetaCM_min/2./CLHEP::rad),4));
+	  } while(rand > RF / (E_CM * E_CM) / pow(sin(thetaCM/2./CLHEP::rad),4));
 	 */
 	fThetaCM = 2.* asin(1. / sqrt(1. / sin(fThetaCM_min*0.5) / sin(fThetaCM_min*0.5) - rand / fNorm));
 
@@ -121,11 +121,11 @@ void TRexRutherford::ShootEjectileAndRecoilDirections() {
 	recoilCM.setVect(recoilMomentumVectorCM);
 
 	// transformation from the CM frame to the lab frame
-	double T3 = (fGamma - 1.) * fProjectileRestMass + fGamma * fTcm3 + fGamma *fBeta * fPcm3 * c_light * cos(fThetaCM);
-	double T4 = (fGamma - 1.) * fTargetRestMass + fGamma * fTcm4 + fGamma * fBeta * fPcm4 * c_light * cos(TMath::Pi() - fThetaCM);
+	double T3 = (fGamma - 1.) * fProjectileRestMass + fGamma * fTcm3 + fGamma *fBeta * fPcm3 * CLHEP::c_light * cos(fThetaCM);
+	double T4 = (fGamma - 1.) * fTargetRestMass + fGamma * fTcm4 + fGamma * fBeta * fPcm4 * CLHEP::c_light * cos(TMath::Pi() - fThetaCM);
 
-	double p3 = sqrt(T3 * T3 + 2. * T3 * fProjectileRestMass) / c_light;
-	double p4 = sqrt(T4 * T4 + 2. * T4 * fTargetRestMass) / c_light;
+	double p3 = sqrt(T3 * T3 + 2. * T3 * fProjectileRestMass) / CLHEP::c_light;
+	double p4 = sqrt(T4 * T4 + 2. * T4 * fTargetRestMass) / CLHEP::c_light;
 
 	double theta3 = fabs(atan(sin(fThetaCM) / (fGamma * (cos(fThetaCM) + fBeta / fBetaCm3))));
 	double theta4 = fabs(atan(sin(TMath::Pi() - fThetaCM) / (fGamma * (cos(TMath::Pi() - fThetaCM) + fBeta / fBetaCm4))));

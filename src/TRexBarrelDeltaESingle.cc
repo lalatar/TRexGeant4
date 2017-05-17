@@ -29,8 +29,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 
 		fDeadLayer = TRexSettings::Get()->GetFBarrelDeltaESingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetFBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetFBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetFBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetFBarrelDeltaESingleFoilThickness();
@@ -42,8 +42,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 
 		fDeadLayer = TRexSettings::Get()->GetSecondFBarrelDeltaESingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetSecondFBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetSecondFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetSecondFBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetSecondFBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetSecondFBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetSecondFBarrelDeltaESingleFoilThickness();
@@ -55,8 +55,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 
 		fDeadLayer = TRexSettings::Get()->GetMBarrelDeltaESingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetMBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetMBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetMBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetMBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetMBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetMBarrelDeltaESingleFoilThickness();
@@ -68,8 +68,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 
 		fDeadLayer = TRexSettings::Get()->GetBBarrelDeltaESingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetBBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetBBarrelDeltaESingleFoilThickness();
@@ -81,8 +81,8 @@ TRexBarrelDeltaESingle::TRexBarrelDeltaESingle(std::string name, std::string dir
 
 		fDeadLayer = TRexSettings::Get()->GetSecondBBarrelDeltaESingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetSecondBBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetSecondBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetSecondBBarrelDeltaESingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetSecondBBarrelDeltaESingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetSecondBBarrelDeltaESinglePosZ()[fId]);
 
 		fFoilThickness = TRexSettings::Get()->GetSecondBBarrelDeltaESingleFoilThickness();
@@ -108,12 +108,12 @@ void TRexBarrelDeltaESingle::Construct(G4LogicalVolume* experimentalHall_log, G4
 	}
 
 	// include dead layer ?
-	if(fDeadLayer > 0.1*um) {
+	if(fDeadLayer > 0.1*CLHEP::um) {
 		ConstructDeadLayer(experimentalHall_log);
 	}
 
 	// protection foils ?
-	if(fFoilThickness > 0.1*um) {
+	if(fFoilThickness > 0.1*CLHEP::um) {
 		ConstructFoil(experimentalHall_log);
 	}
 }
@@ -146,12 +146,12 @@ void TRexBarrelDeltaESingle::ConstructSilicon(G4LogicalVolume* experimentalHall_
 void TRexBarrelDeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) {
 	G4Material* pcb = TRexMaterials::Get()->GetMaterial("pcb");
 
-	G4double pcbWidth = 89 * mm;
-	G4double pcbThickness = 1.5 * mm;
-	G4double pcbLength = 54 * mm;
-	G4double pcbRecessWidth = 23 * mm;
-	G4double pcbRecessLength = 22 * mm;
-	G4double barrelDisplacement = 16.5 * mm;
+	G4double pcbWidth = 89 * CLHEP::mm;
+	G4double pcbThickness = 1.5 * CLHEP::mm;
+	G4double pcbLength = 54 * CLHEP::mm;
+	G4double pcbRecessWidth = 23 * CLHEP::mm;
+	G4double pcbRecessLength = 22 * CLHEP::mm;
+	G4double barrelDisplacement = 16.5 * CLHEP::mm;
 
 	G4Box* PCB_dE = new G4Box("PCB_dE", pcbThickness / 2., pcbWidth / 2., pcbLength / 2.);
 
@@ -171,26 +171,26 @@ void TRexBarrelDeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_log)
 	fRotMatrixPcb = fRotMatrix;
 
 	G4ThreeVector pcbPos = fPos;
-	pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / rad));
-	pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / rad));
+	pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+	pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 
 	if(fabs(fPos.x()) < 0.1) {
-		fRotMatrixPcb->rotateX(180.*degree);
-		pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / rad));
-		pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / rad));
+		fRotMatrixPcb->rotateX(180.*CLHEP::degree);
+		pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+		pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 	}
 
 	if(fDirection == "backward") {
-		pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / rad));
-		pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / rad));
+		pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+		pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 
 		if(fabs(fPos.y()) < 0.1) {
-			fRotMatrixPcb->rotateY(180.*degree);
-			pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / rad));
-			pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / rad));
+			fRotMatrixPcb->rotateY(180.*CLHEP::degree);
+			pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+			pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 		}
 
-		fRotMatrixPcb->rotateZ(-180.*degree);
+		fRotMatrixPcb->rotateZ(-180.*CLHEP::degree);
 	}
 
 	//G4VPhysicalVolume* phys_vol =
@@ -225,11 +225,11 @@ void TRexBarrelDeltaESingle::ConstructDeadLayer(G4LogicalVolume* experimentalHal
 void TRexBarrelDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log) {
 	G4Material* foilMaterial = TRexMaterials::Get()->GetMaterial("mylar");
 
-	G4double foilDistance = (1.0 + 2.0) * mm;
+	G4double foilDistance = (1.0 + 2.0) * CLHEP::mm;
 	//G4double foilWidth = (TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] -  1 * (foilDistance - fFoilThickness / 2.)) * 2;
 	G4double foilWidth = (TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] - 1 * (foilDistance - fFoilThickness / 2.)) * 2;
-	//G4double foilLength = 54 * mm;
-	G4double foilLength = 4 * mm;
+	//G4double foilLength = 54 * CLHEP::mm;
+	G4double foilLength = 4 * CLHEP::mm;
 
 	if(fDirection == "forward") {
 		foilLength += TRexSettings::Get()->GetFBarrelDeltaESingleLengthY();
@@ -246,8 +246,8 @@ void TRexBarrelDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log
 
 	// position of the foil
 	G4ThreeVector position = fPos;
-	position.setX(fPos.x() - (foilDistance - fFoilThickness / 2.) * cos(fStartAngleDetector / rad));
-	position.setY(fPos.y() - (foilDistance - fFoilThickness / 2.) * sin(fStartAngleDetector / rad));
+	position.setX(fPos.x() - (foilDistance - fFoilThickness / 2.) * cos(fStartAngleDetector / CLHEP::rad));
+	position.setY(fPos.y() - (foilDistance - fFoilThickness / 2.) * sin(fStartAngleDetector / CLHEP::rad));
 
 	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(G4Transform3D(*fRotMatrix, position), foil_log, "foil", experimentalHall_log, false, 0);

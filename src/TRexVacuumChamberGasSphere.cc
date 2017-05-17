@@ -20,17 +20,17 @@ G4LogicalVolume* TRexVacuumChamberGasSphere::ConstructChamberGas(G4LogicalVolume
 
 	// commented values: T-REX spherical vaccum chamber
 	// current values: adapted to Coulex chamber
-	G4double chamberInnerRadius = 81. * mm;// 98. * mm;
+	G4double chamberInnerRadius = 81.*CLHEP::mm;
 
 	//the sphere
 	G4Sphere* chamberGas_sphere;
 
 	if(TRexSettings::Get()->VisualizationCut()) {
 		chamberGas_sphere = new G4Sphere("ChamberGasSphere", 0. , chamberInnerRadius ,
-				270.*degree, 180.*degree, 0.*degree, 180.*degree);
+				270.*CLHEP::degree, 180.*CLHEP::degree, 0.*CLHEP::degree, 180.*CLHEP::degree);
 	} else {
 		chamberGas_sphere = new G4Sphere("ChamberGasSphere", 0., chamberInnerRadius,
-				0.*degree, 360.*degree, 0.*degree, 180.*degree);
+				0.*CLHEP::degree, 360.*CLHEP::degree, 0.*CLHEP::degree, 180.*CLHEP::degree);
 	}
 
 	G4LogicalVolume* chamberGas_log = new G4LogicalVolume(chamberGas_sphere, chamberGasMaterial, "chamberGas_log");

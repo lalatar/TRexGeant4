@@ -34,6 +34,8 @@ include $(G4INSTALL)/config/architecture.gmk
 
 EXTRA_INCLUDES = -I$(MBINC) -I$(COMMON_DIR)
 CPPFLAGS += -O0 -Wall -Wno-write-strings -Wno-deprecated -pedantic -g $(INCFLAGS) $(ROOTCFLAGS) $(EXTRA_INCLUDES) -DSIMULATION_PATH=\"$(PWD)\"
+CPPFLAGS += -pthread
+CPPFLAGS += -DG4MULTITHREADED
 LDFLAGS  += $(ROOTLIBS) -Wl,--no-as-needed $(G4TMP)/$(G4SYSTEM)/$(G4TARGET)/Dictionary.o -lG4OpenGL
 EXTRALIBS = -L$(MBLIB) -L$(LIB_DIR) -lMiniBall -lCommandLineInterface
 

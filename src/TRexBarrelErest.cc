@@ -36,7 +36,7 @@ std::vector<ParticleMC>* TRexBarrelErest::GetParticleMCvector() {
 
 	for(int i = 0; i < fNbOfSingles; i++) {
 		// include only detectors with a hit
-		if(fBarrelErestSingles[i]->GetParticleMC()->GetEdet() > 0.001 * eV) {
+		if(fBarrelErestSingles[i]->GetParticleMC()->GetEdet() > 0.001 * CLHEP::eV) {
 			particleMCvector->push_back(*fBarrelErestSingles[i]->GetParticleMC());
 		}
 	}
