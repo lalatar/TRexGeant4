@@ -13,7 +13,6 @@
 #include "TRexAlphaSource.hh"
 #include "TRexRutherford.hh"
 #include "TRexAngularDistribution.hh"
-#include "TRexBeamIn.hh"
 
 #include "MBglobals.hh"
 #include "MiniBallSource.hh"

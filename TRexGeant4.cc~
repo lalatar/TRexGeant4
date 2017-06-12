@@ -5,11 +5,11 @@
  *      Author: sklupp
  */
 
-//#ifdef G4MULTITHREADED
-//#include "G4MTRunManager.hh"
-//#else
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
-//#endif
+#endif
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
@@ -27,10 +27,7 @@
 
 #include "TRexDetectorConstruction.hh"
 //#include "TRexPhysicsList.hh"
-//#include "PhysicsList.hh"
-
-#include "QGSP_BIC.hh"
-
+#include "PhysicsList.hh"
 #include "TRexPrimaryGeneratorAction.hh"
 #include "TRexRunAction.hh"
 #include "TRexEventAction.hh"
@@ -62,12 +59,12 @@ int main(int argc,char** argv) {
 
   // Construct the default run manager  //
   //#ifdef G4MULTITHREADED
-  //  G4cout << "RUNNING MULTITHREADED" << G4endl;
-  //  G4int nThreads = 1;
-  //  G4MTRunManager * runManager = new G4MTRunManager;
-  //	runManager->SetNumberOfThreads(nThreads);
+    G4cout << "RUNNING MULTITHREADED" << G4endl;
+    G4int nThreads = 1;
+    G4MTRunManager * runManager = new G4MTRunManager;
+  	runManager->SetNumberOfThreads(nThreads);
   //#else
-  G4RunManager * runManager = new G4RunManager;
+  //G4RunManager * runManager = new G4RunManager;
   //#endif
 
   // initalize Miniball
@@ -82,7 +79,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
 
   //G4VUserPhysicsList* physics = new TRexPhysicsList;
-  G4VUserPhysicsList* physics = new QGSP_BIC();
+  G4VUserPhysicsList* physics = new PhysicsList;
   runManager->SetUserInitialization(physics);
 
   runManager->SetUserInitialization(new TRexActionInitialization((TRexDetectorConstruction*)detector, &data, miniballHistoManager));
@@ -109,11 +106,10 @@ int main(int argc,char** argv) {
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
   //
+  delete runManager;
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete runManager;
-
   delete session;
 
   return 0;

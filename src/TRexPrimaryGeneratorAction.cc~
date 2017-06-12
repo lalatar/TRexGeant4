@@ -37,7 +37,7 @@ void TRexPrimaryGeneratorAction::SetGenerator() {
 		fCurrentGenerator = new TRexAlphaSource;
 	} else if(generatorName == "BeamIn") {
 		std::cout<<std::endl<<"Using beamIn source ....\n"<<std::endl;
-		fCurrentGenerator = new TRexBeamIn;
+		fCurrentGenerator = new BeamIn;
 	}
 }
 

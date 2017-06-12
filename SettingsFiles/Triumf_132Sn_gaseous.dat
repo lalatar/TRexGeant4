@@ -1,7 +1,7 @@
 ################################################################################
 # Primary generator
 ################################################################################
-PrimaryGenerator:				AngularDistribution
+PrimaryGenerator:				BeamIn
 LevelFile:						LevelFiles/132Sn_dp.dat
 AngularDistributionFile:	AngularDistributionFiles/132Sn_dp.dat
 

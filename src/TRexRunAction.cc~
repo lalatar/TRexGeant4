@@ -45,7 +45,7 @@ void TRexRunAction::BeginOfRunAction(const G4Run*) {
 
 
 void TRexRunAction::EndOfRunAction(const G4Run*) {
-    //if (!IsMaster()){
+    if (!IsMaster()){
 	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " a" << G4endl;
  	fOutputFile->cd();
 	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " b" << G4endl;
@@ -56,5 +56,5 @@ void TRexRunAction::EndOfRunAction(const G4Run*) {
 
 	fOutputFile->Close();
 	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " e" << G4endl;
-    //}
+    }
 }

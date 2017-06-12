@@ -245,7 +245,7 @@ void TRexDetectorConstruction::DefineDetectors() {
 	}
 }
 
-void TRexDetectorConstruction::DefineMiniball() {/*
+//void TRexDetectorConstruction::DefineMiniball() {
 	std::cout << "Constructing MINIBALL ....\n" << std::endl;
 
 	G4bool MiniballCapsule = true;
@@ -270,5 +270,5 @@ void TRexDetectorConstruction::DefineMiniball() {/*
 		}
 		}*/
 
-	//fMiniball->Construct();
+	fMiniball->Construct();
 }
