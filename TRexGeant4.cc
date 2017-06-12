@@ -71,8 +71,7 @@ int main(int argc,char** argv) {
   //#endif
 
   // initalize Miniball
-  std::string fName = "t-1_" + data.GetOutputFileName();
-  MiniBallRootGenerator* miniballHistoGen = new MiniBallRootGenerator(fName.c_str(), 5);
+  MiniBallRootGenerator* miniballHistoGen = new MiniBallRootGenerator(data.GetOutputFileName(), 5);
   MiniBallHistoManager* miniballHistoManager = new MiniBallHistoManager(miniballHistoGen);
   miniballHistoManager->SetMBTupleType(EVENT);
   miniballHistoManager->SetEnergyUnit(keV);
