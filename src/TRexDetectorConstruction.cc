@@ -245,7 +245,7 @@ void TRexDetectorConstruction::DefineDetectors() {
 	}
 }
 
-void TRexDetectorConstruction::DefineMiniball() {/*
+void TRexDetectorConstruction::DefineMiniball() {
 	std::cout << "Constructing MINIBALL ....\n" << std::endl;
 
 	G4bool MiniballCapsule = true;
@@ -258,7 +258,7 @@ void TRexDetectorConstruction::DefineMiniball() {/*
 
 	fMiniball->SetAllDeadlayer(0.7*micrometer, DEADLAYER_OUTER_CONTACT);
 
-	/*	for(i = 0; i < 8; i++) {
+		for(i = 0; i < 8; i++) {
 		if(data->settings->MiniballRelativeEfficiency[i][0] > 0.) {
 		fMiniball->SetRelativeEfficiencyDetA(i, data->settings->MiniballRelativeEfficiency[i][0]);
 		}
@@ -268,7 +268,7 @@ void TRexDetectorConstruction::DefineMiniball() {/*
 		if(data->settings->MiniballRelativeEfficiency[i][2] > 0.) {
 		fMiniball->SetRelativeEfficiencyDetC(i, data->settings->MiniballRelativeEfficiency[i][2]);
 		}
-		}*/
+		}
 
-	//fMiniball->Construct();
+	fMiniball->Construct();
 }

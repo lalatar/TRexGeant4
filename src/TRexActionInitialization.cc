@@ -18,20 +18,11 @@ TRexActionInitialization::~TRexActionInitialization(){
 }
 
 void TRexActionInitialization::Build() const{
-G4cout << "build for " << std::to_string(G4Threading::G4GetThreadId()) << G4endl;
-
-// initalize Miniball
-  std::string fName = "t" + std::to_string(G4Threading::G4GetThreadId()) + "_" + fData->GetOutputFileName();
-  MiniBallRootGenerator* miniballHistoGen = new MiniBallRootGenerator(fName.c_str(), 5);
-  MiniBallHistoManager* miniballHistoManager = new MiniBallHistoManager(miniballHistoGen);
-  miniballHistoManager->SetMBTupleType(EVENT);
-  miniballHistoManager->SetEnergyUnit(keV);
-
     // set mandatory user action class
     TRexPrimaryGeneratorAction* gen_action = new TRexPrimaryGeneratorAction();
     SetUserAction(gen_action);
 
-    TRexEventAction* event_action = new TRexEventAction(fDetConst, miniballHistoManager);
+    TRexEventAction* event_action = new TRexEventAction(fDetConst, fHistoMan);
     SetUserAction(event_action);
 
     TRexRunAction* run_action = new TRexRunAction(fData, gen_action, event_action);

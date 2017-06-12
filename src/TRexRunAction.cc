@@ -24,9 +24,7 @@ TRexRunAction::~TRexRunAction() {
 void TRexRunAction::BeginOfRunAction(const G4Run*) {
         //if (!IsMaster()){
 		// open result Root file
-		std::string fName = "t" + std::to_string(G4Threading::G4GetThreadId()) + "_" + fData->GetOutputFileName();
-		//std::string fName = "out.root";
-		fOutputFile = new TFile(fName.c_str(), "recreate");
+		fOutputFile = new TFile(fData.GetOutputFileName().c_str(), "recreate");
 		fOutputFile->cd();
 
 		// create trees
