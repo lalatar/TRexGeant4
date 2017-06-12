@@ -30,10 +30,10 @@ void TRexActionInitialization::Build() const{
 }
 
 void TRexActionInitialization::BuildForMaster() const{
-    TRexPrimaryGeneratorAction* gen_action = new TRexPrimaryGeneratorAction;
+    //TRexPrimaryGeneratorAction* gen_action = new TRexPrimaryGeneratorAction;
 
-    TRexEventAction* event_action = new TRexEventAction(fDetConst, fHistoMan);
+    //TRexEventAction* event_action = new TRexEventAction(fDetConst, fHistoMan);
 
-    TRexRunAction* run_action = new TRexRunAction(fData, gen_action, event_action);
-    SetUserAction(run_action);
+    //TRexRunAction* run_action = new TRexRunAction(fData, gen_action, event_action);
+    //SetUserAction(run_action);
 }

@@ -44,15 +44,15 @@ void TRexRunAction::BeginOfRunAction(const G4Run*) {
 
 void TRexRunAction::EndOfRunAction(const G4Run*) {
     //if (!IsMaster()){
-	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " a" << G4endl;
+	//G4cout << std::to_string(G4Threading::G4GetThreadId()) << " a" << G4endl;
  	fOutputFile->cd();
-	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " b" << G4endl;
+	//G4cout << std::to_string(G4Threading::G4GetThreadId()) << " b" << G4endl;
 	fGeneratorTree->Write();
-	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " c" << G4endl;
+	//G4cout << std::to_string(G4Threading::G4GetThreadId()) << " c" << G4endl;
 	fDetectorTree->Write();
-	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " d" << G4endl;
+	//G4cout << std::to_string(G4Threading::G4GetThreadId()) << " d" << G4endl;
 
 	fOutputFile->Close();
-	G4cout << std::to_string(G4Threading::G4GetThreadId()) << " e" << G4endl;
+	//G4cout << std::to_string(G4Threading::G4GetThreadId()) << " e" << G4endl;
     //}
 }
