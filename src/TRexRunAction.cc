@@ -24,7 +24,7 @@ TRexRunAction::~TRexRunAction() {
 void TRexRunAction::BeginOfRunAction(const G4Run*) {
         //if (!IsMaster()){
 		// open result Root file
-		fOutputFile = new TFile(fData.GetOutputFileName().c_str(), "recreate");
+		fOutputFile = new TFile(fData->GetOutputFileName().c_str(), "recreate");
 		fOutputFile->cd();
 
 		// create trees
