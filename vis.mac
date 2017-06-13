@@ -1,0 +1,44 @@
+# Set verbose level
+/run/verbose 0
+
+#################################################
+# Visualization of detector geometry with 
+# the VRML2FILE driver.
+#################################################
+
+# Invoke the VRML2FILE driver
+/vis/open VRML2FILE
+
+# Set viewer rendering style
+# "wireframe" means  "half-transparent" in VRML2FILE driver 
+/vis/viewer/set/style surface
+#/vis/viewer/set/style wireframe
+
+# Compund command: creates scene, adds volume, attaches scene handler
+# and refreshes viewer
+/vis/drawVolume
+
+# Create a new scene 
+/vis/scene/create
+
+# Attach the current scene handler to the current scene
+/vis/sceneHandler/attach 
+
+# Add the world volume to the current scene
+/vis/scene/add/volume
+
+# Add coordinate axes at origin
+# red color for x-axis
+# green color for y-axis
+# blue color for z-axis
+/vis/scene/add/axes 0 0 0 500 mm
+
+# Add trajectories to the visualization.
+/vis/scene/add/trajectories smooth
+
+# Add hits to scene
+/vis/scene/add/hits
+
+# Accumulate multiple events in one picture.
+/vis/scene/endOfEventAction accumulate
+

@@ -249,7 +249,6 @@ void TRexBarrelDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log
 	position.setX(fPos.x() - (foilDistance - fFoilThickness / 2.) * cos(fStartAngleDetector / CLHEP::rad));
 	position.setY(fPos.y() - (foilDistance - fFoilThickness / 2.) * sin(fStartAngleDetector / CLHEP::rad));
 
-	//G4VPhysicalVolume* phys_vol =
 	new G4PVPlacement(G4Transform3D(*fRotMatrix, position), foil_log, "foil", experimentalHall_log, false, 0);
 
 	if(TRexSettings::Get()->Colours()) {
