@@ -3,6 +3,7 @@
 
 #include "G4ClassificationOfNewTrack.hh"
 #include "G4UserStackingAction.hh"
+#include "G4ParticleTable.hh"
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -17,6 +18,8 @@ class TRexStackingAction : public G4UserStackingAction{
         
     private:
         G4ParticleDefinition* electronDef;
+        
+        G4ParticleTable* particleTable;
 };
 
 #endif
