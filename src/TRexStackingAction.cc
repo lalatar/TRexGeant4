@@ -14,7 +14,7 @@ TRexStackingAction::TRexStackingAction(){
 TRexStackingAction::~TRexStackingAction()
 {}
 
-G4ClassificationOfNewTrack HadronicStackingAction::ClassifyNewTrack(const G4Track* track){
+G4ClassificationOfNewTrack TRexStackingAction::ClassifyNewTrack(const G4Track* track){
 	if (electronDef == nullptr){
 		electronDef = particleTable->FindParticle("e-");
 	}
@@ -30,9 +30,9 @@ G4ClassificationOfNewTrack HadronicStackingAction::ClassifyNewTrack(const G4Trac
     return classification;
 }
 
-void HadronicStackingAction::NewStage()
+void TRexStackingAction::NewStage()
 {}
 
-void HadronicStackingAction::PrepareNewEvent()
+void TRexStackingAction::PrepareNewEvent()
 {}
 
