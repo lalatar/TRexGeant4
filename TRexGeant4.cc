@@ -3,6 +3,10 @@
  *
  *  Created on: Jun 15, 2014
  *      Author: sklupp
+ * 
+ * modified to use custom QGSP_BIC physics list, which includes
+ * nuclear recoils on GenericIon class.
+ * dhymers 2017/06/12
  */
 
 //#ifdef G4MULTITHREADED
@@ -67,6 +71,7 @@ int main(int argc,char** argv) {
   //  G4MTRunManager * runManager = new G4MTRunManager;
   //	runManager->SetNumberOfThreads(nThreads);
   //#else
+  //Miniball structure restricts us to single threaded only
   G4RunManager * runManager = new G4RunManager;
   //#endif
 
@@ -81,6 +86,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
 
   //G4VUserPhysicsList* physics = new TRexPhysicsList;
+  //using custom physics lists
   G4VUserPhysicsList* physics = new myQGSP_BIC();
   runManager->SetUserInitialization(physics);
 

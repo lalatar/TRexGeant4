@@ -1,3 +1,11 @@
+/*
+ * This file is included unmodified from the Geant4.10.03 example
+ * extended/electromagnetic/TestEm7 for the purpose of implementing
+ * nuclear recoils as a result of elastic scattering
+ * 
+ * dhymers 2017/06/12
+ */
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *

@@ -1,3 +1,12 @@
+/*
+ * This file is required by the G4ScreenedNuclearRecoil class. It is
+ * included unmodified from the Geant4.10.03 example
+ * extended/electromagnetic/TestEm7
+ * 
+ * dhymers 2017/06/12
+ */
+
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *

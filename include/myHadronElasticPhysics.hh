@@ -1,3 +1,13 @@
+/*
+ * This file is a modification of the header file for 
+ * G4HadronElasticPhysics included in Geant4.10.03. The header is
+ * modified to faciliate the modification of the class definition
+ * to include nuclear recoils from the class G4ScreenedNuclearRecoil
+ * 
+ * dhymers 2017/06/12
+ */
+
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *

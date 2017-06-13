@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * modified to build projectile based on settings file Z, A
+ * dhymers 2017/06/12
  */
 
 #include "TRexBeamIn.hh"

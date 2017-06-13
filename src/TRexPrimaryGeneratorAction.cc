@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 15, 2014
  *      Author: sklupp
+ * 
+ * added option for BeamIn to allow use of TRexBeamIn primary generator
+ * dhymers 2017/05/26
  */
 
 #include "TRexPrimaryGeneratorAction.hh"

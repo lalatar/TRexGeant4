@@ -1,3 +1,13 @@
+/*
+ * Builds materials for use in TRex simulation.
+ * 
+ * 
+ * Modified to add tin target (G4_Sn)
+ * dhymers 2017/06/12
+ * 
+ */
+
+
 #include "TRexMaterials.hh"
 #include "MiniBallMaterial.hh"
 #include "TRexSettings.hh"
@@ -291,11 +301,9 @@ TRexMaterials::TRexMaterials() {
 		fManager->ConstructNewGasMaterial("target", TRexSettings::Get()->GetTargetMaterialName(), CLHEP::STP_Temperature, TRexSettings::Get()->GetTargetPressure());
 	} else {
 		G4Material* material = GetMaterial(TRexSettings::Get()->GetTargetMaterialName());
-		G4cout << material->GetName() << " " << material->GetDensity()/CLHEP::g/CLHEP::cm3 << G4endl;
 		G4Material* target = new G4Material("target", material->GetDensity(), material->GetNumberOfElements());
 		for(size_t i = 0; i < material->GetNumberOfElements(); ++i) {
 			target->AddElement(material->GetElementVector()->at(i), material->GetFractionVector()[i]);
-			G4cout << material->GetElementVector()->at(i)->GetName() << " " << material->GetFractionVector()[i] << G4endl;
 		}
 	}
 

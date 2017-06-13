@@ -1,3 +1,14 @@
+/*
+ * This file is a modification of the source file for 
+ * G4HadronElasticPhysics included in Geant4.10.03. Modified to include
+ * nuclear recoils from the class G4ScreenedNuclearRecoil
+ * 
+ * dhymers 2017/06/12
+ */
+
+
+
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -192,6 +203,8 @@ void myHadronElasticPhysics::ConstructProcess()
     //adding nuclear recoils for generic ion
     else if (pname == "GenericIon"){
         G4ScreenedNuclearRecoil* nucr = new G4ScreenedNuclearRecoil();
+        //upper limit on energy as per
+        //http://hypernews.slac.stanford.edu/HyperNews/geant4/get/phys-list/747/1.html
         nucr->SetMaxEnergyForScattering(100*MeV);
         
         pmanager->AddDiscreteProcess(nucr);

@@ -1,3 +1,11 @@
+/*
+ * ActionInitialization class used as part of migration to Geant 4.10.03
+ * Used to initialize all optional user action classes. Currently set up
+ * only for sequential mode.
+ * 
+ * dhymers 2017/06/12
+ */
+
 #include "TRexActionInitialization.hh"
 
 #include "MiniBallHistoManager.hh"
@@ -17,8 +25,8 @@ TRexActionInitialization::~TRexActionInitialization(){
 
 }
 
+// worker threads and single threaded
 void TRexActionInitialization::Build() const{
-    // set mandatory user action class
     TRexPrimaryGeneratorAction* gen_action = new TRexPrimaryGeneratorAction();
     SetUserAction(gen_action);
 
@@ -29,6 +37,7 @@ void TRexActionInitialization::Build() const{
     SetUserAction(run_action);
 }
 
+//master thread in multithreaded run
 void TRexActionInitialization::BuildForMaster() const{
     //TRexPrimaryGeneratorAction* gen_action = new TRexPrimaryGeneratorAction;
 

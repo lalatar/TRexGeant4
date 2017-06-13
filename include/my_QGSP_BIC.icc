@@ -1,3 +1,13 @@
+/*
+ * This file is a modification of the class template file for 
+ * QGSP_BIC included in Geant4.10.03. The template is modified to use
+ * a modified HadronElasticPhysics class which uses nuclear recoils from
+ * the class G4ScreenedNuclearRecoil
+ * 
+ * dhymers 2017/06/12
+ */
+
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -91,6 +101,7 @@ template<class T> TmyQGSP_BIC<T>::TmyQGSP_BIC(G4int ver):  T()
   this->RegisterPhysics( new G4DecayPhysics(ver) );
 
    // Hadron Elastic scattering
+   //using modified class which includes nuclear recoils
   this->RegisterPhysics( new myHadronElasticPhysics(ver) );
 
    // Hadron Physics
