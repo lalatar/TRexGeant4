@@ -67,7 +67,8 @@ G4bool TRexBarrelErestSingleSensitiveDetector::ProcessHits(G4Step *aStep,
 G4bool TRexBarrelErestSingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 						G4TouchableHistory* ROHist) {
   // only primary particle hits are considered (no secondaries)
-  if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+  //if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+  if (aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV){
 	  return false;
   }
 

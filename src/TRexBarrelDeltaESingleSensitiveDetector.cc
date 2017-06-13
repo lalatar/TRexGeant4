@@ -8,6 +8,8 @@
 #include "TRexBarrelDeltaESingleSensitiveDetector.hh"
 #include "TRexSettings.hh"
 
+
+#include "G4VProcess.hh"
 //TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector() {
 //}
 
@@ -89,10 +91,16 @@ G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits(G4Step *aStep,
 
 G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 		G4TouchableHistory* ROHist) {
+	//G4cout << "===" << G4endl;
 	// only primary particle hits are considered (no secondaries)
-	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+	//if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+	if (aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV){
+	    //if (aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) G4cout << "hit, energy too low" << G4endl;
+	    //if (aStep->GetTrack()->GetParentID() != 0) G4cout << "hit, parent not 0: " << aStep->GetTrack()->GetParentID() << " -- " << aStep->GetTrack()->GetCreatorProcess()->GetProcessName() << G4endl;
 		return false;
 	}
+	
+	//G4cout << "hit" << G4endl;
 
 	TRexHit *hit = new TRexHit(aStep, ROHist);
 	fHitCollection->insert(hit);

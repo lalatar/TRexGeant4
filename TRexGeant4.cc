@@ -29,7 +29,7 @@
 //#include "TRexPhysicsList.hh"
 //#include "PhysicsList.hh"
 
-#include "QGSP_BIC.hh"
+#include "my_QGSP_BIC.hh"
 
 #include "TRexPrimaryGeneratorAction.hh"
 #include "TRexRunAction.hh"
@@ -81,7 +81,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
 
   //G4VUserPhysicsList* physics = new TRexPhysicsList;
-  G4VUserPhysicsList* physics = new QGSP_BIC();
+  G4VUserPhysicsList* physics = new myQGSP_BIC();
   runManager->SetUserInitialization(physics);
 
   runManager->SetUserInitialization(new TRexActionInitialization((TRexDetectorConstruction*)detector, &data, miniballHistoManager));
