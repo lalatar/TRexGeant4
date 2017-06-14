@@ -73,7 +73,7 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4StoppingPhysics.hh"
-#include "myHadronElasticPhysics.hh"
+#include "G4HadronElasticPhysics.hh"
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
@@ -102,7 +102,7 @@ template<class T> TmyQGSP_BIC<T>::TmyQGSP_BIC(G4int ver):  T()
 
    // Hadron Elastic scattering
    //using modified class which includes nuclear recoils
-  this->RegisterPhysics( new myHadronElasticPhysics(ver) );
+  this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
    // Hadron Physics
   this->RegisterPhysics(  new G4HadronPhysicsQGSP_BIC(ver));

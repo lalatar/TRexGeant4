@@ -202,12 +202,12 @@ void myHadronElasticPhysics::ConstructProcess()
     } 
     //adding nuclear recoils for generic ion
     else if (pname == "GenericIon"){
-       G4ScreenedNuclearRecoil* nucr = new G4ScreenedNuclearRecoil();
+       
        //upper limit on energy as per
        //http://hypernews.slac.stanford.edu/HyperNews/geant4/get/phys-list/747/1.html
-       nucr->SetMaxEnergyForScattering(100*MeV);
+       
       
-       pmanager->AddDiscreteProcess(nucr);
+       //pmanager->AddDiscreteProcess(nucr);
     }
     //end of changes
     else if(pname == "proton") {   
