@@ -282,7 +282,7 @@ void myEmStandardPhysics::ConstructProcess()
     } else if (particleName == "GenericIon") {
 	  
 	  //changes to comply with settings for G4ScreenedNuclearRecoil
-      G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ionmsc");
+      G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ihmsc");
       ihmsc->SetLowestKinEnergy(100*MeV);
       ph->RegisterProcess(ihmsc, particle);
       //end changes
