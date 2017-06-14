@@ -1,3 +1,12 @@
+/*
+ * This file is a modification of the source file for 
+ * G4EmStandardPhysics included in Geant4.10.03. Modified to include a
+ * cut on G4hMultipleScattering to comply with conditions suggested for
+ * G4ScreenedNuclearRecoil
+ * 
+ * dhymers 2017/06/14
+ */
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
