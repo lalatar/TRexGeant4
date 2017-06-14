@@ -201,8 +201,8 @@ void myEmStandardPhysics::ConstructProcess()
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
   
   //for genericIon
-  G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ihmsc");
-  ihmsc->SetLowestKinEnergy(100*MeV);
+  G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ionmsc");
+  ihmsc->SetMinKinEnergy(100*MeV);
   //end changes
 
   // high energy limit for e+- scattering models
