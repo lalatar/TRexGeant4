@@ -89,6 +89,8 @@
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
 
+#include "G4ScreenedNuclearRecoil.hh"
+
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
