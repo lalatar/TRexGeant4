@@ -199,6 +199,11 @@ void myEmStandardPhysics::ConstructProcess()
   G4CoulombScattering* pss = new G4CoulombScattering();
 
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
+  
+  //for genericIon
+  G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ihmsc");
+  ihmsc->SetLowestKinEnergy(100*MeV);
+  //end changes
 
   // high energy limit for e+- scattering models
   G4double highEnergyLimit = 100*MeV;
@@ -282,8 +287,6 @@ void myEmStandardPhysics::ConstructProcess()
     } else if (particleName == "GenericIon") {
 	  
 	  //changes to comply with settings for G4ScreenedNuclearRecoil
-      G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ihmsc");
-      ihmsc->SetLowestKinEnergy(100*MeV);
       ph->RegisterProcess(ihmsc, particle);
       //end changes
       ph->RegisterProcess(new G4ionIonisation(), particle);
