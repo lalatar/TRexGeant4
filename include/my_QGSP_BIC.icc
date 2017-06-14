@@ -69,7 +69,7 @@
 #include "G4MaterialTable.hh"
 
 #include "G4DecayPhysics.hh"
-#include "G4EmStandardPhysics.hh"
+#include "myEmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4StoppingPhysics.hh"
@@ -92,7 +92,7 @@ template<class T> TmyQGSP_BIC<T>::TmyQGSP_BIC(G4int ver):  T()
   this->SetVerboseLevel(ver);
 
   // EM Physics
-  this->RegisterPhysics( new G4EmStandardPhysics(ver) );
+  this->RegisterPhysics( new myEmStandardPhysics(ver) );
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics(ver) );

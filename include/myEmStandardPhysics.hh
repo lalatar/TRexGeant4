@@ -41,21 +41,21 @@
 // This class provides construction of default EM standard physics
 //
 
-#ifndef G4EmStandardPhysics_h
-#define G4EmStandardPhysics_h 1
+#ifndef myEmStandardPhysics_h
+#define myEmStandardPhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4EmStandardPhysics : public G4VPhysicsConstructor
+class myEmStandardPhysics : public G4VPhysicsConstructor
 {
 public:
 
-  explicit G4EmStandardPhysics(G4int ver=0, const G4String& name="");
+  explicit myEmStandardPhysics(G4int ver=0, const G4String& name="");
 
-  virtual ~G4EmStandardPhysics();
+  virtual ~myEmStandardPhysics();
 
   virtual void ConstructParticle();
   virtual void ConstructProcess();

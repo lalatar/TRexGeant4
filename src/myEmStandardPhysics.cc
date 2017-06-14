@@ -42,7 +42,7 @@
 //----------------------------------------------------------------------------
 //
 
-#include "G4EmStandardPhysics.hh"
+#include "myEmStandardPhysics.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4EmParameters.hh"
@@ -104,11 +104,11 @@
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
-G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics);
+G4_DECLARE_PHYSCONSTR_FACTORY(myEmStandardPhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String&)
+myEmStandardPhysics::myEmStandardPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
@@ -119,12 +119,12 @@ G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::~G4EmStandardPhysics()
+myEmStandardPhysics::~myEmStandardPhysics()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics::ConstructParticle()
+void myEmStandardPhysics::ConstructParticle()
 {
   // gamma
   G4Gamma::Gamma();
@@ -155,7 +155,7 @@ void G4EmStandardPhysics::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics::ConstructProcess()
+void myEmStandardPhysics::ConstructProcess()
 {
   if(verbose > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
@@ -271,8 +271,12 @@ void G4EmStandardPhysics::ConstructProcess()
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
     } else if (particleName == "GenericIon") {
-
-      ph->RegisterProcess(hmsc, particle);
+	  
+	  //changes to comply with settings for G4ScreenedNuclearRecoil
+      G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ionmsc");
+      ihmsc->SetLowestKinEnergy(100*MeV);
+      ph->RegisterProcess(ihmsc, particle);
+      //end changes
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
     } else if (particleName == "pi+" ||
