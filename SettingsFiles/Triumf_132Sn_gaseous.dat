@@ -7,6 +7,7 @@ AngularDistributionFile:	AngularDistributionFiles/132Sn_dp.dat
 
 # energy of the beam
 BeamEnergy:		792.0		in MeV
+#BeamEnergy:     2640.0 in MeV
 BeamWidth:		1.0		in mm
  
 ProjectileName:		132Sn

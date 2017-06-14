@@ -9,10 +9,14 @@ TRexStackingAction::TRexStackingAction(){
 	particleTable = G4ParticleTable::GetParticleTable();
 	
 	electronDef = nullptr;
+	
+	out.open("electrons.dat", std::ios::app | std::ios::out);
 }
 
 TRexStackingAction::~TRexStackingAction()
-{}
+{
+out.close();
+}
 
 G4ClassificationOfNewTrack TRexStackingAction::ClassifyNewTrack(const G4Track* track){
 	if (electronDef == nullptr){
@@ -25,6 +29,10 @@ G4ClassificationOfNewTrack TRexStackingAction::ClassifyNewTrack(const G4Track* t
     //do not simulate electrons, to speed up simulation
     if(track->GetParticleDefinition() == electronDef){
         classification = fKill;
+        out << track->GetMomentumDirection().getTheta() << ", "
+            << track->GetKineticEnergy() / CLHEP::keV
+            << std::endl;
+        
     }
     
     return classification;

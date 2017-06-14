@@ -6,6 +6,7 @@
 #include "G4ParticleTable.hh"
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
+#include <iostream>
 
 class TRexStackingAction : public G4UserStackingAction{
     public:
@@ -20,6 +21,7 @@ class TRexStackingAction : public G4UserStackingAction{
         G4ParticleDefinition* electronDef;
         
         G4ParticleTable* particleTable;
+        std::ofstream out;
 };
 
 #endif
