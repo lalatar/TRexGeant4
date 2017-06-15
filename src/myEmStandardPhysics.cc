@@ -200,10 +200,10 @@ void myEmStandardPhysics::ConstructProcess()
   pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4CoulombScattering* pss = new G4CoulombScattering();
 
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
+  //G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
   
   //for genericIon
-  G4hMultipleScattering* ihmsc = new G4hMultipleScattering("genionmsc");
+  G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ionmsc");
   G4UrbanMscModel* ihmscmodel = new G4UrbanMscModel();
   ihmscmodel->SetActivationLowEnergyLimit(0*MeV);
   ihmsc->SetEmModel(ihmscmodel, 1);
@@ -360,7 +360,10 @@ void myEmStandardPhysics::ConstructProcess()
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
 
-      ph->RegisterProcess(hmsc, particle);
+	//using screened nuclear recoil at low energy
+      ph->RegisterProcess(ihmsc, particle);
+      ph->RegisterProcess(nucr, particle);
+	//end changes
       ph->RegisterProcess(new G4hIonisation(), particle);
     }
   }
