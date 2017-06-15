@@ -205,7 +205,7 @@ void myEmStandardPhysics::ConstructProcess()
   //for genericIon
   G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ionmsc");
   G4UrbanMscModel* ihmscmodel = new G4UrbanMscModel();
-  ihmscmodel->SetActivationLowEnergyLimit(100*MeV);
+  ihmscmodel->SetActivationLowEnergyLimit(0*MeV);
   ihmsc->SetEmModel(ihmscmodel, 1);
   
   G4ScreenedNuclearRecoil* nucr = new G4ScreenedNuclearRecoil();
@@ -294,7 +294,7 @@ void myEmStandardPhysics::ConstructProcess()
     } else if (particleName == "GenericIon") {
 	  
 	  //changes to comply with settings for G4ScreenedNuclearRecoil
-      ph->RegisterProcess(hmsc, particle);
+      ph->RegisterProcess(ihmsc, particle);
       ph->RegisterProcess(nucr, particle);
       //end changes
       ph->RegisterProcess(new G4ionIonisation(), particle);
