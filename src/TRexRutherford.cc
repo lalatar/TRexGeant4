@@ -16,14 +16,14 @@ TRexRutherford::TRexRutherford() {
 	fNorm = 1./  (1./(sin(fThetaCM_min/CLHEP::rad * 0.5) * sin(fThetaCM_min/CLHEP::rad * 0.5)) -1);
 
 	// calculate reaction energy in the middle of the target
-	fReactionZ = 0.;
-	CalculateReactionEnergyInTheTarget();
+	//fReactionZ = 0.;
+	//CalculateReactionEnergyInTheTarget();
 
 	// calculate the probability for a Rutherford scattering
-	CalculateScatteringProbability();
+	//CalculateScatteringProbability();
 
 	// kinematics calculation before the reaction
-	DoKinematicCalculation();
+	//DoKinematicCalculation();
 }
 
 TRexRutherford::~TRexRutherford() {
@@ -41,6 +41,16 @@ void TRexRutherford::GeneratePrimaries(G4Event *anEvent) {
 		fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
 		
 		fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
+		
+		// calculate reaction energy in the middle of the target
+		fReactionZ = 0.;
+		CalculateReactionEnergyInTheTarget();
+		
+		// calculate the probability for a Rutherford scattering
+		CalculateScatteringProbability();
+		
+		// kinematics calculation before the reaction
+		DoKinematicCalculation();
 		
 		isDefined = true;
 	}
