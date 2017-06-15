@@ -32,7 +32,7 @@ TRexRutherford::~TRexRutherford() {
 
 
 void TRexRutherford::GeneratePrimaries(G4Event *anEvent) {
-	if (isDefined == false)
+	if (isDefined == false){
 		//define nuclei after physics list is instantiated
 		DefineNuclei();
 		
