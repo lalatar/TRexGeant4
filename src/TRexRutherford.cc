@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ *
+ * Modified 2017/06/15 trockman
+ * Call DefineNuclei after physics list is instantiated
  */
 
 #include "TRexRutherford.hh"
@@ -29,6 +32,9 @@ TRexRutherford::~TRexRutherford() {
 
 
 void TRexRutherford::GeneratePrimaries(G4Event *anEvent) {
+    //define nuclei after physics list is instantiated
+    DefineNuclei();
+
 	// shoot the emission point
 	ShootReactionPosition();
 

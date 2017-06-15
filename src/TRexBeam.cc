@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ *
+ * Modified 2017/06/15 trockman
+ * Do not call DefineNuclei until physics list is instantiated
  */
 
 #include "TRexBeam.hh"
@@ -25,7 +28,7 @@ TRexBeam::TRexBeam() :
 	fReactionEnergy = 0.;
 
 	// define nuclei
-	DefineNuclei();
+	//DefineNuclei();
 
 	// define reaction kinematics and energy loss calculations
 	fTargetMaterial = GetTargetMaterial();
