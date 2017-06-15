@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * Modified 2017/06/15 dhymers
+ * To correspond with changes in 4.10
  */
 
 #include "TRexAngularDistribution.hh"
@@ -17,11 +20,6 @@ TRexAngularDistribution::TRexAngularDistribution() :
 	// write the given angular distribution from the text file into Root histograms
 	FillAngularDistributionGraphs();
 	FillAngularDistributionHistos();
-
-	// calculate scattering probability
-	CalculateArealDensity();
-	CalculateCrossSectionIntegral();
-	CalculateScatteringProbability();
 }
 
 TRexAngularDistribution::~TRexAngularDistribution() {
@@ -30,6 +28,24 @@ TRexAngularDistribution::~TRexAngularDistribution() {
 
 
 void TRexAngularDistribution::GeneratePrimaries(G4Event *anEvent) {
+	if (isDefined == false){
+		//define nuclei after physics list is instantiated
+		DefineNuclei();
+		
+		fTargetMaterial = GetTargetMaterial();
+		std::cout << "TargetMaterialName for energy loss calculation in the target = " << fTargetMaterial->Name() << std::endl;
+		fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
+		
+		fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
+				
+		isDefined = true;
+		
+		// calculate scattering probability
+		CalculateArealDensity();
+		CalculateCrossSectionIntegral();
+		CalculateScatteringProbability();
+	}
+	
 	// clear old event
 	fGammaTheta->resize(0);
 	fGammaPhi->resize(0);
