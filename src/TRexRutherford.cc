@@ -6,6 +6,10 @@
  *
  * Modified 2017/06/15 trockman
  * Call DefineNuclei after physics list is instantiated
+ * 
+ * Modified 2017/06/15 dhymers
+ * Moved additional things into first-run call to GeneratePrimaries to
+ * fix some dependency issues.
  */
 
 #include "TRexRutherford.hh"

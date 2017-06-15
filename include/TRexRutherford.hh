@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * Modified 2017/06/15 dhymers
+ * Added isDefined to keep track of first-run instantiations
  */
 
 

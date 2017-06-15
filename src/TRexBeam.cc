@@ -6,6 +6,9 @@
  *
  * Modified 2017/06/15 trockman
  * Do not call DefineNuclei until physics list is instantiated
+ * 
+ * Modified 2017/06/15 dhymers
+ * Moved calls depending on DefineNuclei to occur afterwards
  */
 
 #include "TRexBeam.hh"
