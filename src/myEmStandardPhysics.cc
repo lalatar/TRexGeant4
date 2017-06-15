@@ -205,7 +205,7 @@ void myEmStandardPhysics::ConstructProcess()
   //for genericIon
   G4hMultipleScattering* ihmsc = new G4hMultipleScattering("ionmsc");
   G4UrbanMscModel* ihmscmodel = new G4UrbanMscModel();
-  ihmscmodel->SetActivationLowEnergyLimit(0*MeV);
+  ihmscmodel->SetActivationLowEnergyLimit(100*MeV);
   ihmsc->SetEmModel(ihmscmodel, 1);
   
   G4ScreenedNuclearRecoil* nucr = new G4ScreenedNuclearRecoil();
