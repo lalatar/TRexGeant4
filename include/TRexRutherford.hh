@@ -39,6 +39,8 @@ class TRexRutherford : public TRexBeam {
 		G4double fGamma;
 		G4double fBetaCm3;
 		G4double fBetaCm4;
+		
+		G4bool isDefined = false;
 };
 
 #endif /* TREXRUTHERFORD_HH_ */

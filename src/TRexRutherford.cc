@@ -32,8 +32,18 @@ TRexRutherford::~TRexRutherford() {
 
 
 void TRexRutherford::GeneratePrimaries(G4Event *anEvent) {
-    //define nuclei after physics list is instantiated
-    DefineNuclei();
+	if (isDefined == false)
+		//define nuclei after physics list is instantiated
+		DefineNuclei();
+		
+		fTargetMaterial = GetTargetMaterial();
+		std::cout << "TargetMaterialName for energy loss calculation in the target = " << fTargetMaterial->Name() << std::endl;
+		fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
+		
+		fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
+		
+		isDefined = true;
+	}
 
 	// shoot the emission point
 	ShootReactionPosition();
