@@ -3,13 +3,17 @@
  *
  *  Created on: Jun 15, 2014
  *      Author: sklupp
+ * 
+ * modified to use custom QGSP_BIC physics list, which includes
+ * nuclear recoils on GenericIon class.
+ * dhymers 2017/06/12
  */
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
+//#ifdef G4MULTITHREADED
+//#include "G4MTRunManager.hh"
+//#else
 #include "G4RunManager.hh"
-#endif
+//#endif
 
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
@@ -27,7 +31,10 @@
 
 #include "TRexDetectorConstruction.hh"
 //#include "TRexPhysicsList.hh"
-#include "PhysicsList.hh"
+//#include "PhysicsList.hh"
+
+#include "my_QGSP_BIC.hh"
+
 #include "TRexPrimaryGeneratorAction.hh"
 #include "TRexRunAction.hh"
 #include "TRexEventAction.hh"
@@ -37,6 +44,8 @@
 #include "MiniBallHistoManager.hh"
 #include "MiniBallHistoGenerator.hh"
 #include "MiniBallRootGenerator.hh"
+
+#include "TRexActionInitialization.hh"
 
 #include "Randomize.hh"
 
@@ -58,13 +67,13 @@ int main(int argc,char** argv) {
   // Construct the default run manager  //
   //#ifdef G4MULTITHREADED
   //  G4cout << "RUNNING MULTITHREADED" << G4endl;
-  //  G4int nThreads = 2;
+  //  G4int nThreads = 1;
   //  G4MTRunManager * runManager = new G4MTRunManager;
   //	runManager->SetNumberOfThreads(nThreads);
   //#else
+  //Miniball structure restricts us to single threaded only
   G4RunManager * runManager = new G4RunManager;
   //#endif
-
 
   // initalize Miniball
   MiniBallRootGenerator* miniballHistoGen = new MiniBallRootGenerator(data.GetOutputFileName(), 5);
@@ -77,24 +86,13 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
 
   //G4VUserPhysicsList* physics = new TRexPhysicsList;
-  G4VUserPhysicsList* physics = new PhysicsList;
+  //using custom physics lists
+  G4VUserPhysicsList* physics = new myQGSP_BIC();
   runManager->SetUserInitialization(physics);
 
+  runManager->SetUserInitialization(new TRexActionInitialization((TRexDetectorConstruction*)detector, &data, miniballHistoManager));
+
   runManager->Initialize();
-
-  // set mandatory user action class
-  G4VUserPrimaryGeneratorAction* gen_action = new TRexPrimaryGeneratorAction;
-  runManager->SetUserAction(gen_action);
-
-  G4UserEventAction* event_action = new TRexEventAction((TRexDetectorConstruction*) detector, miniballHistoManager);
-  runManager->SetUserAction(event_action);
-
-  G4UserRunAction* run_action = new TRexRunAction(data, (TRexPrimaryGeneratorAction*)gen_action, (TRexEventAction*) event_action);
-  runManager->SetUserAction(run_action);
-
-
-  // Initialize G4 kernel
-  //runManager->Initialize();
 
   // visualization
 #ifdef G4VIS_USE
@@ -116,10 +114,11 @@ int main(int argc,char** argv) {
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
   //
-  delete runManager;
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+  delete runManager;
+
   delete session;
 
   return 0;

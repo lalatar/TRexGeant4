@@ -3,11 +3,18 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * 
+ * modified to remove condition that only hits from particles with
+ * parent ID 0 are collected
+ * dhymers 2017/06/12
  */
 
 #include "TRexBarrelDeltaESingleSensitiveDetector.hh"
 #include "TRexSettings.hh"
 
+
+#include "G4VProcess.hh"
 //TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector() {
 //}
 
@@ -90,7 +97,10 @@ G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits(G4Step *aStep,
 G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 		G4TouchableHistory* ROHist) {
 	// only primary particle hits are considered (no secondaries)
-	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+	//if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+	//using energy cut only, allows incoming beam to generate detectable
+	//particles
+	if (aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV){
 		return false;
 	}
 

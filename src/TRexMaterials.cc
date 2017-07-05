@@ -1,3 +1,13 @@
+/*
+ * Builds materials for use in TRex simulation.
+ * 
+ * 
+ * Modified to add tin target (G4_Sn)
+ * dhymers 2017/06/12
+ * 
+ */
+
+
 #include "TRexMaterials.hh"
 #include "MiniBallMaterial.hh"
 #include "TRexSettings.hh"
@@ -113,6 +123,9 @@ TRexMaterials::TRexMaterials() {
 
 	G4Material* iron = fManager->FindOrBuildMaterial("G4_Fe");
 	iron->SetName("iron");
+	
+	G4Material* tin = fManager->FindOrBuildMaterial("G4_Sn");
+	tin->SetName("tin");
 
 	G4Material* silver = fManager->FindOrBuildMaterial("G4_Ag");
 	silver->SetName("silver");

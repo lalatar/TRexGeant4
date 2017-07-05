@@ -3,6 +3,12 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ *
+ * Modified 2017/06/15 trockman
+ * Do not call DefineNuclei until physics list is instantiated
+ * 
+ * Modified 2017/06/15 dhymers
+ * Moved calls depending on DefineNuclei to occur afterwards
  */
 
 #include "TRexBeam.hh"
@@ -25,15 +31,15 @@ TRexBeam::TRexBeam() :
 	fReactionEnergy = 0.;
 
 	// define nuclei
-	DefineNuclei();
+	//DefineNuclei();
 
 	// define reaction kinematics and energy loss calculations
-	fTargetMaterial = GetTargetMaterial();
-	std::cout << "TargetMaterialName for energy loss calculation in the target = " << fTargetMaterial->Name() << std::endl;
-	fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
+	//fTargetMaterial = GetTargetMaterial();
+	//std::cout << "TargetMaterialName for energy loss calculation in the target = " << fTargetMaterial->Name() << std::endl;
+	//fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
 
 	// energy loss in the target
-	fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
+	//fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
 
 	//	TFile bla("bla.root", "recreate");
 	//	bla.cd();

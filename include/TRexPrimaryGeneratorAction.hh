@@ -3,6 +3,11 @@
  *
  *  Created on: Jun 15, 2014
  *      Author: sklupp
+ * 
+ * Added TRexBeamIn.hh include to allow use of additional primary
+ * generator
+ * dhymers 2017/05/26
+ * 
  */
 
 #ifndef TREXPRIMARYGENERATORACTION_HH_
@@ -13,6 +18,7 @@
 #include "TRexAlphaSource.hh"
 #include "TRexRutherford.hh"
 #include "TRexAngularDistribution.hh"
+#include "TRexBeamIn.hh"
 
 #include "MBglobals.hh"
 #include "MiniBallSource.hh"

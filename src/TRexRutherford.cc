@@ -3,6 +3,13 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ *
+ * Modified 2017/06/15 trockman
+ * Call DefineNuclei after physics list is instantiated
+ * 
+ * Modified 2017/06/15 dhymers
+ * Moved additional things into first-run call to GeneratePrimaries to
+ * fix some dependency issues.
  */
 
 #include "TRexRutherford.hh"
@@ -13,14 +20,14 @@ TRexRutherford::TRexRutherford() {
 	fNorm = 1./  (1./(sin(fThetaCM_min/CLHEP::rad * 0.5) * sin(fThetaCM_min/CLHEP::rad * 0.5)) -1);
 
 	// calculate reaction energy in the middle of the target
-	fReactionZ = 0.;
-	CalculateReactionEnergyInTheTarget();
+	//fReactionZ = 0.;
+	//CalculateReactionEnergyInTheTarget();
 
 	// calculate the probability for a Rutherford scattering
-	CalculateScatteringProbability();
+	//CalculateScatteringProbability();
 
 	// kinematics calculation before the reaction
-	DoKinematicCalculation();
+	//DoKinematicCalculation();
 }
 
 TRexRutherford::~TRexRutherford() {
@@ -29,6 +36,29 @@ TRexRutherford::~TRexRutherford() {
 
 
 void TRexRutherford::GeneratePrimaries(G4Event *anEvent) {
+	if (isDefined == false){
+		//define nuclei after physics list is instantiated
+		DefineNuclei();
+		
+		fTargetMaterial = GetTargetMaterial();
+		std::cout << "TargetMaterialName for energy loss calculation in the target = " << fTargetMaterial->Name() << std::endl;
+		fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
+		
+		fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
+		
+		// calculate reaction energy in the middle of the target
+		fReactionZ = 0.;
+		CalculateReactionEnergyInTheTarget();
+		
+		// calculate the probability for a Rutherford scattering
+		CalculateScatteringProbability();
+		
+		// kinematics calculation before the reaction
+		DoKinematicCalculation();
+		
+		isDefined = true;
+	}
+
 	// shoot the emission point
 	ShootReactionPosition();
 
