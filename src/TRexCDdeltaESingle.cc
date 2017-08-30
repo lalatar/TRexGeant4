@@ -64,12 +64,12 @@ void TRexCDdeltaESingle::Construct(G4LogicalVolume* experimentalHall_log, G4SDMa
 	}
 
 	// include dead layers ?
-	if(fDeadLayer > 0.1*um) {
+	if(fDeadLayer > 0.1*CLHEP::um) {
 		ConstructDeadLayer(experimentalHall_log);
 	}
 
 	// protection foils ?
-	if(fFoilThickness > 0.1*um) {
+	if(fFoilThickness > 0.1*CLHEP::um) {
 		ConstructFoil(experimentalHall_log);
 	}
 }
@@ -103,12 +103,12 @@ void TRexCDdeltaESingle::ConstructSilicon(G4LogicalVolume* experimentalHall_log,
 void TRexCDdeltaESingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) {
 	G4Material* pcb = TRexMaterials::Get()->GetMaterial("pcb");
 
-	G4double pcbInnerRadius = 7.4 * mm;
-	G4double pcbOuterRadius = 61.0 * mm;
-	G4double pcbThickness = 2.0 * mm;
+	G4double pcbInnerRadius = 7.4 * CLHEP::mm;
+	G4double pcbOuterRadius = 61.0 * CLHEP::mm;
+	G4double pcbThickness = 2.0 * CLHEP::mm;
 
 	// pcb start volume
-	G4Tubs* pcbtot_solid = new G4Tubs("PCB1_solid", 0., pcbOuterRadius, pcbThickness /2., fStartAngleDetector - 4*degree, 90.*degree);
+	G4Tubs* pcbtot_solid = new G4Tubs("PCB1_solid", 0., pcbOuterRadius, pcbThickness /2., fStartAngleDetector - 4*CLHEP::degree, 90.*CLHEP::degree);
 
 	// inner quadratic hole
 	G4Box* pcbhole = new G4Box("PCBHole_solid", pcbInnerRadius/sqrt(2.), pcbInnerRadius/sqrt(2.), pcbThickness*2.);
@@ -156,12 +156,12 @@ void TRexCDdeltaESingle::ConstructDeadLayer(G4LogicalVolume* experimentalHall_lo
 void TRexCDdeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log) {
 	G4Material* foilMaterial = TRexMaterials::Get()->GetMaterial("mylar");
 
-	G4double foilInnerRadius = 6.0 * mm;
-	G4double foilOuterRadius = 47.0 * mm;
-	G4double foilDistance = (1.5 + 2.0) * mm;
+	G4double foilInnerRadius = 6.0 * CLHEP::mm;
+	G4double foilOuterRadius = 47.0 * CLHEP::mm;
+	G4double foilDistance = (1.5 + 2.0) * CLHEP::mm;
 
 	// pcb start volume
-	G4Tubs* foil_solid = new G4Tubs("Foil1_solid", foilInnerRadius, foilOuterRadius, fFoilThickness /2., fStartAngleDetector - 4*degree, 90.*degree);
+	G4Tubs* foil_solid = new G4Tubs("Foil1_solid", foilInnerRadius, foilOuterRadius, fFoilThickness /2., fStartAngleDetector - 4*CLHEP::degree, 90.*CLHEP::degree);
 
 	G4LogicalVolume* foil_log = new G4LogicalVolume(foil_solid, foilMaterial, "foilCD_log");
 

@@ -3,11 +3,18 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * 
+ * modified to remove condition that only hits from particles with
+ * parent ID 0 are collected
+ * dhymers 2017/06/12
  */
 
 #include "TRexBarrelDeltaESingleSensitiveDetector.hh"
 #include "TRexSettings.hh"
 
+ 
+#include "G4VProcess.hh"
 //TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector() {
 //}
 
@@ -28,12 +35,16 @@ TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector
 	if(fBaseName == "FBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetFBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetFBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetFBarrelDeltaESingleEnergyResolution();
 	} else if(fBaseName == "SecondFBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetSecondFBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetSecondFBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetSecondFBarrelDeltaESingleEnergyResolution();
 	} else if(fBaseName == "MBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetMBarrelDeltaESingleLengthX();
@@ -43,12 +54,16 @@ TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector
 	} else if(fBaseName == "BBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetBBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetBBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetBBarrelDeltaESingleEnergyResolution();
 	} else if(fBaseName == "SecondBBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetSecondBBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetSecondBBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetSecondBBarrelDeltaESingleEnergyResolution();
 	} else {
 		std::cerr<<"Detector Name "<<fBaseName<<" is wrong!"<<std::endl;
@@ -90,7 +105,10 @@ G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits(G4Step *aStep,
 G4bool TRexBarrelDeltaESingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 		G4TouchableHistory* ROHist) {
 	// only primary particle hits are considered (no secondaries)
-	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV) {
+	//if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+	//using energy cut only, allows incoming beam to generate detectable
+	//particles
+	if (aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV){
 		return false;
 	}
 
@@ -173,7 +191,6 @@ void TRexBarrelDeltaESingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 			// for double-sided strip detectors we have to do the same for the strips parallel to the beam (called rings here)
 			if(!TRexSettings::Get()->ResistiveStrips()) {
 				//loop over the strips perpendicular to the beam we already have and see if we can find the current one
-				size_t j;
 				for(j = 0; j < ringNb.size(); ++j) {
 					//same ring number
 					if(currentRingNb == ringNb[j]) {
@@ -201,25 +218,25 @@ void TRexBarrelDeltaESingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 		// loop over all strips we've found and add them
 		for(size_t i = 0; i < stripNb.size(); ++i) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-					stripEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
+					stripEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV;
 			}
-			fBarrelDeltaESingle->AddStrip(stripNb[i], stripEnergy[i]/keV, stripA[i], stripZ[i], stripTrackID[i], stripTime[i], stripStopped[i]);
+			fBarrelDeltaESingle->AddStrip(stripNb[i], stripEnergy[i]/CLHEP::keV, stripA[i], stripZ[i], stripTrackID[i], stripTime[i], stripStopped[i]);
 		}
 
 		// loop over all rings we've found and add them
 		for(size_t i = 0; i < ringNb.size(); ++i) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-					ringEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV;
+					ringEnergy[i] += CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV;
 			}
-			fBarrelDeltaESingle->AddRing(ringNb[i], ringEnergy[i]/keV, ringA[i], ringZ[i], ringTrackID[i], ringTime[i], ringStopped[i]);
+			fBarrelDeltaESingle->AddRing(ringNb[i], ringEnergy[i]/CLHEP::keV, ringA[i], ringZ[i], ringTrackID[i], ringTime[i], ringStopped[i]);
 		}
 
 		// for a resistive strip detector we set the energy of the rear to the total energy deposited
 		if(fHitCollection->entries() > 0 && TRexSettings::Get()->ResistiveStrips()) {
 			if(TRexSettings::Get()->IncludeEnergyResolution()) {
-				fBarrelDeltaESingle->SetRear((GetTotalEnergyDeposition() + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
+				fBarrelDeltaESingle->SetRear((GetTotalEnergyDeposition() + CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV) / CLHEP::keV);
 			} else {
-				fBarrelDeltaESingle->SetRear(GetTotalEnergyDeposition() / keV);
+				fBarrelDeltaESingle->SetRear(GetTotalEnergyDeposition() / CLHEP::keV);
 			}
 		}
 		//fBarrelDeltaESingle->SetRear(posAlongStrip);
@@ -256,9 +273,9 @@ int TRexBarrelDeltaESingleSensitiveDetector::GetStripNumber(G4ThreeVector localP
 		z -= 1e-5;
 	}
 
-	stripNb =  static_cast<int>(z/fStripWidth);
+	stripNb =  static_cast<int>(z/fStripWidthPar);
 
-	if(stripNb > static_cast<int>(fLengthY/fStripWidth) || stripNb < 0) {
+	if(stripNb > static_cast<int>(fLengthY/fStripWidthPar) || stripNb < 0) {
 		std::cout<<"Problem: fID = "<<fID<<" , localZ = "<<z<<" , stripNb = "<<stripNb<<std::endl;
 		return -1;
 	}
@@ -277,9 +294,9 @@ int TRexBarrelDeltaESingleSensitiveDetector::GetRingNumber(G4ThreeVector localPo
 		y -= 1e-5;
 	}
 
-	ringNb =  static_cast<int>(y/fStripWidth);
+	ringNb =  static_cast<int>(y/fStripWidthPer);
 
-	if(ringNb > static_cast<int>(fLengthX/fStripWidth) || ringNb < 0) {
+	if(ringNb > static_cast<int>(fLengthX/fStripWidthPer) || ringNb < 0) {
 		std::cout<<"Problem: fID = "<<fID<<" , localZ = "<<y<<" , ringNb = "<<ringNb<<std::endl;
 		return -1;
 	}
@@ -299,7 +316,7 @@ int TRexBarrelDeltaESingleSensitiveDetector::IsStopped(int hitIndex, double &res
 	bool isLastHit;
 	if(hitIndex == fHitCollection->entries() - 1) {
 		isLastHit = true;
-	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ) { // check if it is the same particle
+	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*CLHEP::eV ) { // check if it is the same particle
 		isLastHit = false;
 	} else {
 		isLastHit = true;
@@ -308,10 +325,10 @@ int TRexBarrelDeltaESingleSensitiveDetector::IsStopped(int hitIndex, double &res
 	if(isLastHit == false)
 		return -2;
 
-	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / keV;
+	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / CLHEP::keV;
 
 	// check if particle is stopped
-	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV) {
+	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*CLHEP::eV) {
 		// stopped
 		return 1;
 	} else {

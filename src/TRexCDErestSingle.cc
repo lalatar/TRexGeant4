@@ -58,7 +58,7 @@ void TRexCDErestSingle::Construct(G4LogicalVolume* experimentalHall_log, G4SDMan
 	}
 
 	// include dead layers ?
-	if(fDeadLayer > 0.1*um) {
+	if(fDeadLayer > 0.1*CLHEP::um) {
 		ConstructDeadLayer(experimentalHall_log);
 	}
 }
@@ -72,7 +72,7 @@ void TRexCDErestSingle::ConstructSilicon(G4LogicalVolume* experimentalHall_log, 
 	fLogicalVolume = new G4LogicalVolume(fSolid, detectorMaterial, fName + "_log", 0,0 ,0);
 
 	//G4RotationMatrix* rotMatrix = new G4RotationMatrix;
-	//rotMatrix->rotateX(90.*deg);
+	//rotMatrix->rotateX(90.*CLHEP::deg);
 	//fPhysicalVolume = new G4PVPlacement(rotMatrix, fPos,
 	//		fLogicalVolume, "detectorWithHole", experimentalHall_log, false, 0);
 
@@ -92,12 +92,12 @@ void TRexCDErestSingle::ConstructSilicon(G4LogicalVolume* experimentalHall_log, 
 void TRexCDErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) {
 	G4Material* pcb = TRexMaterials::Get()->GetMaterial("pcb");
 
-	G4double pcbInnerRadius = 7.4 * mm;
-	G4double pcbOuterRadius = 61.0 * mm;
-	G4double pcbThickness = 2.0 * mm;
+	G4double pcbInnerRadius = 7.4 * CLHEP::mm;
+	G4double pcbOuterRadius = 61.0 * CLHEP::mm;
+	G4double pcbThickness = 2.0 * CLHEP::mm;
 
 	// pcb start volume
-	G4Tubs* pcbtot_solid = new G4Tubs("PCB1_solid", 0., pcbOuterRadius, pcbThickness /2., fStartAngleDetector - 4*degree, 90.*degree);
+	G4Tubs* pcbtot_solid = new G4Tubs("PCB1_solid", 0., pcbOuterRadius, pcbThickness /2., fStartAngleDetector - 4*CLHEP::degree, 90.*CLHEP::degree);
 
 	// inner quadratic hole
 	G4Box* pcbhole = new G4Box("PCBHole_solid", pcbInnerRadius/sqrt(2.), pcbInnerRadius/sqrt(2.), pcbThickness*2.);

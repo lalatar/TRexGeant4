@@ -3,10 +3,15 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * Modified 2017/06/15 dhymers
+ * To correspond with changes in 4.10
  */
 
 #include "TRexAngularDistribution.hh"
 #include "TRexSettings.hh"
+
+// Leila: Flat reactionX/Y/Z distribution comes from TRexBeam.cc TRexBeam ::ShootReactionPosition() 
 
 TRexAngularDistribution::TRexAngularDistribution() :
 	fScatteringProbabilitySingle(0) {
@@ -17,19 +22,32 @@ TRexAngularDistribution::TRexAngularDistribution() :
 	// write the given angular distribution from the text file into Root histograms
 	FillAngularDistributionGraphs();
 	FillAngularDistributionHistos();
-
-	// calculate scattering probability
-	CalculateArealDensity();
-	CalculateCrossSectionIntegral();
-	CalculateScatteringProbability();
 }
 
 TRexAngularDistribution::~TRexAngularDistribution() {
 	// TODO Auto-generated destructor stub
 }
 
-
 void TRexAngularDistribution::GeneratePrimaries(G4Event *anEvent) {
+	if (isDefined == false){
+		//define nuclei after physics list is instantiated
+		DefineNuclei();
+		
+		fTargetMaterial = GetTargetMaterial();
+		std::cout << "TargetMaterialName for energy loss calculation in the target = " << fTargetMaterial->Name() << std::endl;
+		
+		fKinematics = new Kinematic(&fProjectile, fTargetMaterial, TRexSettings::Get()->GetTargetThickness()/(CLHEP::mg/CLHEP::cm2));
+		
+		fEnergyVsTargetDepth = *(fKinematics->EnergyVsThickness(fBeamEnergy / CLHEP::MeV, TRexSettings::Get()->GetTargetThickness() / 1000 / (CLHEP::mg/CLHEP::cm2)));
+				
+		isDefined = true;
+		
+		// calculate scattering probability
+		CalculateArealDensity();
+		CalculateCrossSectionIntegral();
+		CalculateScatteringProbability();
+	}
+	
 	// clear old event
 	fGammaTheta->resize(0);
 	fGammaPhi->resize(0);
@@ -108,6 +126,17 @@ void TRexAngularDistribution::ShootThetaCm(int levelNb) {
 	}
 }
 
+/*void TRexAngularDistribution::ShootReactionPosition() {
+	
+	fBeamWidth = TRexSettings::Get()->GetBeamWidth();
+	
+	//select random x and y position on a disk with diameter beamWidth
+	do {
+		fReactionX = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * CLHEP::mm;
+		fReactionY = CLHEP::RandFlat::shoot(-fBeamWidth / 2., fBeamWidth / 2.) * CLHEP::mm;
+	} while(sqrt(pow(fReactionX,2)+pow(fReactionY,2)) > fBeamWidth / 2.);	
+}*/
+
 
 void TRexAngularDistribution::ShootReactionTypeAndExcitationEnergy() {
 	// decide whether to simulate transfer reaction / Coulex reaction or elastic Rutherford scattering
@@ -127,7 +156,7 @@ void TRexAngularDistribution::ShootReactionTypeAndExcitationEnergy() {
 			fReaction = fNbOfLevels;
 		} else {
 			// shoot elastic Rutherford channel
-			double tmp = CLHEP::RandFlat::shoot(fScatteringProbabilitySingle[fNbOfLevels - 1],
+			tmp = CLHEP::RandFlat::shoot(fScatteringProbabilitySingle[fNbOfLevels - 1],
 					fScatteringProbabilitySingle[fNbOfLevels + fTargetMaterial->NumberOfElements() - 1]);
 
 			for(fReaction = fNbOfLevels; tmp > fScatteringProbabilitySingle[fReaction]; fReaction++) {
@@ -333,12 +362,12 @@ void TRexAngularDistribution::FillAngularDistributionHistos() {
 
 void TRexAngularDistribution::CalculateArealDensity() {
 	if(fTargetMaterial->NumberOfElements() == 1) {
-		fArealDensity.push_back(TRexSettings::Get()->GetTargetThickness() * Avogadro / (fTargetMaterial->GetElement(0)->A() * g/mole));
+		fArealDensity.push_back(TRexSettings::Get()->GetTargetThickness() * CLHEP::Avogadro / (fTargetMaterial->GetElement(0)->A() * g/mole));
 	} else {
 		double atomicRatio[2] = {1.0, TRexSettings::Get()->GetTargetAtomicRatio()};
 
 		for(size_t i = 0; i < fTargetMaterial->NumberOfElements(); ++i) {
-			fArealDensity.push_back(atomicRatio[i] * TRexSettings::Get()->GetTargetThickness() * Avogadro /
+			fArealDensity.push_back(atomicRatio[i] * TRexSettings::Get()->GetTargetThickness() * CLHEP::Avogadro /
 					(fTargetMaterial->GetElement(0)->A() * g/mole + TRexSettings::Get()->GetTargetAtomicRatio() * fTargetMaterial->GetElement(1)->A() * g/mole));
 		}
 	}
@@ -367,7 +396,7 @@ void TRexAngularDistribution::CalculateCrossSectionIntegral() {
 	// elastic scattering (using Rutherford scattering)
 	for(size_t i = 0; i < fTargetMaterial->NumberOfElements(); ++i) {
 		// Rutherford factor
-		G4double RF = fProjectileZ * fTargetMaterial->Z(i) * eplus * eplus / (16. * M_PI * epsilon0);
+		G4double RF = fProjectileZ * fTargetMaterial->Z(i) * eplus * eplus / (16. * M_PI * CLHEP::epsilon0);
 		RF *= RF;
 
 		G4double fBeamEnergyMiddleTarget = fEnergyVsTargetDepth.Eval(TRexSettings::Get()->GetTargetThickness() / 2. /(mg/cm2))*MeV;
@@ -427,12 +456,12 @@ void TRexAngularDistribution::CalculateScatteringProbability() {
 			fScatteringProbabilitySingle.push_back(fScatteringProbabilitySingle[index-1] +
 					fArealDensity[fTargetMaterial->NumberOfElements()-1] * fCrossSectionIntegral[index]);
 
-			std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[fTargetMaterial->NumberOfElements()-1] * cm2
+			std::cout << "index for transfer(leila) = " << index << "fTargetMaterial->NumberOfElements(leila):"<<fTargetMaterial->NumberOfElements()<<" , fArealDensity = " << fArealDensity[fTargetMaterial->NumberOfElements()-1] * cm2
 				<< " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
 		} else { // elastic Rutherford cross sections
 			fScatteringProbabilitySingle.push_back(fScatteringProbabilitySingle[index-1] +  fArealDensity[index - fNbOfLevels] * fCrossSectionIntegral[index]);
 
-			std::cout << "index = " << index << " , fArealDensity = " << fArealDensity[index - fNbOfLevels] * cm2 << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
+			std::cout << "index for elastic(leila)= " << index << " , fArealDensity = " << fArealDensity[index - fNbOfLevels] * cm2 << " , fCrossSectionIntegral = " << fCrossSectionIntegral[index] / millibarn << std::endl;
 		}
 		std::cout << "ScatteringProbability(transfer)[" << index << "] = " << fScatteringProbabilitySingle[index] << std::endl;
 	}
@@ -444,7 +473,7 @@ void TRexAngularDistribution::CalculateScatteringProbability() {
 	if(fThetaCM < 0.00001 * degree) {
 		fScatteringProbability = fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability();
 	}
-	//std::cout << "ScatteringProbabilityTree = " << fScatteringProbability << " = ? "<< fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability() << std::endl;
+	std::cout << "leila: "<<0.00001 * degree<<" ScatteringProbabilityTree total(leila) = " << fScatteringProbability << " = ? "<< fScatteringProbabilitySingle[fNbOfLevels - 1] * TRexSettings::Get()->GetTransferOrCoulexProbability() << std::endl;// commented in by Leila 28.07.2017
 }
 
 

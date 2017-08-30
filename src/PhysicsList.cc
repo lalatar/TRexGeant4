@@ -32,10 +32,12 @@
 #include "globals.hh"
 #include "PhysicsList.hh"
 
+#include "G4PhysicsListHelper.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4IonConstructor.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -166,9 +168,10 @@ void PhysicsList::ConstructProcess() {
 void PhysicsList::ConstructEM() {
 	G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-	theParticleIterator->reset();
-	while( (*theParticleIterator)() ) {
-		G4ParticleDefinition* particle = theParticleIterator->value();
+	auto aParticleIterator = GetParticleIterator();
+	aParticleIterator->reset();
+	while( (*aParticleIterator)() ) {
+		G4ParticleDefinition* particle = aParticleIterator->value();
 		G4String particleName = particle->GetParticleName();
 
 		if (particleName == "gamma") {
@@ -237,9 +240,10 @@ void PhysicsList::ConstructGeneral() {
 
 	// Add Decay Process
 	G4Decay* theDecayProcess = new G4Decay();
-	theParticleIterator->reset();
-	while( (*theParticleIterator)() ) {
-		G4ParticleDefinition* particle = theParticleIterator->value();
+	auto aParticleIterator = GetParticleIterator();
+	aParticleIterator->reset();
+	while( (*aParticleIterator)() ) {
+		G4ParticleDefinition* particle = aParticleIterator->value();
 		if (theDecayProcess->IsApplicable(*particle)) { 
 			ph->RegisterProcess(theDecayProcess, particle);    
 		}
@@ -256,9 +260,10 @@ void PhysicsList::AddStepMax() {
 	G4StepLimiter* stepLimiter = new G4StepLimiter();
 	////G4UserSpecialCuts* userCuts = new G4UserSpecialCuts();
 
-	theParticleIterator->reset();
-	while ((*theParticleIterator)()) {
-		G4ParticleDefinition* particle = theParticleIterator->value();
+	auto aParticleIterator = GetParticleIterator();
+	aParticleIterator->reset();
+	while ((*aParticleIterator)()) {
+		G4ParticleDefinition* particle = aParticleIterator->value();
 		G4ProcessManager* pmanager = particle->GetProcessManager();
 
 		if (particle->GetPDGCharge() != 0.0)
@@ -305,9 +310,10 @@ void PhysicsList::ConstructOptical() {
 	cerenkov->SetMaxBetaChangePerStep(10);
 	cerenkov->SetTrackSecondariesFirst(true);
 
-	theParticleIterator->reset();
-	while ((*theParticleIterator)()) {
-		G4ParticleDefinition* particle = theParticleIterator->value();
+	auto aParticleIterator = GetParticleIterator();
+	aParticleIterator->reset();
+	while ((*aParticleIterator)()) {
+		G4ParticleDefinition* particle = aParticleIterator->value();
 		if (scintillation->IsApplicable(*particle))
 			//		  this->RegisterProcess(scintillation, particle);
 			if (cerenkov->IsApplicable(*particle))
@@ -324,14 +330,15 @@ void PhysicsList::ConstructOptical() {
 
 // #include "LightCreator.hh"
 // void PhysicsList::ConstructLight() {
-// 	 theParticleIterator->reset();
+//     auto aParticleIterator = GetParticleIterator();
+// 	 aParticleIterator->reset();
 // 	 LightCreator* light = new LightCreator();
 // 	 light->setLampAdjustment(input->getLampAdjustment());
 // 	 light->setLampGas(input->getLampSettings().gas);
 
 
-// 	  while ((*theParticleIterator)()) {
-// 	      G4ParticleDefinition* particle = theParticleIterator->value();
+// 	  while ((*aParticleIterator)()) {
+// 	      G4ParticleDefinition* particle = aParticleIterator->value();
 // 	      G4ProcessManager* pmanager = particle->GetProcessManager();
 // 	      if (particle->GetParticleName() == "alpha")	        {
 // 	          pmanager ->AddDiscreteProcess(light);

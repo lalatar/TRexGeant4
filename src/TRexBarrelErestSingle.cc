@@ -25,8 +25,8 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 
 		fDeadLayer = TRexSettings::Get()->GetFBarrelErestSingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetFBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetFBarrelErestSinglePosZ()[fId]);
 	} else if(fDirection == "middle") {
 		fDetectorLengthX = TRexSettings::Get()->GetMBarrelErestSingleLengthX();
@@ -36,8 +36,8 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 
 		fDeadLayer = TRexSettings::Get()->GetMBarrelErestSingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetMBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetMBarrelErestSinglePosZ()[fId]);
 	} else if(fDirection == "backward") {
 		fDetectorLengthX = TRexSettings::Get()->GetBBarrelErestSingleLengthX();
@@ -47,8 +47,8 @@ TRexBarrelErestSingle::TRexBarrelErestSingle(std::string name, std::string direc
 
 		fDeadLayer = TRexSettings::Get()->GetBBarrelErestSingleDeadLayer();
 
-		fPos = G4ThreeVector(TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / rad),
-									TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / rad),
+		fPos = G4ThreeVector(TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * cos(fStartAngleDetector / CLHEP::rad),
+									TRexSettings::Get()->GetBBarrelErestSingleDistanceToBeam()[fId] * sin(fStartAngleDetector / CLHEP::rad),
 									TRexSettings::Get()->GetBBarrelErestSinglePosZ()[fId]);
 	} else {
 		std::cerr << "Direction " << fDirection << " is wrong! Use forward or backward." << std::endl;
@@ -72,7 +72,7 @@ void TRexBarrelErestSingle::Construct(G4LogicalVolume* experimentalHall_log, G4S
 	}
 
 	// include dead layers ?
-	if(fDeadLayer > 0.1*um) {
+	if(fDeadLayer > 0.1*CLHEP::um) {
 		ConstructDeadLayer(experimentalHall_log);
 	}
 }
@@ -105,13 +105,13 @@ void TRexBarrelErestSingle::ConstructSilicon(G4LogicalVolume* experimentalHall_l
 void TRexBarrelErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) {
 	G4Material* pcb = TRexMaterials::Get()->GetMaterial("pcb");
 
-	G4double pcbWidth = 89 * mm;
-	G4double pcbThickness = 1.5 * mm;
-	G4double pcbLength = 54 * mm;
-	G4double pcbRecessWidth = 23 * mm;
-	G4double pcbRecessLength = 22 * mm;
-	G4double barrelDisplacement = 16.5 * mm;
-	//G4double pcbEdgeWidth = 78 * mm;
+	G4double pcbWidth = 89 * CLHEP::mm;
+	G4double pcbThickness = 1.5 * CLHEP::mm;
+	G4double pcbLength = 54 * CLHEP::mm;
+	G4double pcbRecessWidth = 23 * CLHEP::mm;
+	G4double pcbRecessLength = 22 * CLHEP::mm;
+	G4double barrelDisplacement = 16.5 * CLHEP::mm;
+	//G4double pcbEdgeWidth = 78 * CLHEP::mm;
 
 	G4Box* PCB_dE = new G4Box("PCB_dE", pcbThickness / 2., pcbWidth / 2., pcbLength / 2.);
 
@@ -136,26 +136,26 @@ void TRexBarrelErestSingle::ConstructPCB(G4LogicalVolume* experimentalHall_log) 
 	fRotMatrixPcb = fRotMatrix;
 
 	G4ThreeVector pcbPos = fPos;
-	pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / rad));
-	pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / rad));
+	pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+	pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 
 	if(fabs(fPos.x()) < 0.1) {
-		fRotMatrixPcb->rotateX(180.*degree);
-		pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / rad));
-		pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / rad));
+		fRotMatrixPcb->rotateX(180.*CLHEP::degree);
+		pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+		pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 	}
 
 	if(fDirection == "backward") {
-		pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / rad));
-		pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / rad));
+		pcbPos.setX(fPos.x() - barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+		pcbPos.setY(fPos.y() - barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 
 		if(fabs(fPos.y()) < 0.1) {
-			fRotMatrixPcb->rotateY(180.*degree);
-			pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / rad));
-			pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / rad));
+			fRotMatrixPcb->rotateY(180.*CLHEP::degree);
+			pcbPos.setX(fPos.x() + barrelDisplacement * sin(fStartAngleDetector / CLHEP::rad));
+			pcbPos.setY(fPos.y() + barrelDisplacement * cos(fStartAngleDetector / CLHEP::rad));
 		}
 
-		fRotMatrixPcb->rotateZ(-180.*degree);
+		fRotMatrixPcb->rotateZ(-180.*CLHEP::degree);
 	}
 
 	//G4VPhysicalVolume* phys_vol =

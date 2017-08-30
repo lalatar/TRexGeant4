@@ -3,6 +3,10 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * modified to remove condition that only hits from particles with
+ * parent ID 0 are collected
+ * dhymers 2017/06/12
  */
 
 #include "TRexBarrelErestSingleSensitiveDetector.hh"
@@ -67,7 +71,10 @@ G4bool TRexBarrelErestSingleSensitiveDetector::ProcessHits(G4Step *aStep,
 G4bool TRexBarrelErestSingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 						G4TouchableHistory* ROHist) {
   // only primary particle hits are considered (no secondaries)
-  if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV) {
+  //if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
+  //using energy cut only, allows incoming beam to generate detectable
+  //particles
+  if (aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV){
 	  return false;
   }
 
@@ -87,19 +94,19 @@ void TRexBarrelErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 	G4double totalEnergy = GetTotalEnergyDeposition();
 
 	//G4std::cout << "NbOfHits = " << fHitCollection->entries() << G4std::endl;
-	//G4std::cout << "Deposited energy = " << totalEnergy / keV << G4std::endl;
+	//G4std::cout << "Deposited energy = " << totalEnergy / CLHEP::keV << G4std::endl;
 
 	if(GetTotalEnergyDeposition() > 0) {
 		fBarrelErestSingle->ID(fID);
 
 		if(TRexSettings::Get()->IncludeEnergyResolution()) {
-			fBarrelErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
+			fBarrelErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV) / CLHEP::keV);
 		} else {
-			fBarrelErestSingle->SetEdet(totalEnergy / keV);
+			fBarrelErestSingle->SetEdet(totalEnergy / CLHEP::keV);
 		}
 
 		if(fHitCollection->entries() > 0) {
-			fBarrelErestSingle->SetTime((*fHitCollection)[0]->GetTime() / ns);
+			fBarrelErestSingle->SetTime((*fHitCollection)[0]->GetTime() / CLHEP::ns);
 			fBarrelErestSingle->SetZ((*fHitCollection)[0]->GetParticleZ());
 			fBarrelErestSingle->SetA((*fHitCollection)[0]->GetParticleA());
 			fBarrelErestSingle->SetTrackID((*fHitCollection)[0]->GetTrackID());
@@ -136,7 +143,7 @@ int TRexBarrelErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resK
   bool isLastHit;
   if(hitIndex == fHitCollection->entries() - 1) {
 	  isLastHit = true;
-  } else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ) { // check if it is the same particle
+  } else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*CLHEP::eV ) { // check if it is the same particle
     isLastHit = false;
   } else {
     isLastHit = true;
@@ -145,10 +152,10 @@ int TRexBarrelErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resK
   if(isLastHit == false)
     return -2;
 
-  resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / keV;
+  resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / CLHEP::keV;
 
   // check if particle is stopped
-  if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV) {
+  if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*CLHEP::eV) {
     // stopped
     return 1;
   }  else {

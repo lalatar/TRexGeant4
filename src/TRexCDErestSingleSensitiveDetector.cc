@@ -62,7 +62,7 @@ G4bool TRexCDErestSingleSensitiveDetector::ProcessHits(G4Step *aStep,
 G4bool TRexCDErestSingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 		G4TouchableHistory* ROHist) {
 	// only primary particle hits are considered (no secondaries)
-	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV) {
+	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
 		return false;
 	}
 
@@ -88,13 +88,13 @@ void TRexCDErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 		fCDErestSingle->ID(fID);
 
 		if(TRexSettings::Get()->IncludeEnergyResolution()) {
-			fCDErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
+			fCDErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV) / CLHEP::keV);
 		} else {
-			fCDErestSingle->SetEdet(totalEnergy / keV);
+			fCDErestSingle->SetEdet(totalEnergy / CLHEP::keV);
 		}
 
 		if(fHitCollection->entries() > 0) {
-			fCDErestSingle->SetTime((*fHitCollection)[0]->GetTime() / ns);
+			fCDErestSingle->SetTime((*fHitCollection)[0]->GetTime() / CLHEP::ns);
 			fCDErestSingle->SetZ((*fHitCollection)[0]->GetParticleZ());
 			fCDErestSingle->SetA((*fHitCollection)[0]->GetParticleA());
 			fCDErestSingle->SetTrackID((*fHitCollection)[0]->GetTrackID());
@@ -132,7 +132,7 @@ int TRexCDErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEn
 	bool isLastHit;
 	if(hitIndex == fHitCollection->entries() - 1) {
 		isLastHit = true;
-	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ) { // check if it is the same particle
+	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*CLHEP::eV ) { // check if it is the same particle
 		isLastHit = false;
 	} else {
 		isLastHit = true;
@@ -142,10 +142,10 @@ int TRexCDErestSingleSensitiveDetector::IsStopped(int hitIndex, double &resKinEn
 		return -2;
 	}
 
-	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / keV;
+	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / CLHEP::keV;
 
 	// check if particle is stopped
-	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV) {
+	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*CLHEP::eV) {
 		// stopped
 		return 1;
 	} else {

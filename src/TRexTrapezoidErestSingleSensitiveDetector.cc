@@ -59,7 +59,7 @@ G4bool TRexTrapezoidErestSingleSensitiveDetector::ProcessHits(G4Step *aStep,
 G4bool TRexTrapezoidErestSingleSensitiveDetector::ProcessHits_constStep(const G4Step * aStep,
 		G4TouchableHistory* ROHist) {
 	// only primary particle hits are considered (no secondaries)
-	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*eV) {
+	if(aStep->GetTrack()->GetParentID() != 0 || aStep->GetTotalEnergyDeposit() < 1.*CLHEP::eV) {
 		return false;
 	}
 
@@ -82,13 +82,13 @@ void TRexTrapezoidErestSingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 		fTrapezoidErestSingle->ID(fID);
 
 		if(TRexSettings::Get()->IncludeEnergyResolution()) {
-			fTrapezoidErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / keV) * keV) / keV);
+			fTrapezoidErestSingle->SetEdet((totalEnergy + CLHEP::RandGauss::shoot(0., fEnergyResolution / CLHEP::keV) * CLHEP::keV) / CLHEP::keV);
 		} else {
-			fTrapezoidErestSingle->SetEdet(totalEnergy / keV);
+			fTrapezoidErestSingle->SetEdet(totalEnergy / CLHEP::keV);
 		}
 
 		if(fHitCollection->entries() > 0) {
-			fTrapezoidErestSingle->SetTime((*fHitCollection)[0]->GetTime() / ns);
+			fTrapezoidErestSingle->SetTime((*fHitCollection)[0]->GetTime() / CLHEP::ns);
 			fTrapezoidErestSingle->SetZ((*fHitCollection)[0]->GetParticleZ());
 			fTrapezoidErestSingle->SetA((*fHitCollection)[0]->GetParticleA());
 			fTrapezoidErestSingle->SetTrackID((*fHitCollection)[0]->GetTrackID());
@@ -126,7 +126,7 @@ int TRexTrapezoidErestSingleSensitiveDetector::IsStopped(int hitIndex, double &r
 	bool isLastHit;
 	if(hitIndex == fHitCollection->entries() - 1) {
 		isLastHit = true;
-	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*eV ) { // check if it is the same particle
+	} else if(fabs((*fHitCollection)[hitIndex]->GetVertexKineticEnergy() - (*fHitCollection)[hitIndex + 1]->GetVertexKineticEnergy()) < 0.001*CLHEP::eV ) { // check if it is the same particle
 		isLastHit = false;
 	} else {
 		isLastHit = true;
@@ -135,10 +135,10 @@ int TRexTrapezoidErestSingleSensitiveDetector::IsStopped(int hitIndex, double &r
 	if(isLastHit == false)
 		return -2;
 
-	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / keV;
+	resKinEnergy = (*fHitCollection)[hitIndex]->GetKineticEnergy() / CLHEP::keV;
 
 	// check if particle is stopped
-	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*eV) {
+	if(fabs((*fHitCollection)[hitIndex]->GetKineticEnergy()) < 0.001*CLHEP::eV) {
 		// stopped
 		return 1;
 	} else {

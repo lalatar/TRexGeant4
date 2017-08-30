@@ -87,12 +87,12 @@ void TRexEventAction::MiniballEndOfEventAction(const G4Event* evt) {
 	G4int event_id = evt->GetEventID();
 	G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
 
-	for(int det_id = 0; det_id < fMbHistoMan->GetNbOfDetectors(); det_id++) {
+	for(int id = 0; id < fMbHistoMan->GetNbOfDetectors(); id++) {
 		//every detector has its own HitsCollection
-		G4int HCID = fMbHistoMan->GetMBHitsCollectionID(det_id);
+		G4int HCID = fMbHistoMan->GetMBHitsCollectionID(id);
 
 		if(HCID < 0) {
-			G4cerr << "MiniBallHitsCollection of detector id "<< det_id << " is missing" << G4endl;
+			G4cerr << "MiniBallHitsCollection of detector id "<< id << " is missing" << G4endl;
 			continue;
 		}
 
@@ -102,7 +102,7 @@ void TRexEventAction::MiniballEndOfEventAction(const G4Event* evt) {
 			// loop over all hits in the current detector during this event
 
 			//if(HPGeHC->entries() > 0) {
-			//	cout << "nbOfHits in detector " << det_id << " (clu = " << det_id / 3 << " , cry = " << det_id % 3 << ") : " << HPGeHC->entries() << endl;
+			//	cout << "nbOfHits in detector " << id << " (clu = " << id / 3 << " , cry = " << id % 3 << ") : " << HPGeHC->entries() << endl;
 			//}
 
 			for(int hit_nb = 0; hit_nb < HPGeHC->entries(); hit_nb++) {
@@ -116,7 +116,7 @@ void TRexEventAction::MiniballEndOfEventAction(const G4Event* evt) {
 				G4double Edep = (*HPGeHC)[hit_nb]->GetEdep();
 
 				// if(Edep > 2000*keV) {
-				// 	cout << "Edep = " << Edep / keV << " , nbOfHits in detector " << det_id << " (clu = " << det_id / 3 << " , cry = " << det_id % 3 << ") : " << HPGeHC->entries() << endl;
+				// 	cout << "Edep = " << Edep / keV << " , nbOfHits in detector " << id << " (clu = " << id / 3 << " , cry = " << id % 3 << ") : " << HPGeHC->entries() << endl;
 				// }
 
 				if(Edep > 0) {

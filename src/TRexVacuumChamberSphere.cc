@@ -40,38 +40,38 @@ void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall
 
 	// commented values: T-REX spherical vaccum chamber
 	// current values: adapted to Coulex chamber
-	G4double chamberInnerRadius = 81. * mm;// 98. * mm;
-	G4double chamberWallThickness = 2. * mm;
+	G4double chamberInnerRadius = 81.*CLHEP::mm;// 98.*CLHEP::mm;
+	G4double chamberWallThickness = 2.*CLHEP::mm;
 
-	G4double chamberForwardFlangeInnerRadius = 20. * mm;
-	G4double chamberForwardFlangeOuterRadius = 40. * mm;
-	G4double chamberForwardFlangeConnectionLength = 10. * mm;
-	G4double chamberForwardFlangeLength = 10. * mm;
+	G4double chamberForwardFlangeInnerRadius = 20.*CLHEP::mm;
+	G4double chamberForwardFlangeOuterRadius = 40.*CLHEP::mm;
+	G4double chamberForwardFlangeConnectionLength = 10.*CLHEP::mm;
+	G4double chamberForwardFlangeLength = 10.*CLHEP::mm;
 
-	G4double chamberBackwardFlangeInnerRadius = 50. * mm; //70. * mm;
-	G4double chamberBackwardFlangeOuterRadius = 65. * mm; //85. * mm;
-	G4double chamberBackwardFlangeConnectionLength = 30. * mm;
-	G4double chamberBackwardFlangeLength = 10. * mm;
+	G4double chamberBackwardFlangeInnerRadius = 50.*CLHEP::mm; //70.*CLHEP::mm;
+	G4double chamberBackwardFlangeOuterRadius = 65.*CLHEP::mm; //85.*CLHEP::mm;
+	G4double chamberBackwardFlangeConnectionLength = 30.*CLHEP::mm;
+	G4double chamberBackwardFlangeLength = 10.*CLHEP::mm;
 
-	G4double chamberFlangeConnectionThickness = 3. * mm;
+	G4double chamberFlangeConnectionThickness = 3.*CLHEP::mm;
 
-	G4double chamberTargetFlangeInnerRadius = 20.25 *mm;
-	G4double chamberTargetFlangeOuterRadius = 27.5 *mm;
-	G4double chamberTargetFlangeConnectionLength = 27. * mm;
-	G4double chamberTargetFlangeLength = 3. * mm;
+	G4double chamberTargetFlangeInnerRadius = 20.25*CLHEP::mm;
+	G4double chamberTargetFlangeOuterRadius = 27.5*CLHEP::mm;
+	G4double chamberTargetFlangeConnectionLength = 27.*CLHEP::mm;
+	G4double chamberTargetFlangeLength = 3.*CLHEP::mm;
 
 	//the sphere
 	G4Sphere* chamber_sphere;
 
 	if(TRexSettings::Get()->VisualizationCut()){
 		chamber_sphere = new G4Sphere("ChamberSphere", chamberInnerRadius, chamberInnerRadius + chamberWallThickness,
-				270.*degree, 180.*degree, asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius),
-				180.*degree - asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius) - asin(chamberForwardFlangeInnerRadius / chamberInnerRadius));
+				270.*CLHEP::degree, 180.*CLHEP::degree, asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius),
+				180.*CLHEP::degree - asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius) - asin(chamberForwardFlangeInnerRadius / chamberInnerRadius));
 	}
 	else{
 		chamber_sphere = new G4Sphere("ChamberSphere", chamberInnerRadius, chamberInnerRadius + chamberWallThickness,
-				0.*degree, 360.*degree, asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius),
-				180.*degree - asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius) - asin(chamberForwardFlangeInnerRadius / chamberInnerRadius));
+				0.*CLHEP::degree, 360.*CLHEP::degree, asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius),
+				180.*CLHEP::degree - asin(chamberBackwardFlangeInnerRadius / chamberInnerRadius) - asin(chamberForwardFlangeInnerRadius / chamberInnerRadius));
 	}
 
 	//flanges and connections to flanges
@@ -95,8 +95,8 @@ void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall
 
 	//flanges
 	if(TRexSettings::Get()->VisualizationCut()){
-		forward_flange = new G4Polycone("forward_flange",270.*degree,180.*degree,4,forward_flange_z,forward_flange_inner_radius,forward_flange_outer_radius);
-		backward_flange = new G4Polycone("backward_flange",270.*degree,180.*degree,4,backward_flange_z,backward_flange_inner_radius,backward_flange_outer_radius);
+		forward_flange = new G4Polycone("forward_flange",270.*CLHEP::degree,180.*CLHEP::degree,4,forward_flange_z,forward_flange_inner_radius,forward_flange_outer_radius);
+		backward_flange = new G4Polycone("backward_flange",270.*CLHEP::degree,180.*CLHEP::degree,4,backward_flange_z,backward_flange_inner_radius,backward_flange_outer_radius);
 	}
 	else{
 		forward_flange = new G4Polycone("forward_flange",0.,2*M_PI,4,forward_flange_z,forward_flange_inner_radius,forward_flange_outer_radius);
@@ -123,7 +123,7 @@ void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall
 	G4Polycone* target_flange;
 
 	G4double target_flange_z[4] = {0,
-		-(chamberTargetFlangeConnectionLength - sin(20.*degree) * (chamberTargetFlangeOuterRadius - chamberTargetFlangeInnerRadius + chamberWallThickness)),
+		-(chamberTargetFlangeConnectionLength - sin(20.*CLHEP::degree) * (chamberTargetFlangeOuterRadius - chamberTargetFlangeInnerRadius + chamberWallThickness)),
 		-chamberTargetFlangeConnectionLength, -(chamberTargetFlangeConnectionLength + chamberTargetFlangeLength)};
 	G4double target_flange_inner_radius[4] = {chamberTargetFlangeInnerRadius, chamberTargetFlangeInnerRadius,
 		chamberTargetFlangeInnerRadius, chamberTargetFlangeInnerRadius};
@@ -132,7 +132,7 @@ void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall
 
 
 	if(TRexSettings::Get()->VisualizationCut()){
-		target_flange = new G4Polycone("target_flange",270.*degree,180.*degree,4,target_flange_z,target_flange_inner_radius,target_flange_outer_radius);
+		target_flange = new G4Polycone("target_flange",270.*CLHEP::degree,180.*CLHEP::degree,4,target_flange_z,target_flange_inner_radius,target_flange_outer_radius);
 	}
 	else{
 		target_flange = new G4Polycone("target_flange",0.,2*M_PI,4,target_flange_z,target_flange_inner_radius,target_flange_outer_radius);
@@ -141,7 +141,7 @@ void TRexVacuumChamberSphere::ConstructChamber(G4LogicalVolume* experimentalHall
 	//cut hole into sphere
 	G4RotationMatrix* rotate_target_flange;
 	rotate_target_flange = new G4RotationMatrix();
-	rotate_target_flange->rotateX(90.*degree);
+	rotate_target_flange->rotateX(90.*CLHEP::degree);
 
 	G4SubtractionSolid* chamber_with_hole;
 	chamber_with_hole = new G4SubtractionSolid("chamber_with_hole", chamber_with_flanges, hole, rotate_target_flange,

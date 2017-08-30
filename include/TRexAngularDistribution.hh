@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 16, 2014
  *      Author: sklupp
+ * 
+ * Modified 2017/06/15 dhymers
+ * To correspond with changes in 4.10
  */
 
 
@@ -45,6 +48,7 @@ class TRexAngularDistribution : public TRexBeam, public MiniBallSource {
 		void SetEjectileAndRecoil();
 		void ShootThetaCm(int levelNb);
 		void ShootReactionTypeAndExcitationEnergy();
+		//void ShootReactionPosition();
 
 
 		size_t fNbOfLevels;
@@ -71,6 +75,8 @@ class TRexAngularDistribution : public TRexBeam, public MiniBallSource {
 		std::vector<G4double> fArealDensity;
 		std::vector<G4double> fCrossSectionIntegral;
 		std::vector<G4double> fScatteringProbabilitySingle;
+		
+		G4bool isDefined = false;
 };
 
 #endif /* TREXANGULARDISTRIBUTION_HH_ */

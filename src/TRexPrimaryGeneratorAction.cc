@@ -3,6 +3,9 @@
  *
  *  Created on: Jun 15, 2014
  *      Author: sklupp
+ * 
+ * added option for BeamIn to allow use of TRexBeamIn primary generator
+ * dhymers 2017/05/26
  */
 
 #include "TRexPrimaryGeneratorAction.hh"
@@ -35,6 +38,9 @@ void TRexPrimaryGeneratorAction::SetGenerator() {
 	} else if(generatorName == "AlphaSource") {
 		std::cout<<std::endl<<"Using alpha source ....\n"<<std::endl;
 		fCurrentGenerator = new TRexAlphaSource;
+	} else if(generatorName == "BeamIn") {
+		std::cout<<std::endl<<"Using beamIn source ....\n"<<std::endl;
+		fCurrentGenerator = new TRexBeamIn;
 	}
 }
 

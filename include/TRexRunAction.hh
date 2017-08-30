@@ -20,7 +20,7 @@
 class TRexRunAction : public G4UserRunAction {
 	public:
 		TRexRunAction();
-		TRexRunAction(TRexData &data,TRexPrimaryGeneratorAction* generator, TRexEventAction* eventAction);
+		TRexRunAction(TRexData* data,TRexPrimaryGeneratorAction* generator, TRexEventAction* eventAction);
 
 		virtual ~TRexRunAction();
 
@@ -32,7 +32,7 @@ class TRexRunAction : public G4UserRunAction {
 
 
 	private:
-		TRexData fData;
+		TRexData* fData;
 
 		TRexPrimaryGeneratorAction* fGenerator;
 		TRexEventAction* fEventAction;

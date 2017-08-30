@@ -1,0 +1,22 @@
+#/vis/viewer/set/viewpointVector 1 0 0 
+#/vis/viewer/set/hiddenEdge
+/vis/geometry/set/visibility chambergas_log 0 false
+
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA deuteron 1 0 1 1   # magenta
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA proton 0 0 1 1   # blue
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA gamma 0 1 0 1   # green
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA pi- 1 1 1 1   # white
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA pi+ 1 1 1 1   # white
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA triton 1 1 1 1  # white
+/vis/modeling/trajectories/drawByParticleID-0/setRGBA neutron 1 0 0 1 # red
+/vis/modeling/trajectories/list
+
+#/vis/viewer/set/viewpointThetaPhi 45 45
+#/vis/viewer/set/viewpointVector 1 0 0 side
+#/vis/viewer/set/viewpointVector 1 1 1 corner
+#/vis/viewer/set/viewpointVector 0 1 1 top
+#/vis/viewer/set/viewpointVector 0 0 1 front
+#/vis/viewer/zoom 300 
+#/vis/viewer/pan 4 0 cm  left shifting up: 0 -2 cm 
+#/control/execute myVis.mac 
+#/vis/geometry/set/visibility chambergas_log 0 false to turn off the gas chamber

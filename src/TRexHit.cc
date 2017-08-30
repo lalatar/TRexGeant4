@@ -52,8 +52,8 @@ TRexHit::~TRexHit() {
 
 // print
 void TRexHit::Print() {
-	G4cout << "particle = " << fParticle << " : " << fPos[0]/mm
-		<< " mm , " << fPos[1]/mm << " mm , " << fPos[2]/mm
+	G4cout << "particle = " << fParticle << " : " << fPos[0]/CLHEP::mm
+		<< " mm , " << fPos[1]/CLHEP::mm << " mm , " << fPos[2]/CLHEP::mm
 		<< " mm , process = " << fProcess << " , time = " << fTime
 		<< "  , trackLength = " << fTrackLength
 		<< "  , energy deposition = " << fEnergy

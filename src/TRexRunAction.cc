@@ -8,10 +8,12 @@
 #include "TRexRunAction.hh"
 #include "TRexSettings.hh"
 
+#include "G4Threading.hh"
+
 TRexRunAction::TRexRunAction() {
 }
 
-TRexRunAction::TRexRunAction(TRexData &data, TRexPrimaryGeneratorAction* generator, TRexEventAction* eventAction) :
+TRexRunAction::TRexRunAction(TRexData* data, TRexPrimaryGeneratorAction* generator, TRexEventAction* eventAction) :
 	fData(data), fGenerator(generator), fEventAction(eventAction) {
 }
 
@@ -20,26 +22,23 @@ TRexRunAction::~TRexRunAction() {
 }
 
 void TRexRunAction::BeginOfRunAction(const G4Run*) {
-	// open result Root file
-	fOutputFile = new TFile(fData.GetOutputFileName().c_str(), "recreate");
-	fOutputFile->cd();
+		// open result Root file
+		fOutputFile = new TFile(fData->GetOutputFileName().c_str(), "recreate");
+		fOutputFile->cd();
 
-	// create trees
-	fGeneratorTree = new TTree("treeGen", "Primary generator tree");
-	fDetectorTree = new TTree("treeDet", "Detector tree");
+		fGeneratorTree = new TTree("treeGen", "Primary generator tree");
+		fDetectorTree = new TTree("treeDet", "Detector tree");
 
-	// set the trees
-	fGenerator->SetTree(fGeneratorTree);
-	fEventAction->SetTree(fDetectorTree);
-	fEventAction->CreateBranches();
+		fGenerator->SetTree(fGeneratorTree);
+		fEventAction->SetTree(fDetectorTree);
+		fEventAction->CreateBranches();
 
-	// write the settings
-	TRexSettings::Get()->Write("settings",TObject::kOverwrite);
+		TRexSettings::Get()->Write("settings",TObject::kOverwrite);
 }
 
 
 void TRexRunAction::EndOfRunAction(const G4Run*) {
-	fOutputFile->cd();
+ 	fOutputFile->cd();
 	fGeneratorTree->Write();
 	fDetectorTree->Write();
 

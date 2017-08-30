@@ -156,7 +156,7 @@ class TRexSettings : public TObject {
 		double GetBCDErestSingleOuterRadius() { return fBCDErestSingleOuterRadius; }
 		double GetBCDErestSingleSpanningAngle() { return fBCDErestSingleSpanningAngle; }
 		double GetBCDErestSingleEnergyResolution() { return fBCDErestSingleEnergyResolution; }
-
+		
 		// FBarrel deltaE
 		int UseFBarrelDeltaE() { return fUseFBarrelDeltaE; }
 		int GetNbOfFBarrelDeltaESingles() { return fNbOfFBarrelDeltaESingles; }
@@ -169,7 +169,9 @@ class TRexSettings : public TObject {
 		double GetFBarrelDeltaESingleDeadLayer() { return fFBarrelDeltaESingleDeadLayer; }
 		double GetFBarrelDeltaESingleLengthX() { return fFBarrelDeltaESingleLengthX; }
 		double GetFBarrelDeltaESingleLengthY() { return fFBarrelDeltaESingleLengthY; }
-		double GetFBarrelDeltaESingleStripWidth() { return fFBarrelDeltaESingleStripWidth; }
+		//double GetFBarrelDeltaESingleStripWidth() { return fFBarrelDeltaESingleStripWidth; }
+		double GetFBarrelDeltaESingleStripWidthPar() { return fFBarrelDeltaESingleStripWidthPar; } // added bei Leila
+		double GetFBarrelDeltaESingleStripWidthPer() { return fFBarrelDeltaESingleStripWidthPer; } // added bei Leila
 		double GetFBarrelDeltaESingleEnergyResolution() { return fFBarrelDeltaESingleEnergyResolution; }
 		double GetFBarrelDeltaESingleFoilThickness() { return fFBarrelDeltaESingleFoilThickness; }
 		// FBarrel Erest
@@ -195,7 +197,9 @@ class TRexSettings : public TObject {
 		double GetSecondFBarrelDeltaESingleDeadLayer() { return fSecondFBarrelDeltaESingleDeadLayer; }
 		double GetSecondFBarrelDeltaESingleLengthX() { return fSecondFBarrelDeltaESingleLengthX; }
 		double GetSecondFBarrelDeltaESingleLengthY() { return fSecondFBarrelDeltaESingleLengthY; }
-		double GetSecondFBarrelDeltaESingleStripWidth() { return fSecondFBarrelDeltaESingleStripWidth; }
+		//double GetSecondFBarrelDeltaESingleStripWidth() { return fSecondFBarrelDeltaESingleStripWidth; }
+		double GetSecondFBarrelDeltaESingleStripWidthPar() { return fSecondFBarrelDeltaESingleStripWidthPar; } // added bei Leila
+		double GetSecondFBarrelDeltaESingleStripWidthPer() { return fSecondFBarrelDeltaESingleStripWidthPer; } // added bei Leila
 		double GetSecondFBarrelDeltaESingleEnergyResolution() { return fSecondFBarrelDeltaESingleEnergyResolution; }
 		double GetSecondFBarrelDeltaESingleFoilThickness() { return fSecondFBarrelDeltaESingleFoilThickness; }
 
@@ -240,7 +244,9 @@ class TRexSettings : public TObject {
 		double GetBBarrelDeltaESingleDeadLayer() { return fBBarrelDeltaESingleDeadLayer; }
 		double GetBBarrelDeltaESingleLengthX() { return fBBarrelDeltaESingleLengthX; }
 		double GetBBarrelDeltaESingleLengthY() { return fBBarrelDeltaESingleLengthY; }
-		double GetBBarrelDeltaESingleStripWidth() { return fBBarrelDeltaESingleStripWidth; }
+		//double GetBBarrelDeltaESingleStripWidth() { return fBBarrelDeltaESingleStripWidth; }
+		double GetBBarrelDeltaESingleStripWidthPar() { return fBBarrelDeltaESingleStripWidthPar; } // added bei Leila
+		double GetBBarrelDeltaESingleStripWidthPer() { return fBBarrelDeltaESingleStripWidthPer; } // added bei Leila
 		double GetBBarrelDeltaESingleEnergyResolution() { return fBBarrelDeltaESingleEnergyResolution; }
 		double GetBBarrelDeltaESingleFoilThickness() { return fBBarrelDeltaESingleFoilThickness; }
 		// BBarrel Erest
@@ -266,7 +272,9 @@ class TRexSettings : public TObject {
 		double GetSecondBBarrelDeltaESingleDeadLayer() { return fSecondBBarrelDeltaESingleDeadLayer; }
 		double GetSecondBBarrelDeltaESingleLengthX() { return fSecondBBarrelDeltaESingleLengthX; }
 		double GetSecondBBarrelDeltaESingleLengthY() { return fSecondBBarrelDeltaESingleLengthY; }
-		double GetSecondBBarrelDeltaESingleStripWidth() { return fSecondBBarrelDeltaESingleStripWidth; }
+		//double GetSecondBBarrelDeltaESingleStripWidth() { return fSecondBBarrelDeltaESingleStripWidth; }
+		double GetSecondBBarrelDeltaESingleStripWidthPar() { return fSecondBBarrelDeltaESingleStripWidthPar; } // added bei Leila
+		double GetSecondBBarrelDeltaESingleStripWidthPer() { return fSecondBBarrelDeltaESingleStripWidthPer; } // added bei Leila
 		double GetSecondBBarrelDeltaESingleEnergyResolution() { return fSecondBBarrelDeltaESingleEnergyResolution; }
 		double GetSecondBBarrelDeltaESingleFoilThickness() { return fSecondBBarrelDeltaESingleFoilThickness; }
 
@@ -328,6 +336,16 @@ class TRexSettings : public TObject {
 		std::vector<double> GetMiniballClusterSpin() { return fMiniballClusterSpin; }
 		double GetMiniballEnergyResolutionCore() { return fMiniballEnergyResolutionCore; }
 		double GetMiniballEnergyResolutionSegment() { return fMiniballEnergyResolutionSegment; }
+		
+		//##################### Target Entrance Foil by Leila begin #####################
+		
+		/*std::vector<double> GetTargetEntranceFoilPosZ() { return fTargetEntranceFoilPosZ; }		
+		std::vector<double> GetTargetEntranceFoilStartAngle() { return fTargetEntranceFoilStartAngle; }
+		std::vector<double> GetTargetEntranceFoilThickness() { return fTargetEntranceFoilThickness; }		
+		double GetTargetEntranceFoilLengthX() { return fTargetEntranceFoilLengthX; }
+		double GetTargetEntranceFoilLengthY() { return fTargetEntranceFoilLengthY; }	*/
+			
+		//##################### Target Entrance Foil by Leila  end  #####################
 		
 		// this constructor has to be public to be able to
 		// write the class to file, but it should never be used!
@@ -455,7 +473,9 @@ class TRexSettings : public TObject {
 		double fFBarrelDeltaESingleDeadLayer;
 		double fFBarrelDeltaESingleLengthX;
 		double fFBarrelDeltaESingleLengthY;
-		double fFBarrelDeltaESingleStripWidth;
+		//double fFBarrelDeltaESingleStripWidth;
+		double fFBarrelDeltaESingleStripWidthPar; // added bei Leila
+		double fFBarrelDeltaESingleStripWidthPer; // added bei Leila
 		double fFBarrelDeltaESingleEnergyResolution;
 		double fFBarrelDeltaESingleFoilThickness;
 		// FBarrel Erest
@@ -481,7 +501,9 @@ class TRexSettings : public TObject {
 		double fSecondFBarrelDeltaESingleDeadLayer;
 		double fSecondFBarrelDeltaESingleLengthX;
 		double fSecondFBarrelDeltaESingleLengthY;
-		double fSecondFBarrelDeltaESingleStripWidth;
+		//double fSecondFBarrelDeltaESingleStripWidth;
+		double fSecondFBarrelDeltaESingleStripWidthPar; // added bei Leila
+		double fSecondFBarrelDeltaESingleStripWidthPer;// added bei Leila
 		double fSecondFBarrelDeltaESingleEnergyResolution;
 		double fSecondFBarrelDeltaESingleFoilThickness;
 
@@ -526,7 +548,9 @@ class TRexSettings : public TObject {
 		double fBBarrelDeltaESingleDeadLayer;
 		double fBBarrelDeltaESingleLengthX;
 		double fBBarrelDeltaESingleLengthY;
-		double fBBarrelDeltaESingleStripWidth;
+		//double fBBarrelDeltaESingleStripWidth;
+		double fBBarrelDeltaESingleStripWidthPar; // added bei Leila
+		double fBBarrelDeltaESingleStripWidthPer; // added bei Leila 
 		double fBBarrelDeltaESingleEnergyResolution;
 		double fBBarrelDeltaESingleFoilThickness;
 		// BBarrel Erest
@@ -552,7 +576,9 @@ class TRexSettings : public TObject {
 		double fSecondBBarrelDeltaESingleDeadLayer;
 		double fSecondBBarrelDeltaESingleLengthX;
 		double fSecondBBarrelDeltaESingleLengthY;
-		double fSecondBBarrelDeltaESingleStripWidth;
+		//double fSecondBBarrelDeltaESingleStripWidth;
+		double fSecondBBarrelDeltaESingleStripWidthPar; // added bei Leila
+		double fSecondBBarrelDeltaESingleStripWidthPer; // added bei Leila
 		double fSecondBBarrelDeltaESingleEnergyResolution;
 		double fSecondBBarrelDeltaESingleFoilThickness;
 
@@ -614,6 +640,13 @@ class TRexSettings : public TObject {
 		std::vector<double> fMiniballClusterSpin;
 		double fMiniballEnergyResolutionCore;
 		double fMiniballEnergyResolutionSegment;
+		
+		// target entrance foil by Leila
+		/*std::vector<double> fTargetEntranceFoilPosZ;
+		std::vector<double> fTargetEntranceFoilStartAngle;
+		std::vector<double> fTargetEntranceFoilThickness;
+		double fTargetEntranceFoilLengthX;
+		double fTargetEntranceFoilLengthY;*/
 
 		ClassDef(TRexSettings, 1)
 };

@@ -54,7 +54,9 @@ class TRexBarrelDeltaESingleSensitiveDetector : public G4VSensitiveDetector {
 
 		G4double fLengthX;
 		G4double fLengthY;
-		G4double fStripWidth;
+		G4double fStripWidth; // only used by MBarrel
+		G4double fStripWidthPar; // added bei Leila
+		G4double fStripWidthPer; // added bei Leila
 		int fTransferTo16Strips;
 
 		G4double fEnergyResolution;
