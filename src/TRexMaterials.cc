@@ -704,7 +704,7 @@ void TRexMaterials::BuildSurfaceMirror() {
 
 G4Material* TRexMaterials::BuildDeuterium() {
 	G4Material* deuteriumGas = new G4Material("2H", 0.180 * CLHEP::kg/CLHEP::m3, 1,
-			kStateGas, 298 * CLHEP::kelvin, 10.0e-3 * CLHEP::atmosphere);
+			kStateGas, 273 * CLHEP::kelvin, 1. * CLHEP::atmosphere);//10.0e-3. * CLHEP::atmosphere, 298 * CLHEP::kelvin
 
 	deuteriumGas->AddElement(fElD,2);
 

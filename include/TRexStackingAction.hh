@@ -22,6 +22,7 @@ class TRexStackingAction : public G4UserStackingAction{
         
         G4ParticleTable* particleTable;
         std::ofstream out;
+
 };
 
 #endif

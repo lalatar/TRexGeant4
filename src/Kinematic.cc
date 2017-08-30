@@ -1,4 +1,5 @@
 #include "Kinematic.hh"
+#include <fstream>
 
 //#define debug
 //#define debug_orbits
@@ -35,7 +36,7 @@ double lab3f(double ex, double cm, double Emean, Element** particle) {
 	double cm_unit[3];
 	double e2=0;
 	double lab;
-	theta = cm * TMath::Pi() / 180.0;
+		theta = cm * TMath::Pi() / 180.0;
 	cm_unit[2] = cos(theta);
 	cm_unit[1] = 0.0;
 	cm_unit[0] = sin(theta);
@@ -1367,7 +1368,7 @@ double Kinematic::Energy(double range, double max_energy, double tolerance) {
 
 double Kinematic::CompoundRange(Element* projectile, Material* target, double energy, int integration_limit) {
 #ifdef debug_irma
-	std::cout<<"starting CompoundRange("<<flush<<projectile->A()<<projectile->Name()<<", "<<flush<<target->Name()<<", "<<energy<<", "<<integration_limit<<")"<<std::endl;
+	std::cout<<"starting CompoundRange("<<std::flush<<projectile->A()<<projectile->Name()<<", "<<std::flush<<target->Name()<<", "<<energy<<", "<<integration_limit<<")"<<std::endl;
 #endif
 	int z_p = projectile->Z();
 	double a_p = projectile->A();
@@ -1422,7 +1423,7 @@ double Kinematic::CompoundRange(Element* projectile, Material* target, double en
 
 double Kinematic::CompoundStoppingPower(Element* projectile, Material* target, double energy) {
 #ifdef debug_irma
-	std::cout<<"starting CompoundStoppingPower("<<flush<<projectile->A()<<projectile->Name()<<", "<<flush<<target->Name()<<", "<<energy<<")"<<std::endl;
+	std::cout<<"starting CompoundStoppingPower("<<std::flush<<projectile->A()<<projectile->Name()<<", "<<std::flush<<target->Name()<<", "<<energy<<")"<<std::endl;
 #endif
 	double res;
 
@@ -1490,15 +1491,15 @@ double Kinematic::StoppingPower(Element* projectile, Element* target, double ene
 	} else {
 		dedx_n = log(1. + 1.1383*eps)/(2.*(eps + 0.01321*pow(eps,0.21226) + 0.19593*sqrt(eps)));
 #ifdef debug_results
-		std::cout<<"STOP1: "<<setprecision(10)<<log(1. + 1.1383*eps)<<" "<<(1. + 1.1383*eps)<<" "<<eps<<" "<<0.01321*pow(eps,0.21226)<<" "<<0.19593*sqrt(eps)<<std::endl;
+		std::cout<<"STOP1: "<<std::setprecision(10)<<log(1. + 1.1383*eps)<<" "<<(1. + 1.1383*eps)<<" "<<eps<<" "<<0.01321*pow(eps,0.21226)<<" "<<0.19593*sqrt(eps)<<std::endl;
 #endif
 	}
 #ifdef debug_results
-	std::cout<<"STOP2: "<<z_p<<" "<<a_p<<" "<<z_t<<" "<<a_t<<setprecision(10)<<" "<<energy<<" "<<vsq<<" "<<vovc<<" "<<dedx_n<<" "<<eps<<std::endl;
+	std::cout<<"STOP2: "<<z_p<<" "<<a_p<<" "<<z_t<<" "<<a_t<<std::setprecision(10)<<" "<<energy<<" "<<vsq<<" "<<vovc<<" "<<dedx_n<<" "<<eps<<std::endl;
 #endif
 	dedx_n *= 8.462*z_p*z_t*a_p/(a*z_eff)*factor;
 #ifdef debug_results
-	std::cout<<"STOP3: "<<setprecision(10)<<dedx_n<<" "<<8.462*z_p*z_t*a_p/(a*z_eff)*factor<<std::endl;
+	std::cout<<"STOP3: "<<std::setprecision(10)<<dedx_n<<" "<<8.462*z_p*z_t*a_p/(a*z_eff)*factor<<std::endl;
 #endif
 
 	//master electronic stopping powers for hydrogen

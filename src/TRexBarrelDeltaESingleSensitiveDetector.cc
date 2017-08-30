@@ -13,7 +13,7 @@
 #include "TRexBarrelDeltaESingleSensitiveDetector.hh"
 #include "TRexSettings.hh"
 
-
+ 
 #include "G4VProcess.hh"
 //TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector() {
 //}
@@ -35,12 +35,16 @@ TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector
 	if(fBaseName == "FBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetFBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetFBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetFBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetFBarrelDeltaESingleEnergyResolution();
 	} else if(fBaseName == "SecondFBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetSecondFBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetSecondFBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetSecondFBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetSecondFBarrelDeltaESingleEnergyResolution();
 	} else if(fBaseName == "MBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetMBarrelDeltaESingleLengthX();
@@ -50,12 +54,16 @@ TRexBarrelDeltaESingleSensitiveDetector::TRexBarrelDeltaESingleSensitiveDetector
 	} else if(fBaseName == "BBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetBBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetBBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetBBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetBBarrelDeltaESingleEnergyResolution();
 	} else if(fBaseName == "SecondBBarrelDeltaESingle") {
 		fLengthX = TRexSettings::Get()->GetSecondBBarrelDeltaESingleLengthX();
 		fLengthY = TRexSettings::Get()->GetSecondBBarrelDeltaESingleLengthY();
-		fStripWidth = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidth();
+		//fStripWidth = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidth();
+		fStripWidthPar = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidthPar(); // added bei Leila
+		fStripWidthPer = TRexSettings::Get()->GetSecondBBarrelDeltaESingleStripWidthPer(); // added bei Leila
 		fEnergyResolution = TRexSettings::Get()->GetSecondBBarrelDeltaESingleEnergyResolution();
 	} else {
 		std::cerr<<"Detector Name "<<fBaseName<<" is wrong!"<<std::endl;
@@ -183,7 +191,6 @@ void TRexBarrelDeltaESingleSensitiveDetector::EndOfEvent(G4HCofThisEvent*) {
 			// for double-sided strip detectors we have to do the same for the strips parallel to the beam (called rings here)
 			if(!TRexSettings::Get()->ResistiveStrips()) {
 				//loop over the strips perpendicular to the beam we already have and see if we can find the current one
-				size_t j;
 				for(j = 0; j < ringNb.size(); ++j) {
 					//same ring number
 					if(currentRingNb == ringNb[j]) {
@@ -266,9 +273,9 @@ int TRexBarrelDeltaESingleSensitiveDetector::GetStripNumber(G4ThreeVector localP
 		z -= 1e-5;
 	}
 
-	stripNb =  static_cast<int>(z/fStripWidth);
+	stripNb =  static_cast<int>(z/fStripWidthPar);
 
-	if(stripNb > static_cast<int>(fLengthY/fStripWidth) || stripNb < 0) {
+	if(stripNb > static_cast<int>(fLengthY/fStripWidthPar) || stripNb < 0) {
 		std::cout<<"Problem: fID = "<<fID<<" , localZ = "<<z<<" , stripNb = "<<stripNb<<std::endl;
 		return -1;
 	}
@@ -287,9 +294,9 @@ int TRexBarrelDeltaESingleSensitiveDetector::GetRingNumber(G4ThreeVector localPo
 		y -= 1e-5;
 	}
 
-	ringNb =  static_cast<int>(y/fStripWidth);
+	ringNb =  static_cast<int>(y/fStripWidthPer);
 
-	if(ringNb > static_cast<int>(fLengthX/fStripWidth) || ringNb < 0) {
+	if(ringNb > static_cast<int>(fLengthX/fStripWidthPer) || ringNb < 0) {
 		std::cout<<"Problem: fID = "<<fID<<" , localZ = "<<y<<" , ringNb = "<<ringNb<<std::endl;
 		return -1;
 	}

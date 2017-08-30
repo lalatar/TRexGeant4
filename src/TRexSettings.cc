@@ -10,6 +10,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "globals.hh"
+//#include "Randomize.hh"
 
 #include <algorithm>
 
@@ -47,14 +48,20 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 	fIncludeVacuumChamber = sett.GetValue("IncludeVacuumChamber", 1);
 	fVacuumChamberType = sett.GetValue("VacuumChamberType", "cylinder");
 	fVacuumChamberGas = sett.GetValue("VacuumChamberGas", "helium");
-	fVacuumChamberGasPressure = sett.GetValue("VacuumChamberGasPressure", 1e-6) /1000. * CLHEP::bar;
+	//fVacuumChamberGasPressure = sett.GetValue("VacuumChamberGasPressure", 1e-6) /1000. * CLHEP::bar; // original
+	fVacuumChamberGasPressure = sett.GetValue("VacuumChamberGasPressure", sett.GetValue("TargetPressure", 0.0) /1000.) * CLHEP::bar;
 
 	fTestSourceEnergy = sett.GetValue("TestSourceEnergy", 5000.0) * CLHEP::keV;
 
 	//beam properties
 	fBeamEnergy = sett.GetValue("BeamEnergy", 100.0) * CLHEP::MeV;
-	fBeamWidth = sett.GetValue("BeamWidth", 3.0) * CLHEP::mm;
-	fThetaCmMin = sett.GetValue("ThetaCmMin", 2.0) * CLHEP::degree;
+	fBeamWidth = sett.GetValue("BeamWidth", 3.0) * CLHEP::mm; //original
+	//fBeamWidth = CLHEP::RandFlat::shoot(sett.GetValue("BeamWidth", 3.0) * (-0.5) * CLHEP::mm, sett.GetValue("BeamWidth", 3.0) * 0.5 * CLHEP::mm);
+	//fThetaCmMin = sett.GetValue("ThetaCmMin", 2.0) * CLHEP::degree; // commented out by Leila 27.07.2017
+	fThetaCmMin = sett.GetValue("ThetaCmMin", 2.0) * CLHEP::degree;  // added by Leila 27.07.2017
+	
+	///G4cout<<"Leilaaaaaaaaaaaaaaaaaaaaaaaaaaa RexSettings: fThetaCmMin "<<fThetaCmMin<<"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555"<<G4endl;
+	//G4cout<<"Leilaaaaaaaaaaaaaaaaaaaaaaaaaaa RexSettings: vacuumChamberGasPressure "<<fVacuumChamberGasPressure/CLHEP::bar <<" %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%555"<<G4endl;
 
 	//reaction
 	fProjectileZ = sett.GetValue("ProjectileZ", 30);
@@ -105,7 +112,8 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 	fTransferOrCoulexProbability = sett.GetValue("TransferOrCoulexProbability", 1.0);
 
 	fColours = sett.GetValue("SetColours", 0);
-	//fVisualizationCut = sett.GetValue("VisualizationCut", false); // this is actually set by TRexData!
+	//fVisualizationCut = sett.GetValue("VisualizationCut", false); // this is actually set by TRexData! original
+	fVisualizationCut = sett.GetValue("VisualizationCut", false); // changed by Leila
 	// fill always the detector tree regardless if a detector was hit or not ?
 	fWriteAllEvents = sett.GetValue("WriteAllEvents", 0);
 	fConstructPCB =  sett.GetValue("ConstructPCB", true);
@@ -192,13 +200,16 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 		//fFBarrelDeltaESinglePosY.push_back(sett.GetValue(Form("FBarrelDeltaESingles.%d.Y", i), 0) * CLHEP::mm);
 		fFBarrelDeltaESinglePosZ.push_back(sett.GetValue(Form("FBarrelDeltaESingles.%d.Z", i), 33.0) * CLHEP::mm);
 		fFBarrelDeltaESingleDistanceToBeam.push_back(sett.GetValue(Form("FBarrelDeltaESingles.%d.DistanceToBeam", i), 29.0) * CLHEP::mm);
-		fFBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("FBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);
+		//fFBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("FBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);// original
+		fFBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("FBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*180) * CLHEP::deg);// modified bei Leila
 		fFBarrelDeltaESingleThickness.push_back(sett.GetValue(Form("FBarrelDeltaESingles.%d.Thickness", i), 140.0) * CLHEP::um);
 	}
 	fFBarrelDeltaESingleDeadLayer = sett.GetValue("FBarrelDeltaESinglesDeadLayer", 0.0) * CLHEP::um;
 	fFBarrelDeltaESingleLengthX = sett.GetValue("FBarrelDeltaESinglesLength.X", 50.0) * CLHEP::mm;
 	fFBarrelDeltaESingleLengthY = sett.GetValue("FBarrelDeltaESinglesLength.Y", 50.0) * CLHEP::mm;
-	fFBarrelDeltaESingleStripWidth = sett.GetValue("FBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	//fFBarrelDeltaESingleStripWidth = sett.GetValue("FBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	fFBarrelDeltaESingleStripWidthPar = sett.GetValue("FBarrelDeltaESinglesStripWidthPar", 3.125) * CLHEP::mm; // added bei Leila
+	fFBarrelDeltaESingleStripWidthPer = sett.GetValue("FBarrelDeltaESinglesStripWidthPer", 3.125) * CLHEP::mm; // added bei Leila
 	fFBarrelDeltaESingleEnergyResolution = sett.GetValue("FBarrelDeltaESinglesEnergyResolution", 50) * CLHEP::keV;
 	fFBarrelDeltaESingleFoilThickness = sett.GetValue("FBarrelDeltaESinglesFoilThickness", -1.) * CLHEP::um;
 
@@ -209,8 +220,9 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 		//fFBarrelErestSinglePosX.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.X", i), 0) * CLHEP::mm);
 		//fFBarrelErestSinglePosY.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.Y", i), 0) * CLHEP::mm);
 		fFBarrelErestSinglePosZ.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.Z", i), 33.0) * CLHEP::mm);
-		fFBarrelErestSingleDistanceToBeam.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.DistanceToBeam", i), 31.7) * CLHEP::mm);
-		fFBarrelErestSingleStartAngle.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);
+	    fFBarrelErestSingleDistanceToBeam.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.DistanceToBeam", i), 31.7) * CLHEP::mm);
+		//fFBarrelErestSingleStartAngle.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);//original
+		fFBarrelErestSingleStartAngle.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.StartAngle", i), 90.0 - i*180) * CLHEP::deg);//modified by Leila
 		fFBarrelErestSingleThickness.push_back(sett.GetValue(Form("FBarrelErestSingles.%d.Thickness", i), 1000.0) * CLHEP::um);
 	}
 	fFBarrelErestSingleDeadLayer = sett.GetValue("FBarrelErestSingles.DeadLayer", 0.0) * CLHEP::um;
@@ -224,13 +236,16 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 	for(int i = 0; i < fNbOfSecondFBarrelDeltaESingles; i++){
 		fSecondFBarrelDeltaESinglePosZ.push_back(sett.GetValue(Form("SecondFBarrelDeltaESingles.%d.Z", i), 33.0) * CLHEP::mm);
 		fSecondFBarrelDeltaESingleDistanceToBeam.push_back(sett.GetValue(Form("SecondFBarrelDeltaESingles.%d.DistanceToBeam", i), 29.0) * CLHEP::mm);
-		fSecondFBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("SecondFBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);
+		//fSecondFBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("SecondFBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);//original
+		fSecondFBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("SecondFBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*180) * CLHEP::deg);//modified by Leila
 		fSecondFBarrelDeltaESingleThickness.push_back(sett.GetValue(Form("SecondFBarrelDeltaESingles.%d.Thickness", i), 140.0) * CLHEP::um);
 	}
 	fSecondFBarrelDeltaESingleDeadLayer = sett.GetValue("SecondFBarrelDeltaESinglesDeadLayer", 0.0) * CLHEP::um;
 	fSecondFBarrelDeltaESingleLengthX = sett.GetValue("SecondFBarrelDeltaESinglesLength.X", 50.0) * CLHEP::mm;
 	fSecondFBarrelDeltaESingleLengthY = sett.GetValue("SecondFBarrelDeltaESinglesLength.Y", 50.0) * CLHEP::mm;
-	fSecondFBarrelDeltaESingleStripWidth = sett.GetValue("SecondFBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	//fSecondFBarrelDeltaESingleStripWidth = sett.GetValue("SecondFBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	fSecondFBarrelDeltaESingleStripWidthPar = sett.GetValue("SecondFBarrelDeltaESinglesStripWidthPar", 3.125) * CLHEP::mm; // added  bei Leila
+	fSecondFBarrelDeltaESingleStripWidthPer = sett.GetValue("SecondFBarrelDeltaESinglesStripWidthPer", 3.125) * CLHEP::mm; // added bei Leila
 	fSecondFBarrelDeltaESingleEnergyResolution = sett.GetValue("SecondFBarrelDeltaESinglesEnergyResolution", 50) * CLHEP::keV;
 	fSecondFBarrelDeltaESingleFoilThickness = sett.GetValue("SecondFBarrelDeltaESinglesFoilThickness", -1.) * CLHEP::um;
 
@@ -277,13 +292,16 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 		//fFBarrelDeltaESinglePosY.push_back(sett.GetValue(Form("BBarrelDeltaESingles.%d.Y", i), 0) * CLHEP::mm);
 		fBBarrelDeltaESinglePosZ.push_back(sett.GetValue(Form("BBarrelDeltaESingles.%d.Z", i), -33.0) * CLHEP::mm);
 		fBBarrelDeltaESingleDistanceToBeam.push_back(sett.GetValue(Form("BBarrelDeltaESingles.%d.DistanceToBeam", i), 29.0) * CLHEP::mm);
-		fBBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("BBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);
+		//fBBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("BBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg); // original
+		fBBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("BBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*180) * CLHEP::deg);// modified by Leila
 		fBBarrelDeltaESingleThickness.push_back(sett.GetValue(Form("BBarrelDeltaESingles.%d.Thickness", i), 140.0) * CLHEP::um);
 	}
 	fBBarrelDeltaESingleDeadLayer = sett.GetValue("BBarrelDeltaESinglesDeadLayer", 0.0) * CLHEP::um;
 	fBBarrelDeltaESingleLengthX = sett.GetValue("BBarrelDeltaESinglesLength.X", 50.0) * CLHEP::mm;
 	fBBarrelDeltaESingleLengthY = sett.GetValue("BBarrelDeltaESinglesLength.Y", 50.0) * CLHEP::mm;
-	fBBarrelDeltaESingleStripWidth = sett.GetValue("BBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	//fBBarrelDeltaESingleStripWidth = sett.GetValue("BBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	fBBarrelDeltaESingleStripWidthPar = sett.GetValue("BBarrelDeltaESinglesStripWidthPar", 3.125) * CLHEP::mm; // added bei Leila
+	fBBarrelDeltaESingleStripWidthPer = sett.GetValue("BBarrelDeltaESinglesStripWidthPer", 3.125) * CLHEP::mm; // added bei Leila
 	fBBarrelDeltaESingleEnergyResolution = sett.GetValue("BBarrelDeltaESinglesEnergyResolution", 50) * CLHEP::keV;
 	fBBarrelDeltaESingleFoilThickness = sett.GetValue("BBarrelDeltaESinglesFoilThickness", -1.) * CLHEP::um;
 
@@ -295,7 +313,8 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 		//fBBarrelErestSinglePosY.push_back(sett.GetValue(Form("BBarrelErestSingles.%d.Y", i), 0) * CLHEP::mm);
 		fBBarrelErestSinglePosZ.push_back(sett.GetValue(Form("BBarrelErestSingles.%d.Z", i), -33.0) * CLHEP::mm);
 		fBBarrelErestSingleDistanceToBeam.push_back(sett.GetValue(Form("BBarrelErestSingles.%d.DistanceToBeam", i), 31.7) * CLHEP::mm);
-		fBBarrelErestSingleStartAngle.push_back(sett.GetValue(Form("BBarrelErestSingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);
+		//fBBarrelErestSingleStartAngle.push_back(sett.GetValue(Form("BBarrelErestSingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);//original
+		fBBarrelErestSingleStartAngle.push_back(sett.GetValue(Form("BBarrelErestSingles.%d.StartAngle", i), 90.0 - i*180) * CLHEP::deg);//modified by Leila
 		fBBarrelErestSingleThickness.push_back(sett.GetValue(Form("BBarrelErestSingles.%d.Thickness", i), 1000.0) * CLHEP::um);
 	}
 	fBBarrelErestSingleDeadLayer = sett.GetValue("BBarrelErestSingles.DeadLayer", 0.0) * CLHEP::um;
@@ -309,13 +328,16 @@ void TRexSettings::ReadSettingsFile(std::string settingsFile) {
 	for(int i = 0; i < fNbOfSecondBBarrelDeltaESingles; i++){
 		fSecondBBarrelDeltaESinglePosZ.push_back(sett.GetValue(Form("SecondBBarrelDeltaESingles.%d.Z", i), 33.0) * CLHEP::mm);
 		fSecondBBarrelDeltaESingleDistanceToBeam.push_back(sett.GetValue(Form("SecondBBarrelDeltaESingles.%d.DistanceToBeam", i), 29.0) * CLHEP::mm);
-		fSecondBBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("SecondBBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);
+		//fSecondBBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("SecondBBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*90) * CLHEP::deg);//original
+		fSecondBBarrelDeltaESingleStartAngle.push_back(sett.GetValue(Form("SecondBBarrelDeltaESingles.%d.StartAngle", i), 90.0 - i*180) * CLHEP::deg);
 		fSecondBBarrelDeltaESingleThickness.push_back(sett.GetValue(Form("SecondBBarrelDeltaESingles.%d.Thickness", i), 140.0) * CLHEP::um);
 	}
 	fSecondBBarrelDeltaESingleDeadLayer = sett.GetValue("SecondBBarrelDeltaESinglesDeadLayer", 0.0) * CLHEP::um;
 	fSecondBBarrelDeltaESingleLengthX = sett.GetValue("SecondBBarrelDeltaESinglesLength.X", 50.0) * CLHEP::mm;
 	fSecondBBarrelDeltaESingleLengthY = sett.GetValue("SecondBBarrelDeltaESinglesLength.Y", 50.0) * CLHEP::mm;
-	fSecondBBarrelDeltaESingleStripWidth = sett.GetValue("SecondBBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	//fSecondBBarrelDeltaESingleStripWidth = sett.GetValue("SecondBBarrelDeltaESinglesStripWidth", 3.125) * CLHEP::mm;
+	fSecondBBarrelDeltaESingleStripWidthPar = sett.GetValue("SecondBBarrelDeltaESinglesStripWidthPar", 3.125) * CLHEP::mm; // added bei Leila
+	fSecondBBarrelDeltaESingleStripWidthPer = sett.GetValue("SecondBBarrelDeltaESinglesStripWidthPer", 3.125) * CLHEP::mm; // added bei Leila
 	fSecondBBarrelDeltaESingleEnergyResolution = sett.GetValue("SecondBBarrelDeltaESinglesEnergyResolution", 50) * CLHEP::keV;
 	fSecondBBarrelDeltaESingleFoilThickness = sett.GetValue("SecondBBarrelDeltaESinglesFoilThickness", -1.) * CLHEP::um;
 

@@ -10,6 +10,10 @@
  * Modified 2017/06/15 dhymers
  * Moved additional things into first-run call to GeneratePrimaries to
  * fix some dependency issues.
+ * 
+ * fThetaCmMin = sett.GetValue("ThetaCmMin", 2.0) * CLHEP::degree; from TRexSettings.cc
+ * 
+ * 
  */
 
 #include "TRexRutherford.hh"

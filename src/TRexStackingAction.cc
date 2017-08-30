@@ -14,7 +14,7 @@ TRexStackingAction::TRexStackingAction(){
 }
 
 TRexStackingAction::~TRexStackingAction()
-{
+{   
     //out.close();
 }
 
@@ -28,10 +28,10 @@ G4ClassificationOfNewTrack TRexStackingAction::ClassifyNewTrack(const G4Track* t
     
     //do not simulate electrons, to speed up simulation
     if(track->GetParticleDefinition() == electronDef){
-        classification = fKill;
-        //out << track->GetMomentumDirection().getTheta() << ", "
-        //    << track->GetKineticEnergy() / CLHEP::keV
-        //    << std::endl;
+        //classification = fKill; 
+       /*out << track->GetMomentumDirection().getTheta() << ", "
+            << track->GetKineticEnergy() / CLHEP::keV
+            << std::endl;*/
         
     }
     

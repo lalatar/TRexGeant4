@@ -70,7 +70,7 @@ void TRexBeamIn::ShootReactionPosition() {
 	fReactionZ *= cm;
 	
 	//hard-code start position
-	fReactionZ = -8 * cm;
+	//fReactionZ = -1 * cm; ???
 
 	do {
 		fReactionX = CLHEP::RandFlat::shoot(-BeamDiameter / 2., BeamDiameter / 2.);
@@ -83,7 +83,7 @@ void TRexBeamIn::ShootReactionPosition() {
 
 void TRexBeamIn::CreateIsotropicDistribution() {
 	//fThetaCM = CLHEP::RandFlat::shoot(0., M_PI/180.)*radian;
-        fThetaCM =0.;
+        fThetaCM =(0.0*M_PI/180.)*radian;
 	fPhi = CLHEP::RandFlat::shoot(-M_PI,M_PI)*radian;//M_PI=180 deg
 	//fPhi = CLHEP::RandFlat::shoot(0., 2.* M_PI)*radian;
 	//fPhi = CLHEP::RandFlat::shoot(-M_PI / 2.,M_PI + M_PI / 2.)*radian;
