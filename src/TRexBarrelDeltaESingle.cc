@@ -225,11 +225,9 @@ void TRexBarrelDeltaESingle::ConstructDeadLayer(G4LogicalVolume* experimentalHal
 void TRexBarrelDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log) {
 	G4Material* foilMaterial = TRexMaterials::Get()->GetMaterial("mylar");
 
-	G4double foilDistance = (1.0 + 2.0) * CLHEP::mm;
-	//G4double foilWidth = (TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] -  1 * (foilDistance - fFoilThickness / 2.)) * 2;
+	G4double foilDistance = (1.0 + 2.0) * mm;
 	G4double foilWidth = (TRexSettings::Get()->GetBBarrelDeltaESingleDistanceToBeam()[fId] - 1 * (foilDistance - fFoilThickness / 2.)) * 2;
-	//G4double foilLength = 54 * CLHEP::mm;
-	G4double foilLength = 4 * CLHEP::mm;
+	G4double foilLength = 4 * mm;
 
 	if(fDirection == "forward") {
 		foilLength += TRexSettings::Get()->GetFBarrelDeltaESingleLengthY();
@@ -248,8 +246,8 @@ void TRexBarrelDeltaESingle::ConstructFoil(G4LogicalVolume* experimentalHall_log
 	G4ThreeVector position = fPos;
 	position.setX(fPos.x() - (foilDistance - fFoilThickness / 2.) * cos(fStartAngleDetector / CLHEP::rad));
 	position.setY(fPos.y() - (foilDistance - fFoilThickness / 2.) * sin(fStartAngleDetector / CLHEP::rad));
-
-	//new G4PVPlacement(G4Transform3D(*fRotMatrix, position), foil_log, "foil", experimentalHall_log, false, 0); // commented out by Leila
+  
+	new G4PVPlacement(G4Transform3D(*fRotMatrix, position), foil_log, "foil", experimentalHall_log, false, 0);
 
 	if(TRexSettings::Get()->Colours()) {
 		foil_log->SetVisAttributes(TRexColour::Get()->darkblue);//silver);

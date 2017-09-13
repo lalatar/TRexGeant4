@@ -169,7 +169,7 @@ int Kinematic::orbits(Element* projectile, Element* target, Element* recoil, Ele
 				std::cout<<"lab2f("<<ex<<", "<<cm<<", "<<energy<<"): "<<lab2<<" "<<en2<<std::endl;
 #endif
 #ifdef debug_orbits
-				std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((ex - ex_start)/ex_step)<<"]["<<(int)((cm - cm_start)/cm_step)<<"] = "<<flush;
+				std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((ex - ex_start)/ex_step)<<"]["<<(int)((cm - cm_start)/cm_step)<<"] = "<<std::flush;
 #endif
 				results_en[(int)((ex - ex_start)/ex_step)][(int)((cm - cm_start)/cm_step)] = en2;
 				results_ang[(int)((ex - ex_start)/ex_step)][(int)((cm - cm_start)/cm_step)] = lab2/180.*TMath::Pi();
@@ -194,7 +194,7 @@ int Kinematic::orbits(Element* projectile, Element* target, Element* recoil, Ele
 				std::cout<<"lab3f("<<ex<<", "<<cm<<", "<<energy<<"): "<<lab3<<" "<<en3<<std::endl;
 #endif
 #ifdef debug_orbits
-				std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((ex - ex_start)/ex_step)<<"]["<<(int)((cm - cm_start)/cm_step)<<"] = "<<flush;
+				std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((ex - ex_start)/ex_step)<<"]["<<(int)((cm - cm_start)/cm_step)<<"] = "<<std::flush;
 #endif
 				results_en[(int)((ex - ex_start)/ex_step)][(int)((cm - cm_start)/cm_step)] = en3;
 				results_ang[(int)((ex - ex_start)/ex_step)][(int)((cm - cm_start)/cm_step)] = lab3/180.*TMath::Pi();
@@ -314,7 +314,7 @@ int Kinematic::orbits(Element* projectile, Element* target, Element* recoil, Ele
 			std::cout<<"lab2f("<<ex<<", "<<cm<<", "<<energy<<"): "<<lab2<<" "<<en2<<std::endl;
 #endif
 #ifdef debug_orbits
-			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<flush;
+			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<std::flush;
 #endif
 			results_en[(int)((cm - cm_start)/cm_step)] = en2;
 			results_ang[(int)((cm - cm_start)/cm_step)] = lab2/180.*TMath::Pi();
@@ -337,7 +337,7 @@ int Kinematic::orbits(Element* projectile, Element* target, Element* recoil, Ele
 			std::cout<<"lab3f("<<ex<<", "<<cm<<", "<<energy<<"): "<<lab3<<" "<<en3<<std::endl;
 #endif
 #ifdef debug_orbits
-			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<flush;
+			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<std::flush;
 #endif
 			results_en[(int)((cm - cm_start)/cm_step)] = en3;
 			results_ang[(int)((cm - cm_start)/cm_step)] = lab3/180.*TMath::Pi();
@@ -448,7 +448,7 @@ int Kinematic::orbits(Element* projectile, Element* target, Element* recoil, Ele
 			std::cout<<"lab2f("<<ex<<", "<<cm<<", "<<energy<<"): "<<lab2<<" "<<en2<<std::endl;
 #endif
 #ifdef debug_orbits
-			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<flush;
+			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<std::flush;
 #endif
 			results_en.at((int)((cm - cm_start)/cm_step)) = en2;
 			results_ang.at((int)((cm - cm_start)/cm_step)) = lab2/180.*TMath::Pi();
@@ -471,7 +471,7 @@ int Kinematic::orbits(Element* projectile, Element* target, Element* recoil, Ele
 			std::cout<<"lab3f("<<ex<<", "<<cm<<", "<<energy<<"): "<<lab3<<" "<<en3<<std::endl;
 #endif
 #ifdef debug_orbits
-			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<flush;
+			std::cout<<ex<<"/"<<cm<<": results_en["<<(int)((cm - cm_start)/cm_step)<<"] = "<<std::flush;
 #endif
 			results_en.at((int)((cm - cm_start)/cm_step)) = en3;
 			results_ang.at((int)((cm - cm_start)/cm_step)) = lab3/180.*TMath::Pi();
@@ -1089,7 +1089,7 @@ TSpline3* Kinematic::RutherfordVsThickness(double beam_energy, double step_size,
 	int NumberOfSteps = (int)(fTargetThickness/step_size)+1;
 
 #ifdef debug
-	std::cout<<"allocating thickness and rutherford as double arrays of length "<<(int)(fTargetThickness/step_size)+1<<flush;
+	std::cout<<"allocating thickness and rutherford as double arrays of length "<<(int)(fTargetThickness/step_size)+1<<std::flush;
 #endif
 
 	double* thickness;
